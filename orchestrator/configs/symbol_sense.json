@@ -1,0 +1,7538 @@
+{
+"built": "2026-09-25T23:37:05",
+"gene_info": "/BIO1/MRAG/MD_check/Homo_sapiens.gene_info.gz",
+"n_targets": 1052,
+"n_docs": 65943,
+"files": {
+"aml.jsonl": {
+"docs": 5526,
+"bytes": 53767286
+},
+"bladder.jsonl": {
+"docs": 1170,
+"bytes": 2496327
+},
+"breast.jsonl": {
+"docs": 13071,
+"bytes": 146650921
+},
+"colorectal.jsonl": {
+"docs": 8334,
+"bytes": 95083776
+},
+"esophageal.jsonl": {
+"docs": 416,
+"bytes": 5025738
+},
+"gastric.jsonl": {
+"docs": 2231,
+"bytes": 5156698
+},
+"glioblastoma.jsonl": {
+"docs": 3722,
+"bytes": 42559741
+},
+"hcc.jsonl": {
+"docs": 4600,
+"bytes": 52724607
+},
+"headneck.jsonl": {
+"docs": 1137,
+"bytes": 13767874
+},
+"lymphoma.jsonl": {
+"docs": 5275,
+"bytes": 55138758
+},
+"melanoma.jsonl": {
+"docs": 2714,
+"bytes": 30498949
+},
+"nec.jsonl": {
+"docs": 1000,
+"bytes": 9041578
+},
+"nsclc.jsonl": {
+"docs": 3128,
+"bytes": 40930728
+},
+"ovarian.jsonl": {
+"docs": 1698,
+"bytes": 19770952
+},
+"pancancer.jsonl": {
+"docs": 3173,
+"bytes": 93351931
+},
+"pancreatic.jsonl": {
+"docs": 1746,
+"bytes": 24870101
+},
+"prostate.jsonl": {
+"docs": 4701,
+"bytes": 59270442
+},
+"rcc.jsonl": {
+"docs": 1025,
+"bytes": 2832189
+},
+"sclc.jsonl": {
+"docs": 1276,
+"bytes": 37506777
+}
+},
+"rule": {
+"dominated": "documents defining the symbol as ANOTHER gene >= 5 and >= 4 x documents defining it as its own gene (applied at run time)"
+},
+"symbols": {
+"OSR1": {
+"own": 6,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"32782611",
+"nongene",
+"OSR1 -siRNA"
+]
+]
+},
+"MFRP": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CPS1": {
+"own": 5,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RAC1": {
+"own": 14,
+"other": {
+"CDKN1A": 5,
+"HR": 1
+},
+"nongene": 1,
+"examples": [
+[
+"36157504",
+"other:CDKN1A",
+"P21"
+],
+[
+"40535722",
+"other:CDKN1A",
+"P21"
+],
+[
+"40017136",
+"other:CDKN1A",
+"the p21"
+],
+[
+"31788087",
+"other:HR",
+"HR"
+],
+[
+"41668748",
+"other:CDKN1A",
+"P21"
+],
+[
+"38522008",
+"nongene",
+"regulator of cellular processes by targeting p21"
+]
+]
+},
+"MAP2": {
+"own": 7,
+"other": {
+"RMDN1": 1
+},
+"nongene": 1,
+"examples": [
+[
+"14960156",
+"other:RMDN1",
+"microtubule-associated protein"
+],
+[
+"42527507",
+"nongene",
+"MAP2-labeled"
+]
+]
+},
+"ATF2": {
+"own": 74,
+"other": {
+"GDNF": 1,
+"GAS8-AS1": 1
+},
+"nongene": 2,
+"examples": [
+[
+"41043855",
+"nongene",
+"activation transcription factor 2"
+],
+[
+"35211408",
+"other:GDNF",
+"ATF"
+],
+[
+"15185015",
+"nongene",
+"ATF-2pp"
+],
+[
+"42339087",
+"other:GAS8-AS1",
+"GAS8-AS1"
+]
+]
+},
+"SAT1": {
+"own": 6,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MOS": {
+"own": 0,
+"other": {},
+"nongene": 3,
+"examples": [
+[
+"40635765",
+"nongene",
+"mannan oligosaccharide"
+],
+[
+"41511325",
+"nongene",
+"micro-organosphere"
+],
+[
+"41387414",
+"nongene",
+"Median overall survival"
+]
+]
+},
+"SLIT1": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"STAR": {
+"own": 10,
+"other": {},
+"nongene": 22,
+"examples": [
+[
+"41537901",
+"nongene",
+"Tumor-Selected Antibody and Antigen Retrieval"
+],
+[
+"40102405",
+"nongene",
+"Spliced Transcripts Alignment to a Reference"
+],
+[
+"39121370",
+"nongene",
+"Spliced Transcripts Alignment to a Reference"
+],
+[
+"40936337",
+"nongene",
+"Spliced Transcripts Alignment to a Reference"
+],
+[
+"38014033",
+"nongene",
+"Spliced Transcripts Alignment to a Reference"
+],
+[
+"38889771",
+"nongene",
+"Study of Tamoxifen and Raloxifene"
+]
+]
+},
+"ARC": {
+"own": 0,
+"other": {
+"SLC26A4": 1
+},
+"nongene": 11,
+"examples": [
+[
+"40883610",
+"other:SLC26A4",
+"PDS"
+],
+[
+"40619749",
+"nongene",
+"Action de recherch\u00e9 concert\u00e9e"
+],
+[
+"42539087",
+"nongene",
+"Advanced Research Computing"
+],
+[
+"41514592",
+"nongene",
+"arcuate nucleus"
+],
+[
+"40473896",
+"nongene",
+"Australian Resources Centre,"
+],
+[
+"24763054",
+"nongene",
+"apoptosis repressor with caspase recruitment domain"
+]
+]
+},
+"AR": {
+"own": 1939,
+"other": {
+"PTPRF": 3,
+"AREG": 2,
+"AKR1B1": 4,
+"NR1I2": 1,
+"LYVE1": 2
+},
+"nongene": 130,
+"examples": [
+[
+"41347170",
+"nongene",
+"allelic ratio"
+],
+[
+"39223638",
+"nongene",
+"analytical reagent"
+],
+[
+"27416911",
+"nongene",
+"allelic ratio"
+],
+[
+"37774069",
+"nongene",
+"allelic ratio"
+],
+[
+"36824144",
+"nongene",
+"allelic ratio"
+],
+[
+"33439382",
+"nongene",
+"allelic ratio"
+]
+]
+},
+"OSM": {
+"own": 24,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PIP": {
+"own": 5,
+"other": {},
+"nongene": 12,
+"examples": [
+[
+"41987339",
+"nongene",
+"PCNA-interacting protein"
+],
+[
+"41542517",
+"nongene",
+"posterior inclusion probabilities"
+],
+[
+"36870998",
+"nongene",
+"piperine"
+],
+[
+"33557942",
+"nongene",
+"PCNA-interacting protein"
+],
+[
+"27551477",
+"nongene",
+"PCNA-interacting protein"
+],
+[
+"PPR228659",
+"nongene",
+"PCNA-interacting protein"
+]
+]
+},
+"HTT": {
+"own": 3,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"39722749",
+"nongene",
+"hyalinizing trabecular tumor"
+]
+]
+},
+"VDAC3": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MADD": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"TAP1": {
+"own": 7,
+"other": {
+"NOB1": 1
+},
+"nongene": 0,
+"examples": [
+[
+"40091029",
+"other:NOB1",
+"NOB1"
+]
+]
+},
+"AUTS2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"TRAP1": {
+"own": 9,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PNP": {
+"own": 1,
+"other": {},
+"nongene": 9,
+"examples": [
+[
+"33802957",
+"nongene",
+"principal network projection"
+],
+[
+"41469738",
+"nongene",
+"preneoplastic polyps"
+],
+[
+"39655428",
+"nongene",
+"preneoplastic polyps"
+],
+[
+"39774694",
+"nongene",
+"Peptidic nanoparticle"
+],
+[
+"32211020",
+"nongene",
+"principal network projection"
+],
+[
+"27821810",
+"nongene",
+"principal network projection"
+]
+]
+},
+"XBP1": {
+"own": 64,
+"other": {},
+"nongene": 20,
+"examples": [
+[
+"41751794",
+"nongene",
+"XBP1s"
+],
+[
+"40940685",
+"nongene",
+"XBP1s"
+],
+[
+"40940685",
+"nongene",
+"XBP1u"
+],
+[
+"40880749",
+"nongene",
+"XBP1s"
+],
+[
+"38203358",
+"nongene",
+"XBP1s"
+],
+[
+"29276395",
+"nongene",
+"XBP1s"
+]
+]
+},
+"ODC1": {
+"own": 9,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MYT1": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"TUBB1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"SPR": {
+"own": 0,
+"other": {},
+"nongene": 76,
+"examples": [
+[
+"42156735",
+"nongene",
+"Surface plasmon resonance"
+],
+[
+"41182175",
+"nongene",
+"surface plasmon resonance"
+],
+[
+"42587807",
+"nongene",
+"surface plasmon resonance"
+],
+[
+"42592468",
+"nongene",
+"Surface plasmon resonance"
+],
+[
+"33777674",
+"nongene",
+"Surface plasmon resonance"
+],
+[
+"32837872",
+"nongene",
+"surface plasmon resonance"
+]
+]
+},
+"SGK2": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"POGZ": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"GABPB1": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HSD17B7": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"POLQ": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"USP10": {
+"own": 21,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"SI": {
+"own": 4,
+"other": {},
+"nongene": 68,
+"examples": [
+[
+"41882099",
+"nongene",
+"Synergistic Index"
+],
+[
+"41827658",
+"nongene",
+"Supplementary Information"
+],
+[
+"41188771",
+"nongene",
+"stemness index"
+],
+[
+"38226414",
+"nongene",
+"Supplementary Information"
+],
+[
+"42040484",
+"nongene",
+"selectivity index"
+],
+[
+"41506199",
+"nongene",
+"Selectivity Index"
+]
+]
+},
+"PC": {
+"own": 13,
+"other": {
+"PCSK7": 1,
+"PSMA7": 3,
+"WNT2": 1,
+"GZMH": 4,
+"H1-1": 1,
+"KRT16": 1
+},
+"nongene": 620,
+"examples": [
+[
+"41867887",
+"nongene",
+"phosphatidylcholine"
+],
+[
+"41721601",
+"nongene",
+"phosphatidylcholine"
+],
+[
+"41495767",
+"nongene",
+"pancreatic cancer"
+],
+[
+"41214140",
+"nongene",
+"Principal component"
+],
+[
+"40696057",
+"nongene",
+"positive control"
+],
+[
+"40689873",
+"nongene",
+"principal components"
+]
+]
+},
+"ORC1": {
+"own": 8,
+"other": {
+"KAT7": 5,
+"SLC25A15": 1
+},
+"nongene": 0,
+"examples": [
+[
+"41853312",
+"other:KAT7",
+"KAT7"
+],
+[
+"41463052",
+"other:KAT7",
+"HBO1"
+],
+[
+"42033450",
+"other:KAT7",
+"HBO1"
+],
+[
+"32021140",
+"other:KAT7",
+"HBO1"
+],
+[
+"41277911",
+"other:KAT7",
+"HBO1"
+],
+[
+"36941564",
+"other:SLC25A15",
+"SLC25A15"
+]
+]
+},
+"ADK": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HTR2B": {
+"own": 0,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"38589918",
+"nongene",
+"oe-HTR2B"
+]
+]
+},
+"RIT1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"LRRN1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MSE": {
+"own": 0,
+"other": {},
+"nongene": 29,
+"examples": [
+[
+"41643202",
+"nongene",
+"Mean Squared Error"
+],
+[
+"41891880",
+"nongene",
+"mean squared error"
+],
+[
+"41547856",
+"nongene",
+"Mean Squared Error"
+],
+[
+"40501975",
+"nongene",
+"mean squared error"
+],
+[
+"39322849",
+"nongene",
+"mean square error"
+],
+[
+"39134413",
+"nongene",
+"mean squared error"
+]
+]
+},
+"PPAT": {
+"own": 1,
+"other": {},
+"nongene": 3,
+"examples": [
+[
+"38112233",
+"nongene",
+"Periprostatic adipose tissue"
+],
+[
+"31752242",
+"nongene",
+"periprostatic adipose tissue"
+],
+[
+"29692867",
+"nongene",
+"<h4>Background</h4>Periprostatic adipose tissue"
+]
+]
+},
+"TF": {
+"own": 11,
+"other": {
+"F3": 22,
+"IL36RN": 1,
+"GATA1": 1,
+"GDNF": 1,
+"PTEN": 1,
+"MAF": 1,
+"FOSL2": 1,
+"NEUROD1": 2,
+"BRCA1": 1,
+"KLF4": 1,
+"MITF": 3,
+"CREB1": 1,
+"NME2": 1,
+"CNTN1": 1,
+"PSG1": 1,
+"ASCL1": 1,
+"REST": 2,
+"ERG": 1,
+"NFIC": 1,
+"MYBL2": 1,
+"SP1": 1,
+"ZNF423": 1,
+"TP63": 1,
+"PAX5": 1,
+"SRF": 1,
+"WT1": 1,
+"MYC": 1,
+"NANOG": 1,
+"GARS1": 1
+},
+"nongene": 1211,
+"examples": [
+[
+"42034869",
+"nongene",
+"transcription factor"
+],
+[
+"41798677",
+"nongene",
+"transcription factor"
+],
+[
+"41899095",
+"nongene",
+"transcription factor"
+],
+[
+"41721958",
+"nongene",
+"Transcription factor"
+],
+[
+"41671045",
+"nongene",
+"transcription factor"
+],
+[
+"41608320",
+"nongene",
+"transcription factors"
+]
+]
+},
+"CER1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"NPC1": {
+"own": 7,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"TPO": {
+"own": 10,
+"other": {
+"THPO": 21
+},
+"nongene": 0,
+"examples": [
+[
+"42139346",
+"other:THPO",
+"thrombopoietin"
+],
+[
+"41438598",
+"other:THPO",
+"thrombopoietin"
+],
+[
+"40938275",
+"other:THPO",
+"thrombopoietin"
+],
+[
+"40102405",
+"other:THPO",
+"thrombopoietin"
+],
+[
+"39820365",
+"other:THPO",
+"thrombopoietin"
+],
+[
+"39805830",
+"other:THPO",
+"thrombopoietin"
+]
+]
+},
+"CHMP4A": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CES2": {
+"own": 0,
+"other": {
+"DEGS1": 1
+},
+"nongene": 0,
+"examples": [
+[
+"41882765",
+"other:DEGS1",
+"DEGs"
+]
+]
+},
+"GPT": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"BRCC3": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CTNND1": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"TKT": {
+"own": 18,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"35256934",
+"nongene",
+"TKT genes"
+]
+]
+},
+"ENO1-IT1": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PAK1": {
+"own": 8,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HK3": {
+"own": 5,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"GLS": {
+"own": 63,
+"other": {
+"GLS2": 1
+},
+"nongene": 2,
+"examples": [
+[
+"32019575",
+"nongene",
+"global longitudinal strain"
+],
+[
+"35024253",
+"nongene",
+"global longitudinal strain"
+],
+[
+"40952270",
+"other:GLS2",
+"GLS2"
+]
+]
+},
+"EBP": {
+"own": 0,
+"other": {
+"CREBBP": 1,
+"GLB1": 1
+},
+"nongene": 8,
+"examples": [
+[
+"22484554",
+"nongene",
+"CCAAT/enhancer binding protein"
+],
+[
+"16983342",
+"nongene",
+"C/enhancer binding protein"
+],
+[
+"10891464",
+"nongene",
+"CCAAT/enhancer binding protein"
+],
+[
+"28394299",
+"nongene",
+"CCAAT/enhancer binding protein"
+],
+[
+"23448571",
+"nongene",
+"CCAAT/enhancer-binding protein"
+],
+[
+"34556523",
+"other:CREBBP",
+"CREBBP"
+]
+]
+},
+"CDH1": {
+"own": 40,
+"other": {
+"SEM1": 1,
+"CDH2": 1,
+"FZR1": 1
+},
+"nongene": 3,
+"examples": [
+[
+"29273724",
+"nongene",
+"E-cadherin1"
+],
+[
+"12800196",
+"other:SEM1",
+"E-CD"
+],
+[
+"34221061",
+"nongene",
+"cadherin1 gene"
+],
+[
+"34830428",
+"nongene",
+"ONDER_CDH1_TARGETS_2_UP"
+],
+[
+"38473745",
+"other:CDH2",
+"Cadherin 2"
+],
+[
+"21152103",
+"other:FZR1",
+"FZR1"
+]
+]
+},
+"CLIP4": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RBP4": {
+"own": 2,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"40442278",
+"nongene",
+"retinoic acid binding protein 4"
+]
+]
+},
+"HRH1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"SEA": {
+"own": 0,
+"other": {},
+"nongene": 11,
+"examples": [
+[
+"41760656",
+"nongene",
+"Sequence Enrichment Analysis"
+],
+[
+"41498327",
+"nongene",
+"Simple Enrichment Analysis"
+],
+[
+"41086241",
+"nongene",
+"Simple Enrichment Analysis"
+],
+[
+"24270600",
+"nongene",
+"single experiment analysis"
+],
+[
+"35947648",
+"nongene",
+"simple enrichment analysis"
+],
+[
+"40241172",
+"nongene",
+"simple enrichment analysis"
+]
+]
+},
+"ST2": {
+"own": 2,
+"other": {
+"IL33R": 4,
+"CORT": 1
+},
+"nongene": 3,
+"examples": [
+[
+"41676157",
+"other:IL33R",
+"IL-33R"
+],
+[
+"38585634",
+"other:CORT",
+"sST2"
+],
+[
+"35584230",
+"other:IL33R",
+"suppressor of tumorigenicity 2"
+],
+[
+"38184753",
+"nongene",
+"SGK1 and TET2 mutated"
+],
+[
+"42555529",
+"nongene",
+"Supporting Information S2 : Figure S6B"
+],
+[
+"29696026",
+"other:IL33R",
+"IL-33R"
+]
+]
+},
+"MLN": {
+"own": 0,
+"other": {},
+"nongene": 7,
+"examples": [
+[
+"39103576",
+"nongene",
+"mesenteric lymph nodes"
+],
+[
+"38961054",
+"nongene",
+"MLN4924"
+],
+[
+"42368576",
+"nongene",
+"MLN4924"
+],
+[
+"39027246",
+"nongene",
+"mesenteric lymph nodes"
+],
+[
+"38509894",
+"nongene",
+"metastatic lymph node"
+],
+[
+"38398217",
+"nongene",
+"MLN4924"
+]
+]
+},
+"CCR4": {
+"own": 9,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"34689996",
+"nongene",
+"N-CCR4-Fc"
+],
+[
+"37919290",
+"nongene",
+"carbon catabolite repression 4"
+]
+]
+},
+"GLA": {
+"own": 1,
+"other": {},
+"nongene": 5,
+"examples": [
+[
+"40635765",
+"nongene",
+"gut-lung axis"
+],
+[
+"25980823",
+"nongene",
+"Glabridin"
+],
+[
+"16264182",
+"nongene",
+"gamma-linolenic acid"
+],
+[
+"38037799",
+"nongene",
+"German Lymphoma Alliance"
+],
+[
+"36466549",
+"nongene",
+"Glaucocalyxin A"
+]
+]
+},
+"ERF": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"USP16": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"EIF3A": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ROR1": {
+"own": 9,
+"other": {},
+"nongene": 4,
+"examples": [
+[
+"37143733",
+"nongene",
+"receptors 1"
+],
+[
+"34641696",
+"nongene",
+"receptor 1"
+],
+[
+"42286378",
+"nongene",
+"receptor 1"
+],
+[
+"33172431",
+"nongene",
+"receptor 1"
+]
+]
+},
+"RNU12": {
+"own": 0,
+"other": {
+"RNU12-2P": 1
+},
+"nongene": 0,
+"examples": [
+[
+"38942785",
+"other:RNU12-2P",
+"U12"
+]
+]
+},
+"TNC": {
+"own": 25,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"41904529",
+"nongene",
+"Tenescin-C"
+],
+[
+"27616325",
+"nongene",
+"trans-nonachlor"
+]
+]
+},
+"GJC1": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HPF1": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CHD2": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ECD": {
+"own": 1,
+"other": {},
+"nongene": 16,
+"examples": [
+[
+"40938275",
+"nongene",
+"Erdheim Chester Disease"
+],
+[
+"41516015",
+"nongene",
+"extracellular domain"
+],
+[
+"39942711",
+"nongene",
+"extracellular domain"
+],
+[
+"39996234",
+"nongene",
+"extracellular domain"
+],
+[
+"24506198",
+"nongene",
+"extracellular domain"
+],
+[
+"36627894",
+"nongene",
+"extracellular domain"
+]
+]
+},
+"SDS": {
+"own": 2,
+"other": {
+"NEB": 1,
+"SRM": 1
+},
+"nongene": 198,
+"examples": [
+[
+"42017056",
+"nongene",
+"safety dataset"
+],
+[
+"41823345",
+"nongene",
+"sodium dodecyl sulfate"
+],
+[
+"41696734",
+"nongene",
+"sodium dodecyl sulfate"
+],
+[
+"39840105",
+"nongene",
+"sodium dodecyl sulfate"
+],
+[
+"39223638",
+"nongene",
+"Sodium dodecyl sulfate"
+],
+[
+"38831402",
+"nongene",
+"sodium dodecyl sulfate"
+]
+]
+},
+"HCP5": {
+"own": 5,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"TMPRSS3": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"NPR3": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MTF1": {
+"own": 14,
+"other": {
+"YY2": 1
+},
+"nongene": 0,
+"examples": [
+[
+"32464546",
+"other:YY2",
+"YY2"
+]
+]
+},
+"GAR1": {
+"own": 0,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"41301542",
+"nongene",
+"glycine- and arginine-rich protein 1"
+]
+]
+},
+"CST6": {
+"own": 5,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"GDA": {
+"own": 1,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"39606019",
+"nongene",
+"Gene-Disease Association"
+],
+[
+"42361404",
+"nongene",
+"gene-disease association"
+]
+]
+},
+"CCN1": {
+"own": 7,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RPL36A": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CAPS": {
+"own": 1,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"36859282",
+"nongene",
+"chemical-assisted pyridine borane sequencing"
+],
+[
+"40295888",
+"nongene",
+"cilia component genes"
+]
+]
+},
+"ARSB": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"APC2": {
+"own": 5,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"SRM": {
+"own": 6,
+"other": {},
+"nongene": 10,
+"examples": [
+[
+"36980579",
+"nongene",
+"stimulation-responsive motif"
+],
+[
+"34207065",
+"nongene",
+"selected reaction monitoring"
+],
+[
+"40175633",
+"nongene",
+"Selected reaction monitoring"
+],
+[
+"40196671",
+"nongene",
+"steroid receptor modulator"
+],
+[
+"21664237",
+"nongene",
+"steroid receptor modulator"
+],
+[
+"40162736",
+"nongene",
+"Selected reaction monitoring"
+]
+]
+},
+"F3": {
+"own": 5,
+"other": {
+"YTHDF3": 1
+},
+"nongene": 1,
+"examples": [
+[
+"27454254",
+"nongene",
+"fraction 3"
+],
+[
+"39127439",
+"other:YTHDF3",
+"YTHDF3"
+]
+]
+},
+"DMP1": {
+"own": 0,
+"other": {
+"DMTF1": 2
+},
+"nongene": 0,
+"examples": [
+[
+"26187004",
+"other:DMTF1",
+"DMTF1"
+],
+[
+"17237816",
+"other:DMTF1",
+"hDMP1"
+]
+]
+},
+"LAMA3": {
+"own": 5,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CDH7": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"USP21": {
+"own": 8,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CAD": {
+"own": 4,
+"other": {
+"DFFB": 3
+},
+"nongene": 37,
+"examples": [
+[
+"41899316",
+"nongene",
+"coronary artery disease"
+],
+[
+"42292729",
+"nongene",
+"coronary artery disease"
+],
+[
+"35042015",
+"nongene",
+"coronary artery disease"
+],
+[
+"35042015",
+"nongene",
+"EnD-CAD"
+],
+[
+"11865202",
+"nongene",
+"caspase activated deoxyribonuclease"
+],
+[
+"PPR1202285",
+"other:DFFB",
+"caspase-activated DNase"
+]
+]
+},
+"NMB": {
+"own": 1,
+"other": {
+"GPNMB": 4
+},
+"nongene": 0,
+"examples": [
+[
+"25889792",
+"other:GPNMB",
+"GPNMB"
+],
+[
+"19750230",
+"other:GPNMB",
+"GPNMB"
+],
+[
+"38874532",
+"other:GPNMB",
+"GPNMB"
+],
+[
+"38351314",
+"other:GPNMB",
+"GPNMB"
+]
+]
+},
+"FMR1": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"GCK": {
+"own": 8,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RGL1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HBM": {
+"own": 0,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"41214140",
+"nongene",
+"healthy bone marrow"
+]
+]
+},
+"FAH": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"TTN": {
+"own": 7,
+"other": {},
+"nongene": 3,
+"examples": [
+[
+"39103883",
+"nongene",
+"TTNtvs"
+],
+[
+"40840079",
+"nongene",
+"the mutational features of five genes"
+],
+[
+"39500888",
+"nongene",
+"TOP4 interacted proteins"
+]
+]
+},
+"HGF": {
+"own": 162,
+"other": {
+"MET": 1
+},
+"nongene": 9,
+"examples": [
+[
+"42036506",
+"nongene",
+"Hepatocytes growth factor"
+],
+[
+"34378358",
+"nongene",
+"Hepatic growth factor"
+],
+[
+"36348319",
+"nongene",
+"hepatic growth factor"
+],
+[
+"38238515",
+"other:MET",
+"hepatocyte growth factor receptor"
+],
+[
+"41898642",
+"nongene",
+"Hepatocytes Growth Factor"
+],
+[
+"28011478",
+"nongene",
+"hepatic growth factor"
+]
+]
+},
+"NARF": {
+"own": 1,
+"other": {
+"RNF138": 1
+},
+"nongene": 0,
+"examples": [
+[
+"27447672",
+"other:RNF138",
+"NLK-associated RING finger protein"
+]
+]
+},
+"PDC": {
+"own": 0,
+"other": {
+"DCX": 1
+},
+"nongene": 47,
+"examples": [
+[
+"41872160",
+"nongene",
+"patient-derived cell"
+],
+[
+"42545651",
+"nongene",
+"plasmacytoid dendritic cell"
+],
+[
+"41744893",
+"nongene",
+"pyruvate dehydrogenase complex"
+],
+[
+"41413688",
+"nongene",
+"Proteomic Data Commons"
+],
+[
+"38719949",
+"nongene",
+"pyruvate dehydrogenase complex"
+],
+[
+"29273724",
+"nongene",
+"pancreatic ductal carcinoma"
+]
+]
+},
+"SLK": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CAMP": {
+"own": 5,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"39839778",
+"nongene",
+"chromosome alignment-maintaining phosphoprotein"
+]
+]
+},
+"ACF": {
+"own": 0,
+"other": {},
+"nongene": 45,
+"examples": [
+[
+"41770916",
+"nongene",
+"Autocorrelation Function"
+],
+[
+"41278204",
+"nongene",
+"ATP-utilising chromatin assembly and remodeling factor"
+],
+[
+"41245260",
+"nongene",
+"aberrant crypt foci"
+],
+[
+"40660346",
+"nongene",
+"Aberrant Crypt Foci"
+],
+[
+"40537809",
+"nongene",
+"Acriflavine"
+],
+[
+"40001597",
+"nongene",
+"Aberrant Crypt Foci"
+]
+]
+},
+"PAF1": {
+"own": 4,
+"other": {
+"CDC73": 1
+},
+"nongene": 0,
+"examples": [
+[
+"39603380",
+"other:CDC73",
+"the Paf1/RNA polymerase II complex component"
+]
+]
+},
+"USP31": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"TSN": {
+"own": 0,
+"other": {},
+"nongene": 7,
+"examples": [
+[
+"35299281",
+"nongene",
+"TET2 / SRSF2 comutations"
+],
+[
+"41020042",
+"nongene",
+"Trichostatin A"
+],
+[
+"39156126",
+"nongene",
+"compound\u2014toosendanin"
+],
+[
+"40718077",
+"nongene",
+"Toosendanin"
+],
+[
+"38310228",
+"nongene",
+"toosendanin"
+],
+[
+"28209994",
+"nongene",
+"toosendanin"
+]
+]
+},
+"MME": {
+"own": 7,
+"other": {
+"MMP12": 1
+},
+"nongene": 1,
+"examples": [
+[
+"27294413",
+"nongene",
+"Matchmaker Exchange"
+],
+[
+"41440025",
+"other:MMP12",
+"Macrophage Metalloelastase"
+]
+]
+},
+"STK3": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"BCRP1": {
+"own": 0,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"19920924",
+"nongene",
+"breast cancer resistance protein 1"
+]
+]
+},
+"MAL": {
+"own": 8,
+"other": {
+"BCHE": 1
+},
+"nongene": 9,
+"examples": [
+[
+"30220976",
+"nongene",
+"MAL3-101"
+],
+[
+"37266453",
+"nongene",
+"Megakarocytic Acute Leukemia"
+],
+[
+"42606330",
+"nongene",
+"MyD88 adaptor-like protein"
+],
+[
+"36483296",
+"nongene",
+"MyD88 adaptor-like"
+],
+[
+"35409379",
+"other:BCHE",
+"E-1"
+],
+[
+"40227522",
+"nongene",
+"malignant"
+]
+]
+},
+"NRF1": {
+"own": 37,
+"other": {
+"NKRF": 1,
+"NFE2L1": 5
+},
+"nongene": 0,
+"examples": [
+[
+"39376611",
+"other:NKRF",
+"NRF"
+],
+[
+"37985752",
+"other:NFE2L1",
+"NFE2L1"
+],
+[
+"42115609",
+"other:NFE2L1",
+"nuclear factor erythroid 2-related factor 1"
+],
+[
+"39974947",
+"other:NFE2L1",
+"Nuclear factor erythroid 2-related factor 1"
+],
+[
+"PPR973526",
+"other:NFE2L1",
+"Nuclear factor erythroid 2-related factor 1"
+],
+[
+"41652483",
+"other:NFE2L1",
+"NFE2L1"
+]
+]
+},
+"CTH": {
+"own": 10,
+"other": {},
+"nongene": 4,
+"examples": [
+[
+"35596973",
+"nongene",
+"CMV-transformed HMECs"
+],
+[
+"42769430",
+"nongene",
+"Cardinal Tien Hospital"
+],
+[
+"38485737",
+"nongene",
+"CSP-rtTA/ T wist1-tetO-luc /CCSP- H gf"
+],
+[
+"38485737",
+"nongene",
+"CSP-rtTA/ T wist1-tetO-Luc/CCSP-h H GF mice"
+]
+]
+},
+"CCNL1": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CHP1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"DSC2": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"FBP2": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MAFG-AS1": {
+"own": 7,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"AIR": {
+"own": 0,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"37434394",
+"nongene",
+"adaptive immune resistance"
+]
+]
+},
+"DLC1": {
+"own": 22,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"16684779",
+"nongene",
+"dynein light chain 1"
+],
+[
+"35498431",
+"nongene",
+"dynein light chain 1"
+]
+]
+},
+"DSC3": {
+"own": 5,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PEPC": {
+"own": 0,
+"other": {
+"PCK1": 1
+},
+"nongene": 0,
+"examples": [
+[
+"39910442",
+"other:PCK1",
+"phosphoenolpyruvate carboxylase"
+]
+]
+},
+"ARHGAP10": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MMP20": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ADRA1A": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RPN1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"EPO": {
+"own": 22,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"41409030",
+"nongene",
+"European Patent Office"
+],
+[
+"27462788",
+"nongene",
+"Experimental Pharmacology & Oncology Berlin-Buch GmbH"
+]
+]
+},
+"HAS1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"LAMB2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ELK1": {
+"own": 20,
+"other": {},
+"nongene": 5,
+"examples": [
+[
+"32635983",
+"nongene",
+"ETS like-1 protein"
+],
+[
+"42432583",
+"nongene",
+"ETS like-1 protein"
+],
+[
+"29263422",
+"nongene",
+"ETS-like transcription factor-1"
+],
+[
+"38926116",
+"nongene",
+"p-ELK-1"
+],
+[
+"41774334",
+"nongene",
+"ETS-like protein 1"
+]
+]
+},
+"PDF": {
+"own": 1,
+"other": {},
+"nongene": 16,
+"examples": [
+[
+"36989121",
+"nongene",
+"pigment dispersing factor"
+],
+[
+"41960375",
+"nongene",
+"probability density function"
+],
+[
+"41476307",
+"nongene",
+"Professional Development Fund"
+],
+[
+"40112000",
+"nongene",
+"probability density function"
+],
+[
+"33514799",
+"nongene",
+"probability density function"
+],
+[
+"31227749",
+"nongene",
+"probability density function"
+]
+]
+},
+"GAS7": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MS4A7": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"GSS": {
+"own": 8,
+"other": {},
+"nongene": 3,
+"examples": [
+[
+"40864792",
+"nongene",
+"genomic scar scores"
+],
+[
+"40864792",
+"nongene",
+"Genomic Scar Score"
+],
+[
+"28199194",
+"nongene",
+"gene start sites"
+]
+]
+},
+"SPIN1": {
+"own": 3,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"42222882",
+"nongene",
+"MYC-SPIN1-\u0394C23-term"
+]
+]
+},
+"PEMT": {
+"own": 5,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"NTT": {
+"own": 0,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"40413657",
+"nongene",
+"non-coding transcript in CD4+ T cells"
+],
+[
+"38455547",
+"nongene",
+"novel tank test"
+]
+]
+},
+"MST1": {
+"own": 1,
+"other": {
+"STK4": 1,
+"STK3": 1
+},
+"nongene": 11,
+"examples": [
+[
+"41327203",
+"nongene",
+"mammalian sterile 20-like kinase 1"
+],
+[
+"40091020",
+"nongene",
+"mammalian sterile twenty kinase 1"
+],
+[
+"39411137",
+"nongene",
+"mammalian sterile 20-like kinase 1"
+],
+[
+"26657153",
+"nongene",
+"mammalian STE20-like kinase 1"
+],
+[
+"42474048",
+"nongene",
+"GST\u2010MST1"
+],
+[
+"42474048",
+"nongene",
+"FLAG\u2010MST1"
+]
+]
+},
+"CAP1": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PTPA": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"LCP1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"IMP3": {
+"own": 0,
+"other": {
+"IGF2BP3": 1,
+"HSPB3": 1
+},
+"nongene": 0,
+"examples": [
+[
+"36052258",
+"other:IGF2BP3",
+"IGF2BP3"
+],
+[
+"37024466",
+"other:HSPB3",
+"protein 3"
+]
+]
+},
+"RBM5-AS1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"DLD": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HPCA": {
+"own": 0,
+"other": {},
+"nongene": 5,
+"examples": [
+[
+"38589404",
+"nongene",
+"Human Primary Cell Atlas"
+],
+[
+"40315269",
+"nongene",
+"Human Primary Cell Atlas"
+],
+[
+"42158597",
+"nongene",
+"Human Primary Cell Atlas"
+],
+[
+"41485222",
+"nongene",
+"Human Primary Cell Atlas"
+],
+[
+"42305521",
+"nongene",
+"Human Primary Cell Atlas"
+]
+]
+},
+"DOK1": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"NOS2": {
+"own": 8,
+"other": {
+"CHRM1": 3
+},
+"nongene": 0,
+"examples": [
+[
+"36968142",
+"other:CHRM1",
+"M1"
+],
+[
+"41465346",
+"other:CHRM1",
+"M1"
+],
+[
+"40410615",
+"other:CHRM1",
+"M1"
+]
+]
+},
+"XDH": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"USP12": {
+"own": 0,
+"other": {
+"USP2": 2
+},
+"nongene": 0,
+"examples": [
+[
+"41469388",
+"other:USP2",
+"ubiquitin-specific protease 12"
+],
+[
+"39558858",
+"other:USP2",
+"ubiquitin-specific protease 12"
+]
+]
+},
+"ST7": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MR1": {
+"own": 3,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"37091679",
+"nongene",
+"MHC-related protein 1"
+]
+]
+},
+"NRP2": {
+"own": 7,
+"other": {
+"WEE1": 1
+},
+"nongene": 0,
+"examples": [
+[
+"24040438",
+"other:WEE1",
+"protein kinase"
+]
+]
+},
+"NBN": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CPA3": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"AAVS1": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HK1": {
+"own": 14,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MED1": {
+"own": 17,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CGA": {
+"own": 0,
+"other": {
+"CHGA": 7
+},
+"nongene": 6,
+"examples": [
+[
+"30410824",
+"nongene",
+"cancer germline antigen"
+],
+[
+"38541726",
+"nongene",
+"Chlorogenic acid"
+],
+[
+"28454214",
+"nongene",
+"Cancer Genome Atlas"
+],
+[
+"34451858",
+"nongene",
+"chlorogenic acid"
+],
+[
+"31448582",
+"nongene",
+"cardia gastric adenocarcinoma"
+],
+[
+"15544702",
+"other:CHGA",
+"Chromogranin A"
+]
+]
+},
+"TNNC1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"COX1": {
+"own": 4,
+"other": {
+"PTGS1": 2
+},
+"nongene": 0,
+"examples": [
+[
+"38614093",
+"other:PTGS1",
+"cyclooxygenase 1"
+],
+[
+"42147139",
+"other:PTGS1",
+"cyclooxygenase 1"
+]
+]
+},
+"XAGE1B": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"NOS3": {
+"own": 5,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"VIP": {
+"own": 8,
+"other": {},
+"nongene": 33,
+"examples": [
+[
+"40534505",
+"nongene",
+"Variable importance in projection"
+],
+[
+"40721297",
+"nongene",
+"Vav-Cre Cre/+ Flt3 ITD/+ PHF6 fl/Y"
+],
+[
+"40102405",
+"nongene",
+"Variable importance in the projection"
+],
+[
+"33255926",
+"nongene",
+"Variable Importance in Projection"
+],
+[
+"41750645",
+"nongene",
+"variable importance in projection"
+],
+[
+"40919610",
+"nongene",
+"variable importance in projection"
+]
+]
+},
+"HPPD": {
+"own": 0,
+"other": {
+"HPD": 1
+},
+"nongene": 0,
+"examples": [
+[
+"41020873",
+"other:HPD",
+"4-hydroxyphenylpyruvate dioxygenase"
+]
+]
+},
+"BRF1": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HPT": {
+"own": 0,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"41228300",
+"nongene",
+"hypothalamic-pituitary-thyroid"
+],
+[
+"32140387",
+"nongene",
+"hypothalamic\u2013pituitary\u2013thyroid"
+]
+]
+},
+"MEF2B": {
+"own": 17,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"39179580",
+"nongene",
+"MEF2B/SMARCA4 interaction by Flag"
+],
+[
+"39179580",
+"nongene",
+"MEF2B/CUL3/KLHL12 interaction by Flag"
+]
+]
+},
+"LRP1": {
+"own": 7,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"41750597",
+"nongene",
+"LDL-related Receptor Protein 1"
+]
+]
+},
+"CHD5": {
+"own": 9,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MIF": {
+"own": 51,
+"other": {
+"MIR451A": 1
+},
+"nongene": 6,
+"examples": [
+[
+"26941846",
+"nongene",
+"Mifepristone"
+],
+[
+"40879845",
+"nongene",
+"MIF signaling"
+],
+[
+"40869207",
+"other:MIR451A",
+"miR-451"
+],
+[
+"41388436",
+"nongene",
+"MIF pathway molecule expression"
+],
+[
+"41178930",
+"nongene",
+"multiplex immuno-fluorescence"
+],
+[
+"38436543",
+"nongene",
+"MIF n"
+]
+]
+},
+"OPA1": {
+"own": 13,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"SLA": {
+"own": 0,
+"other": {
+"SEPSECS": 1
+},
+"nongene": 0,
+"examples": [
+[
+"41385118",
+"other:SEPSECS",
+"soluble liver antigen"
+]
+]
+},
+"CYC1": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"EPB41L4A-AS2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"FABP5": {
+"own": 20,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"DSP": {
+"own": 6,
+"other": {},
+"nongene": 13,
+"examples": [
+[
+"41373752",
+"nongene",
+"Digital Spatial Profiler"
+],
+[
+"39042692",
+"nongene",
+"digital spatial profiling"
+],
+[
+"38527495",
+"nongene",
+"Digital Spatial Profiler"
+],
+[
+"30940996",
+"nongene",
+"downstream promoter"
+],
+[
+"40957874",
+"nongene",
+"digital spatial profiling"
+],
+[
+"40460875",
+"nongene",
+"dithiobis-succinimidyl propionate"
+]
+]
+},
+"RPA2": {
+"own": 4,
+"other": {
+"CALHM3": 1
+},
+"nongene": 3,
+"examples": [
+[
+"29776342",
+"nongene",
+"Representative data for CpG sites in cg27182070"
+],
+[
+"35813483",
+"other:CALHM3",
+"protein A"
+],
+[
+"37682991",
+"nongene",
+"p-RPA2/p-RPA32"
+],
+[
+"37682991",
+"nongene",
+"p-RPA32"
+]
+]
+},
+"PKD2": {
+"own": 0,
+"other": {
+"PRKD2": 1
+},
+"nongene": 0,
+"examples": [
+[
+"42707690",
+"other:PRKD2",
+"protein kinase D2"
+]
+]
+},
+"TAP2": {
+"own": 4,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"40888963",
+"nongene",
+"TAP2_corr"
+]
+]
+},
+"NGB": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CSN2": {
+"own": 0,
+"other": {
+"CSNK2A1": 1,
+"COPS2": 1
+},
+"nongene": 0,
+"examples": [
+[
+"41323836",
+"other:CSNK2A1",
+"casein kinase II subunit alpha"
+],
+[
+"41789626",
+"other:COPS2",
+"COP9 signalosome subunit 2"
+]
+]
+},
+"RPL10": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"FHL1": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"SRA1": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HAP1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"LBH": {
+"own": 5,
+"other": {},
+"nongene": 3,
+"examples": [
+[
+"17172825",
+"nongene",
+"LBH589"
+],
+[
+"25514379",
+"nongene",
+"LBH589"
+],
+[
+"33023028",
+"nongene",
+"LBH589"
+]
+]
+},
+"LBP": {
+"own": 5,
+"other": {},
+"nongene": 7,
+"examples": [
+[
+"41285747",
+"nongene",
+"Ligand binding pocket"
+],
+[
+"27649496",
+"nongene",
+"Loopy Back Propagation"
+],
+[
+"36230936",
+"nongene",
+"ligand-binding pocket"
+],
+[
+"39985075",
+"nongene",
+"leucine-binding pocket"
+],
+[
+"38612627",
+"nongene",
+"ligand-binding pocket"
+],
+[
+"40647540",
+"nongene",
+"L-bifunctional protein"
+]
+]
+},
+"RIF1": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"REN": {
+"own": 0,
+"other": {
+"KCTD11": 1
+},
+"nongene": 1,
+"examples": [
+[
+"23874502",
+"other:KCTD11",
+"KCTD11"
+],
+[
+"37397539",
+"nongene",
+"Ring-expanded nucleoside analog"
+]
+]
+},
+"CDR3": {
+"own": 0,
+"other": {},
+"nongene": 6,
+"examples": [
+[
+"42701426",
+"nongene",
+"complementarity-determining region 3"
+],
+[
+"41436600",
+"nongene",
+"complementarity-determining region 3"
+],
+[
+"39321027",
+"nongene",
+"complementarity\u2010determining region 3"
+],
+[
+"36619973",
+"nongene",
+"complementary determining region 3"
+],
+[
+"39741925",
+"nongene",
+"complimentary determining region 3"
+],
+[
+"39155358",
+"nongene",
+"complementarity-determining region 3"
+]
+]
+},
+"SCG2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"LAT2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ARFGAP1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"STAG1": {
+"own": 4,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"26069731",
+"nongene",
+"solid tumor associated gene 1"
+]
+]
+},
+"MBP": {
+"own": 15,
+"other": {
+"DPEP1": 1
+},
+"nongene": 11,
+"examples": [
+[
+"42156735",
+"nongene",
+"maltose-binding protein"
+],
+[
+"29439493",
+"nongene",
+"methyl binding protein"
+],
+[
+"16396836",
+"other:DPEP1",
+"MBD1"
+],
+[
+"30226539",
+"nongene",
+"mono\u2011n\u2011butyl phthalate"
+],
+[
+"41155143",
+"nongene",
+"maltose-binding protein"
+],
+[
+"39384753",
+"nongene",
+"Maltose-binding protein"
+]
+]
+},
+"NET1": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RNASEH1": {
+"own": 1,
+"other": {
+"RNASEH1-DT": 1
+},
+"nongene": 0,
+"examples": [
+[
+"41104860",
+"other:RNASEH1-DT",
+"RNASEH1-AS1"
+]
+]
+},
+"PDX1": {
+"own": 14,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"41482854",
+"nongene",
+"patient\u2010derived xenograft #1"
+]
+]
+},
+"EOS": {
+"own": 0,
+"other": {
+"IKZF4": 1
+},
+"nongene": 2,
+"examples": [
+[
+"31856855",
+"other:IKZF4",
+"Ikzf4"
+],
+[
+"42528528",
+"nongene",
+"eosinophils"
+],
+[
+"23600803",
+"nongene",
+"early transposon Oct4 and Sox2 enhancer"
+]
+]
+},
+"BAP1": {
+"own": 51,
+"other": {
+"BIN2": 1
+},
+"nongene": 12,
+"examples": [
+[
+"29206651",
+"nongene",
+"breast cancer gene 1-associated protein 1"
+],
+[
+"36685962",
+"nongene",
+"BRCA-1-associated protein 1"
+],
+[
+"34289891",
+"nongene",
+"breast cancer associated protein-1"
+],
+[
+"31734934",
+"other:BIN2",
+"Breast cancer-associated protein 1"
+],
+[
+"39034372",
+"nongene",
+"BRAC1 associated protein-1"
+],
+[
+"40181550",
+"nongene",
+"BRCA\u20101 associated protein 1"
+]
+]
+},
+"CNP": {
+"own": 4,
+"other": {
+"NPPC": 1
+},
+"nongene": 2,
+"examples": [
+[
+"39256213",
+"nongene",
+"Copy number profiles"
+],
+[
+"34538551",
+"other:NPPC",
+"C-type natriuretic peptide"
+],
+[
+"33349800",
+"nongene",
+"chronic non-bacterial prostatitis"
+]
+]
+},
+"CPD": {
+"own": 1,
+"other": {
+"FOXA3": 1
+},
+"nongene": 13,
+"examples": [
+[
+"40263296",
+"nongene",
+"consensus phosphopeptide motif"
+],
+[
+"41699661",
+"nongene",
+"cyclobutane pyrimidine dimer"
+],
+[
+"41632514",
+"nongene",
+"cyclobutane pyrimidine dimers"
+],
+[
+"38826355",
+"nongene",
+"cyclobutane pyrimidine dimers"
+],
+[
+"27470268",
+"nongene",
+"Cdc4-phosphodegron"
+],
+[
+"38036934",
+"nongene",
+"consensus phosphopeptide motif"
+]
+]
+},
+"APOBEC3A": {
+"own": 6,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"JBS": {
+"own": 0,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"42178345",
+"nongene",
+"JARID2 binding sites"
+],
+[
+"38326875",
+"nongene",
+"JARID2 binding site"
+]
+]
+},
+"MGA": {
+"own": 1,
+"other": {
+"CD74": 1
+},
+"nongene": 7,
+"examples": [
+[
+"38454121",
+"nongene",
+"Max-gene associated"
+],
+[
+"38454121",
+"nongene",
+"WT-MGA"
+],
+[
+"37790524",
+"nongene",
+"Max-gene associated"
+],
+[
+"37790524",
+"nongene",
+"WT-MGA"
+],
+[
+"PPR729382",
+"nongene",
+"Max-gene associated"
+],
+[
+"18628976",
+"other:CD74",
+"II"
+]
+]
+},
+"TAM": {
+"own": 20,
+"other": {
+"GATM": 1,
+"TYRO3": 3,
+"CD68": 1,
+"MERTK": 1,
+"C4A": 1
+},
+"nongene": 225,
+"examples": [
+[
+"40162972",
+"nongene",
+"tamoxifen"
+],
+[
+"37767575",
+"nongene",
+"tamoxifen"
+],
+[
+"37569414",
+"nongene",
+"tumor-associated macrophages"
+],
+[
+"33569447",
+"nongene",
+"tumor-associated macrophage"
+],
+[
+"38561369",
+"nongene",
+"tumor-associated macrophages"
+],
+[
+"41939469",
+"nongene",
+"Tamoxifen"
+]
+]
+},
+"CAST": {
+"own": 3,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"42415118",
+"nongene",
+"CRISPR-associated transposase"
+],
+[
+"39558175",
+"nongene",
+"China Association for Science and Technology"
+]
+]
+},
+"CIT": {
+"own": 1,
+"other": {
+"C4A": 1,
+"C6": 1
+},
+"nongene": 17,
+"examples": [
+[
+"32058954",
+"nongene",
+"chronic insulin treatment"
+],
+[
+"25899003",
+"nongene",
+"Cartes d'Identit\u00e9 des Tumeurs"
+],
+[
+"35606881",
+"other:C4A",
+"C4"
+],
+[
+"35606881",
+"other:C6",
+"C6"
+],
+[
+"33163374",
+"nongene",
+"classified into six subtypes"
+],
+[
+"28944862",
+"nongene",
+"Center for Information Technology"
+]
+]
+},
+"KLHL35": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"GRIK2": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RHEB": {
+"own": 1,
+"other": {
+"GAL3ST1": 1
+},
+"nongene": 0,
+"examples": [
+[
+"33646118",
+"other:GAL3ST1",
+"CST"
+]
+]
+},
+"DIP": {
+"own": 0,
+"other": {},
+"nongene": 4,
+"examples": [
+[
+"40014756",
+"nongene",
+"DNA immunoprecipitation"
+],
+[
+"32211020",
+"nongene",
+"Database of Interacting Proteins"
+],
+[
+"32252184",
+"nongene",
+"Database of Interacting Proteins"
+],
+[
+"26295410",
+"nongene",
+"Database of Interacting Proteins"
+]
+]
+},
+"MAFA": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"AVP": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ELF1": {
+"own": 3,
+"other": {},
+"nongene": 8,
+"examples": [
+[
+"33178343",
+"nongene",
+"E74-like factor 1"
+],
+[
+"33178343",
+"nongene",
+"si-ELF1"
+],
+[
+"39583246",
+"nongene",
+"E74-like factor 1"
+],
+[
+"33720698",
+"nongene",
+"E74-like factor 1"
+],
+[
+"40344414",
+"nongene",
+"E74-like E-Twenty-Six transcription factor 1"
+],
+[
+"32271431",
+"nongene",
+"E74 like factor 1"
+]
+]
+},
+"PDP1": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ZRS": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CDKN1A": {
+"own": 153,
+"other": {
+"TCEAL1": 2,
+"CDKN3": 1
+},
+"nongene": 0,
+"examples": [
+[
+"39223652",
+"other:TCEAL1",
+"the p21"
+],
+[
+"19122196",
+"other:TCEAL1",
+"the p21"
+],
+[
+"37658191",
+"other:CDKN3",
+"cyclin-dependent kinase inhibitor"
+]
+]
+},
+"SAG": {
+"own": 0,
+"other": {},
+"nongene": 8,
+"examples": [
+[
+"41959374",
+"nongene",
+"smoothened agonist"
+],
+[
+"38999049",
+"nongene",
+"Smoothened agonist"
+],
+[
+"29194363",
+"nongene",
+"sensitive to apoptosis gene"
+],
+[
+"10700461",
+"nongene",
+"superantigens"
+],
+[
+"38399442",
+"nongene",
+"Smoothened agonist"
+],
+[
+"38399442",
+"nongene",
+"SMO agonist"
+]
+]
+},
+"TTF1": {
+"own": 1,
+"other": {
+"NKX2-1": 62,
+"PSEN2": 1
+},
+"nongene": 5,
+"examples": [
+[
+"23732632",
+"other:NKX2-1",
+"thyroid transcription factor 1"
+],
+[
+"19442316",
+"other:NKX2-1",
+"thyroid transcription factor 1"
+],
+[
+"30628926",
+"other:NKX2-1",
+"thyroid transcription factor-1"
+],
+[
+"28672935",
+"other:NKX2-1",
+"thyroid transcription factor 1"
+],
+[
+"19747750",
+"other:NKX2-1",
+"Thyroid Transcription Factor-1"
+],
+[
+"22227247",
+"other:PSEN2",
+"pS2"
+]
+]
+},
+"PAK2": {
+"own": 6,
+"other": {
+"WEE1": 1
+},
+"nongene": 0,
+"examples": [
+[
+"21177766",
+"other:WEE1",
+"protein kinase"
+]
+]
+},
+"EIF2A": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CNR1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"DMC1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RAD54L": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"TRAF2": {
+"own": 18,
+"other": {
+"TOLLIP": 1,
+"CASP8": 1
+},
+"nongene": 0,
+"examples": [
+[
+"27454254",
+"other:TOLLIP",
+"adapter protein"
+],
+[
+"36011046",
+"other:CASP8",
+"caspase-8"
+]
+]
+},
+"BNC1": {
+"own": 2,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"39057032",
+"nongene",
+"Basonuclein 1"
+]
+]
+},
+"HP": {
+"own": 1,
+"other": {},
+"nongene": 30,
+"examples": [
+[
+"32299907",
+"nongene",
+"hematopoietic progenitor"
+],
+[
+"27454254",
+"nongene",
+"hypothetical protein"
+],
+[
+"37989525",
+"nongene",
+"Hybridization Premix"
+],
+[
+"35024731",
+"nongene",
+"histopathological"
+],
+[
+"41323278",
+"nongene",
+"hyperplastic epithelium"
+],
+[
+"41094171",
+"nongene",
+"histopathological examination"
+]
+]
+},
+"LINC01995": {
+"own": 0,
+"other": {
+"LINC01994": 1
+},
+"nongene": 0,
+"examples": [
+[
+"39323013",
+"other:LINC01994",
+"CASCADES"
+]
+]
+},
+"MIP": {
+"own": 0,
+"other": {
+"CXCL9": 1
+},
+"nongene": 14,
+"examples": [
+[
+"41089506",
+"nongene",
+"Maximum intensity projection"
+],
+[
+"20798774",
+"nongene",
+"methylation-independent-specific PCR"
+],
+[
+"33382535",
+"nongene",
+"molecular inversion probe"
+],
+[
+"41599615",
+"nongene",
+"molecularly imprinted polymer"
+],
+[
+"40855049",
+"nongene",
+"Maximal intensity projection"
+],
+[
+"22030901",
+"nongene",
+"macrophage inflammatory protein"
+]
+]
+},
+"RER": {
+"own": 0,
+"other": {},
+"nongene": 6,
+"examples": [
+[
+"33777674",
+"nongene",
+"Respiratory exchange ratio"
+],
+[
+"30934991",
+"nongene",
+"repair"
+],
+[
+"40862768",
+"nongene",
+"Respiratory exchange ratio"
+],
+[
+"38894812",
+"nongene",
+"relative enhancement ratio"
+],
+[
+"30723750",
+"nongene",
+"rough endoplasmic reticulum"
+],
+[
+"42237897",
+"nongene",
+"rough endoplasmic reticulum"
+]
+]
+},
+"CAPG": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MBD1": {
+"own": 11,
+"other": {
+"MBL2": 1
+},
+"nongene": 1,
+"examples": [
+[
+"16396836",
+"other:MBL2",
+"MBP"
+],
+[
+"PPR905190",
+"nongene",
+"methylation binding protein 1"
+]
+]
+},
+"FZD3": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"GAL": {
+"own": 2,
+"other": {},
+"nongene": 6,
+"examples": [
+[
+"40255281",
+"nongene",
+"galactose"
+],
+[
+"31652854",
+"nongene",
+"galangin"
+],
+[
+"28119125",
+"nongene",
+"galactose"
+],
+[
+"40546964",
+"nongene",
+"galactose"
+],
+[
+"40546964",
+"nongene",
+"d-galactose"
+],
+[
+"38889639",
+"nongene",
+"Galeterone"
+]
+]
+},
+"CKLF": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"APC": {
+"own": 288,
+"other": {
+"CD34": 1,
+"ANPEP": 1,
+"CD7": 2,
+"CD8A": 2,
+"CD44": 2,
+"LAMP1": 1,
+"NOTCH1": 2,
+"PTPRC": 1,
+"IL3RA": 1,
+"CD1A": 1,
+"NCR1": 1,
+"SLAMF1": 1,
+"PROC": 1,
+"ITGA6": 1,
+"IL2RA": 2,
+"HAVCR2": 1,
+"PDCD1LG2": 1,
+"ANXA5": 1,
+"PROM1": 1,
+"NOC2L": 1,
+"TFRC": 1,
+"CD36": 1,
+"SLC4A1": 1,
+"CXCR4": 1,
+"CD19": 1,
+"FCGR3B": 1,
+"CD69": 1,
+"HR": 1
+},
+"nongene": 88,
+"examples": [
+[
+"41279365",
+"other:CD34",
+"CD34"
+],
+[
+"40858756",
+"nongene",
+"allophycocyanin"
+],
+[
+"40110581",
+"other:ANPEP",
+"CD13"
+],
+[
+"40110581",
+"other:CD7",
+"CD7"
+],
+[
+"40110581",
+"nongene",
+"allophycocyanin"
+],
+[
+"39955618",
+"other:CD8A",
+"CD8"
+]
+]
+},
+"ADCY3": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"NAT2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"KLC2": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"STAP1": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ACAT2": {
+"own": 2,
+"other": {
+"ACAA2": 1
+},
+"nongene": 0,
+"examples": [
+[
+"40467104",
+"other:ACAA2",
+"Acetyl-CoA acetyltransferase"
+]
+]
+},
+"SPP1": {
+"own": 51,
+"other": {
+"HYCC1": 1
+},
+"nongene": 1,
+"examples": [
+[
+"39132148",
+"nongene",
+"shosphoprotein 1"
+],
+[
+"42227003",
+"other:HYCC1",
+"HCC"
+]
+]
+},
+"HRG": {
+"own": 1,
+"other": {
+"POMT1": 1
+},
+"nongene": 26,
+"examples": [
+[
+"41096539",
+"nongene",
+"high-risk group"
+],
+[
+"40692603",
+"nongene",
+"heregulin"
+],
+[
+"40430050",
+"nongene",
+"heregulin"
+],
+[
+"27185877",
+"nongene",
+"heregulin"
+],
+[
+"33453273",
+"nongene",
+"heregulin"
+],
+[
+"26179713",
+"nongene",
+"heregulin"
+]
+]
+},
+"CEBPZ": {
+"own": 3,
+"other": {
+"DDIT3": 1
+},
+"nongene": 0,
+"examples": [
+[
+"24878001",
+"other:DDIT3",
+"DDIT3"
+]
+]
+},
+"OXR1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PRDX6": {
+"own": 5,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"40583735",
+"nongene",
+"PRDX6 in SUM159PT cells"
+]
+]
+},
+"TPP1": {
+"own": 2,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"41338460",
+"nongene",
+"Telomere-protecting protein 1"
+]
+]
+},
+"PSAP": {
+"own": 5,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"40853482",
+"nongene",
+"prostate-specific acid phosphatase"
+],
+[
+"40668272",
+"nongene",
+"Prostataphosphatase"
+]
+]
+},
+"PXN": {
+"own": 9,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"DDX21": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"NMI": {
+"own": 0,
+"other": {},
+"nongene": 12,
+"examples": [
+[
+"22682992",
+"nongene",
+"non-muscle-invasive"
+],
+[
+"PPR1143856",
+"nongene",
+"non-muscle-invasive"
+],
+[
+"41547856",
+"nongene",
+"normalized mutual information"
+],
+[
+"42675068",
+"nongene",
+"normalized mutual information"
+],
+[
+"42608748",
+"nongene",
+"normalized mutual information"
+],
+[
+"41781618",
+"nongene",
+"normalized mutual information"
+]
+]
+},
+"KRT6C": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RGS2": {
+"own": 6,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"39372872",
+"nongene",
+"regulator of G protein signal transduction 2"
+]
+]
+},
+"RPA1": {
+"own": 6,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"THM": {
+"own": 0,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"26039576",
+"nongene",
+"Trihalomethanes"
+]
+]
+},
+"ROR2": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"OIP5": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"FGF2": {
+"own": 35,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"DAP": {
+"own": 4,
+"other": {},
+"nongene": 5,
+"examples": [
+[
+"40663784",
+"nongene",
+"Differentially accessible peak"
+],
+[
+"38594748",
+"nongene",
+"Data Analysis Pipeline"
+],
+[
+"39624961",
+"nongene",
+"differential accessibility peak"
+],
+[
+"42520222",
+"nongene",
+"differentially abundant proteins"
+],
+[
+"42538409",
+"nongene",
+"dorsal and anterior prostate"
+]
+]
+},
+"PBX2": {
+"own": 5,
+"other": {
+"LBX1": 1
+},
+"nongene": 0,
+"examples": [
+[
+"42467924",
+"other:LBX1",
+"Homeobox"
+]
+]
+},
+"RPL13": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RNASE4": {
+"own": 0,
+"other": {
+"CCL2": 1
+},
+"nongene": 0,
+"examples": [
+[
+"39478117",
+"other:CCL2",
+"mCAF"
+]
+]
+},
+"VAT1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"BACH1": {
+"own": 28,
+"other": {
+"F9": 1,
+"RUNX3": 1
+},
+"nongene": 6,
+"examples": [
+[
+"37538118",
+"nongene",
+"BTB and CNC homology1"
+],
+[
+"40263598",
+"other:F9",
+"F-9"
+],
+[
+"30842661",
+"nongene",
+"BTB and CNC homology1"
+],
+[
+"38545192",
+"other:RUNX3",
+"RUNX3"
+],
+[
+"41806079",
+"nongene",
+"BTB and CNC homolog 1"
+],
+[
+"40760448",
+"nongene",
+"btb and cnc homolog 1"
+]
+]
+},
+"LDB1": {
+"own": 6,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MPI": {
+"own": 1,
+"other": {},
+"nongene": 3,
+"examples": [
+[
+"41921416",
+"nongene",
+"mean pixel density"
+],
+[
+"41465346",
+"nongene",
+"metabolic-prognostic index"
+],
+[
+"36861126",
+"nongene",
+"methylation prognosis index"
+]
+]
+},
+"ANCR": {
+"own": 1,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"40141248",
+"nongene",
+"antidifferentiation noncoding RNA"
+],
+[
+"33293663",
+"nongene",
+"antidifferentiation noncoding RNA"
+]
+]
+},
+"RAF1": {
+"own": 4,
+"other": {
+"FKBP4": 1
+},
+"nongene": 2,
+"examples": [
+[
+"42523200",
+"other:FKBP4",
+"FKBP4"
+],
+[
+"39439468",
+"nongene",
+"ras-associated factor 1"
+],
+[
+"29750576",
+"nongene",
+"rapidly accelerated fibrosarcoma 1"
+]
+]
+},
+"FH": {
+"own": 35,
+"other": {
+"CFH": 2
+},
+"nongene": 15,
+"examples": [
+[
+"27454254",
+"nongene",
+"Familial Hypercholesterolemia"
+],
+[
+"41669370",
+"nongene",
+"family history"
+],
+[
+"40278313",
+"nongene",
+"family history"
+],
+[
+"27294413",
+"nongene",
+"Familial hypercholesterolemia"
+],
+[
+"34815386",
+"other:CFH",
+"factor H"
+],
+[
+"32295201",
+"nongene",
+"familial history"
+]
+]
+},
+"SMAD1": {
+"own": 5,
+"other": {
+"F3": 1
+},
+"nongene": 1,
+"examples": [
+[
+"39834944",
+"nongene",
+"SMAD1 OE"
+],
+[
+"25024357",
+"other:F3",
+"TF"
+]
+]
+},
+"MAK": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CAP2": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PTPRO": {
+"own": 10,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"COP1": {
+"own": 10,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"IL25": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HTRA3": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MVP": {
+"own": 7,
+"other": {},
+"nongene": 10,
+"examples": [
+[
+"33924684",
+"nongene",
+"mitral valve prolapse"
+],
+[
+"41625475",
+"nongene",
+"microvascular proliferation"
+],
+[
+"41596413",
+"nongene",
+"microvascular proliferation"
+],
+[
+"41279756",
+"nongene",
+"microvascular proliferation"
+],
+[
+"25538261",
+"nongene",
+"methylation variable positions"
+],
+[
+"39417901",
+"nongene",
+"microvesicle particles"
+]
+]
+},
+"MEMO1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RUFY3": {
+"own": 0,
+"other": {
+"CTRL": 1
+},
+"nongene": 0,
+"examples": [
+[
+"33228208",
+"other:CTRL",
+"CTRL"
+]
+]
+},
+"SKP2": {
+"own": 26,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"39793570",
+"nongene",
+"SKP2-8D9"
+]
+]
+},
+"EXT2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"GRIP1": {
+"own": 0,
+"other": {
+"FGR": 1,
+"NCOA2": 2,
+"RIPK1": 1
+},
+"nongene": 4,
+"examples": [
+[
+"18499756",
+"nongene",
+"glucocorticoid receptor interacting protein 1"
+],
+[
+"15313931",
+"nongene",
+"glucocorticoid receptor interacting protein 1"
+],
+[
+"12805412",
+"other:FGR",
+"SRC-2"
+],
+[
+"38372868",
+"nongene",
+"glucocorticoid receptor interacting protein-1"
+],
+[
+"39343952",
+"nongene",
+"glucocorticoid receptor interacting protein 1"
+],
+[
+"39027480",
+"other:NCOA2",
+"NCOA2"
+]
+]
+},
+"GRIN1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MBD3": {
+"own": 7,
+"other": {
+"HSPB3": 1
+},
+"nongene": 0,
+"examples": [
+[
+"27465550",
+"other:HSPB3",
+"protein 3"
+]
+]
+},
+"CRP": {
+"own": 49,
+"other": {},
+"nongene": 4,
+"examples": [
+[
+"42418586",
+"nongene",
+"Competitive Research Programme"
+],
+[
+"40741262",
+"nongene",
+"DAS28-CRP"
+],
+[
+"39319053",
+"nongene",
+"CRP\u22655mg/L"
+],
+[
+"22067658",
+"nongene",
+"castration-resistant phenotype"
+]
+]
+},
+"RBP2": {
+"own": 1,
+"other": {
+"KDM5A": 8,
+"YTHDF2": 1
+},
+"nongene": 0,
+"examples": [
+[
+"41437062",
+"other:KDM5A",
+"retinoblastoma binding protein 2"
+],
+[
+"39496635",
+"other:KDM5A",
+"Retinoblastoma binding protein 2"
+],
+[
+"38769556",
+"other:KDM5A",
+"retinoblastoma-binding protein 2"
+],
+[
+"29028222",
+"other:KDM5A",
+"retinoblastoma-binding protein 2"
+],
+[
+"23845141",
+"other:KDM5A",
+"Retinoblastoma-binding protein 2"
+],
+[
+"39336822",
+"other:KDM5A",
+"retinoblastoma binding protein 2"
+]
+]
+},
+"PAK3": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"BED": {
+"own": 0,
+"other": {},
+"nongene": 8,
+"examples": [
+[
+"40255281",
+"nongene",
+"Browser extensible data"
+],
+[
+"41539304",
+"nongene",
+"browser extensible data"
+],
+[
+"39314461",
+"nongene",
+"browser extensible data"
+],
+[
+"38863037",
+"nongene",
+"biologically effective dose"
+],
+[
+"39178387",
+"nongene",
+"Browser Extensible Data"
+],
+[
+"39739419",
+"nongene",
+"Browser Extensible Data"
+]
+]
+},
+"BRMS1": {
+"own": 26,
+"other": {
+"PHGDH": 1,
+"PSAT1": 1,
+"AR": 1
+},
+"nongene": 0,
+"examples": [
+[
+"23390556",
+"other:PHGDH",
+"NLS1"
+],
+[
+"23390556",
+"other:PSAT1",
+"NLS2"
+],
+[
+"25368381",
+"other:AR",
+"KD"
+]
+]
+},
+"CCNP": {
+"own": 1,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"35013493",
+"nongene",
+"cisplatin-loaded chitosan nanoparticles"
+]
+]
+},
+"PDK1": {
+"own": 39,
+"other": {
+"PDPK1": 3,
+"PRKD1": 1,
+"SIX5": 1
+},
+"nongene": 21,
+"examples": [
+[
+"41908013",
+"nongene",
+"phosphoinositide dependent kinase 1"
+],
+[
+"41049266",
+"nongene",
+"phosphoinositide\u2010dependent protein kinase 1"
+],
+[
+"39817564",
+"other:PDPK1",
+"3-phosphoinositide dependent protein kinase 1"
+],
+[
+"39275004",
+"other:PRKD1",
+"protein kinase D1"
+],
+[
+"21297860",
+"nongene",
+"3-phosphoinositide-dependent kinase-1"
+],
+[
+"16899133",
+"nongene",
+"phosphoinositide-dependent kinase 1"
+]
+]
+},
+"SMS": {
+"own": 7,
+"other": {
+"SST": 1
+},
+"nongene": 2,
+"examples": [
+[
+"38724748",
+"nongene",
+"single-molecule sequencing"
+],
+[
+"18575731",
+"other:SST",
+"Somatostatin"
+],
+[
+"42733934",
+"nongene",
+"synthesis and Met salvage pathway"
+]
+]
+},
+"DUSP1": {
+"own": 15,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"42651798",
+"nongene",
+"p-DUSP1"
+]
+]
+},
+"PKD1": {
+"own": 0,
+"other": {
+"PRKD1": 5
+},
+"nongene": 2,
+"examples": [
+[
+"23971832",
+"other:PRKD1",
+"protein kinase D1"
+],
+[
+"25203322",
+"other:PRKD1",
+"protein kinase D1"
+],
+[
+"19243594",
+"nongene",
+"PKD1active"
+],
+[
+"19243594",
+"nongene",
+"PKD1inactive"
+],
+[
+"39803743",
+"other:PRKD1",
+"protein kinase D1"
+],
+[
+"26795455",
+"other:PRKD1",
+"Protein kinase D1"
+]
+]
+},
+"IGH": {
+"own": 52,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"S100A16": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"OCM": {
+"own": 1,
+"other": {},
+"nongene": 6,
+"examples": [
+[
+"42063161",
+"nongene",
+"one-carbon metabolism"
+],
+[
+"40888265",
+"nongene",
+"one\u2010carbon metabolism"
+],
+[
+"41677651",
+"nongene",
+"ovarian cancer-stimulated macrophages"
+],
+[
+"41677651",
+"nongene",
+"ovarian cancer-conditioned macrophage medium"
+],
+[
+"34638280",
+"nongene",
+"omental conditioned medium"
+],
+[
+"PPR1315893",
+"nongene",
+"One Carbon Metabolism"
+]
+]
+},
+"HLF": {
+"own": 9,
+"other": {
+"HYCC1": 1
+},
+"nongene": 3,
+"examples": [
+[
+"40291722",
+"other:HYCC1",
+"HCC"
+],
+[
+"40473600",
+"nongene",
+"HA-HLF"
+],
+[
+"40473600",
+"nongene",
+"HLF depleted"
+],
+[
+"40473600",
+"nongene",
+"V5-HLF"
+]
+]
+},
+"CTSO": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"BTF3": {
+"own": 21,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MDK": {
+"own": 18,
+"other": {},
+"nongene": 4,
+"examples": [
+[
+"41320679",
+"nongene",
+"mid-stage cytokine"
+],
+[
+"40606924",
+"nongene",
+"MDK pathway ligands"
+],
+[
+"33808322",
+"nongene",
+"methyl ent-16\u03b1, 17-dihydroxy-kauran-19-oate"
+],
+[
+"21528670",
+"nongene",
+"molecule THBS2, cytokines and chemokines"
+]
+]
+},
+"KLK3": {
+"own": 35,
+"other": {
+"GAL3ST1": 1
+},
+"nongene": 0,
+"examples": [
+[
+"36335093",
+"other:GAL3ST1",
+"CST"
+]
+]
+},
+"MCM2": {
+"own": 10,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"TCF4": {
+"own": 62,
+"other": {
+"TCF7L2": 16,
+"CD4": 1
+},
+"nongene": 26,
+"examples": [
+[
+"30315825",
+"nongene",
+"TCF4<sup>OE</sup>"
+],
+[
+"30315825",
+"nongene",
+"TCF4<sup>KD</sup>"
+],
+[
+"40486851",
+"nongene",
+"cAMP/transcription factor 4"
+],
+[
+"40071088",
+"other:TCF7L2",
+"TCF7L2"
+],
+[
+"25499975",
+"nongene",
+"\u03b2-catenin/transcription factor 4"
+],
+[
+"25359619",
+"nongene",
+"\u03b2-catenin/T cell factor 4"
+]
+]
+},
+"COPD": {
+"own": 44,
+"other": {
+"KRT34": 1
+},
+"nongene": 0,
+"examples": [
+[
+"37761019",
+"other:KRT34",
+"KRT34"
+]
+]
+},
+"NAPA": {
+"own": 0,
+"other": {
+"NAPSA": 1
+},
+"nongene": 0,
+"examples": [
+[
+"26447895",
+"other:NAPSA",
+"napsin A"
+]
+]
+},
+"RFC1": {
+"own": 0,
+"other": {
+"SLC19A1": 3
+},
+"nongene": 0,
+"examples": [
+[
+"27294413",
+"other:SLC19A1",
+"reduced folate carrier 1"
+],
+[
+"24100087",
+"other:SLC19A1",
+"reduced folate carrier 1"
+],
+[
+"34332580",
+"other:SLC19A1",
+"SLC19A1"
+]
+]
+},
+"GIP": {
+"own": 4,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"39539669",
+"nongene",
+"Genetic Information Processing"
+]
+]
+},
+"LIG1": {
+"own": 4,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"41723136",
+"nongene",
+"ligases 1"
+]
+]
+},
+"DAB1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ME2": {
+"own": 9,
+"other": {
+"MDH2": 1
+},
+"nongene": 1,
+"examples": [
+[
+"42196462",
+"nongene",
+"metabolic enzyme enzyme 2"
+],
+[
+"42346100",
+"other:MDH2",
+"Malate dehydrogenase 2"
+]
+]
+},
+"OATP1": {
+"own": 0,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"39910442",
+"nongene",
+"organic anion transporting polypeptide 1"
+]
+]
+},
+"GOT1": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PGD": {
+"own": 7,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"27454254",
+"nongene",
+"preimplantation genetic diagnosis"
+],
+[
+"42661498",
+"nongene",
+"polymerized glyceryl dimethacrylate"
+]
+]
+},
+"ATD": {
+"own": 0,
+"other": {},
+"nongene": 4,
+"examples": [
+[
+"36575195",
+"nongene",
+"accelerated titration design"
+],
+[
+"31435165",
+"nongene",
+"alpha1-antitrypsin deficiency"
+],
+[
+"25025052",
+"nongene",
+"Alpha-1-antitrypsin deficiency"
+],
+[
+"24498058",
+"nongene",
+"\u03b11-antitrypsin deficiency"
+]
+]
+},
+"KLF14": {
+"own": 6,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"39518098",
+"nongene",
+"Kr\u00fcpple-Like factor 14"
+]
+]
+},
+"C6": {
+"own": 1,
+"other": {
+"CIT": 1,
+"XCL1": 1,
+"HOXC6": 6,
+"KMT2D": 1
+},
+"nongene": 7,
+"examples": [
+[
+"41611660",
+"nongene",
+"coumarin 6"
+],
+[
+"38408082",
+"nongene",
+"cluster 6"
+],
+[
+"35606881",
+"other:CIT",
+"CIT"
+],
+[
+"41608585",
+"nongene",
+"Coumarin-6"
+],
+[
+"39486886",
+"other:XCL1",
+"ATAC"
+],
+[
+"41098933",
+"other:HOXC6",
+"HOXC6"
+]
+]
+},
+"LAP": {
+"own": 0,
+"other": {
+"CEBPB": 1,
+"TGFB1": 3
+},
+"nongene": 17,
+"examples": [
+[
+"42564569",
+"nongene",
+"liver-enriched activating protein"
+],
+[
+"39617792",
+"nongene",
+"Linear Assignment Problem"
+],
+[
+"38835115",
+"nongene",
+"liver-enriched activator protein"
+],
+[
+"29805099",
+"nongene",
+"liver-enriched activator protein"
+],
+[
+"26958860",
+"nongene",
+"Lapatinib"
+],
+[
+"12052253",
+"nongene",
+"liver-enriched activating protein"
+]
+]
+},
+"PSS": {
+"own": 0,
+"other": {},
+"nongene": 12,
+"examples": [
+[
+"25375204",
+"nongene",
+"proximal splicing site"
+],
+[
+"41584369",
+"nongene",
+"polygenic survival score"
+],
+[
+"41584369",
+"nongene",
+"polygenic survival scores"
+],
+[
+"25983548",
+"nongene",
+"Perceived Stress Scale"
+],
+[
+"36231913",
+"nongene",
+"Perceived Stress Scale"
+],
+[
+"41686383",
+"nongene",
+"progression survival"
+]
+]
+},
+"ZBP1": {
+"own": 10,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"36052258",
+"nongene",
+"Zipcode Binding Protein 1"
+]
+]
+},
+"POMP": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CLC": {
+"own": 0,
+"other": {
+"FLVCR1": 1
+},
+"nongene": 7,
+"examples": [
+[
+"18393293",
+"nongene",
+"Cholangiolocellular carcinoma"
+],
+[
+"27477179",
+"nongene",
+"cutaneous lymphangitis carcinomatosa"
+],
+[
+"42491364",
+"nongene",
+"Cancer lncRNA Census"
+],
+[
+"28126467",
+"nongene",
+"cholangiolocellular carcinoma"
+],
+[
+"18677758",
+"nongene",
+"chronic lymphocytic cervicitis"
+],
+[
+"41746432",
+"nongene",
+"Cyprus Libraries Consortium"
+]
+]
+},
+"BEX1": {
+"own": 5,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"DLG2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"GRP": {
+"own": 15,
+"other": {},
+"nongene": 17,
+"examples": [
+[
+"22438966",
+"nongene",
+"glucose-regulated protein"
+],
+[
+"21268086",
+"nongene",
+"glucose-regulated protein"
+],
+[
+"25337580",
+"nongene",
+"glucose-regulated protein"
+],
+[
+"18807195",
+"nongene",
+"glucose-regulated protein"
+],
+[
+"17914584",
+"nongene",
+"glucose-regulated protein"
+],
+[
+"22819448",
+"nongene",
+"glucose-regulated protein"
+]
+]
+},
+"SPN": {
+"own": 1,
+"other": {},
+"nongene": 7,
+"examples": [
+[
+"41141277",
+"nongene",
+"Solid pseudopapillary neoplasm"
+],
+[
+"41141277",
+"nongene",
+"Solid pseudopapillary neoplasms"
+],
+[
+"39956959",
+"nongene",
+"SLM primary adjacent normal tissue"
+],
+[
+"40416581",
+"nongene",
+"solid papillary neoplasm"
+],
+[
+"39762172",
+"nongene",
+"solid pseudopapillary neoplasm"
+],
+[
+"39427587",
+"nongene",
+"Solid pseudopapillary neoplasm"
+]
+]
+},
+"GJA9": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"AN": {
+"own": 0,
+"other": {},
+"nongene": 19,
+"examples": [
+[
+"40500734",
+"nongene",
+"Tumor-adjacent normal"
+],
+[
+"40500734",
+"nongene",
+"adjacent-normal"
+],
+[
+"PPR970171",
+"nongene",
+"Tumor-adjacent normal"
+],
+[
+"42289849",
+"nongene",
+"adjacent normal samples"
+],
+[
+"36230901",
+"nongene",
+"apparent normal"
+],
+[
+"41526416",
+"nongene",
+"adjacent normal"
+]
+]
+},
+"LTBP2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CRIP1": {
+"own": 6,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"BRF2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"DUX4": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RBP1": {
+"own": 6,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MPP2": {
+"own": 0,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"41140443",
+"nongene",
+"multipotential progenitor 2 cells"
+],
+[
+"42555294",
+"nongene",
+"multipotent progenitors 2"
+]
+]
+},
+"STRAP": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PGP": {
+"own": 0,
+"other": {},
+"nongene": 4,
+"examples": [
+[
+"38255313",
+"nongene",
+"P-glycoprotein"
+],
+[
+"27294413",
+"nongene",
+"Personal Genome Project"
+],
+[
+"40076613",
+"nongene",
+"P-glycoprotein"
+],
+[
+"22014055",
+"nongene",
+"protein gene product"
+]
+]
+},
+"ATF1": {
+"own": 14,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"28011163",
+"nongene",
+"activates transcription factor 1"
+]
+]
+},
+"NTN4": {
+"own": 2,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"35687692",
+"nongene",
+"NTN4 protein\u2019s full length"
+]
+]
+},
+"TADA1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HDC": {
+"own": 1,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"41419602",
+"nongene",
+"high-dose chemotherapy"
+],
+[
+"27203405",
+"nongene",
+"high-dose chemotherapy"
+]
+]
+},
+"SLIT3": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MIA2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PRR34-AS1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CNR2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HK2": {
+"own": 144,
+"other": {
+"CD74": 7,
+"HK1": 3
+},
+"nongene": 6,
+"examples": [
+[
+"33165437",
+"other:CD74",
+"II"
+],
+[
+"38013272",
+"nongene",
+"METTL3/HK2/IGF2BP2"
+],
+[
+"36100939",
+"other:HK1",
+"hexokinase"
+],
+[
+"41820632",
+"other:CD74",
+"II"
+],
+[
+"39595195",
+"nongene",
+"hexokinase2"
+],
+[
+"26680227",
+"other:CD74",
+"II"
+]
+]
+},
+"ING2": {
+"own": 10,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"AIP": {
+"own": 4,
+"other": {},
+"nongene": 4,
+"examples": [
+[
+"41009721",
+"nongene",
+"AHR-interacting protein"
+],
+[
+"39800900",
+"nongene",
+"LN-AIP"
+],
+[
+"40482688",
+"nongene",
+"Autoimmune pancreatitis"
+],
+[
+"38612627",
+"nongene",
+"AHR interacting protein"
+]
+]
+},
+"SFN": {
+"own": 13,
+"other": {},
+"nongene": 91,
+"examples": [
+[
+"28132875",
+"nongene",
+"sulforaphane"
+],
+[
+"41819438",
+"nongene",
+"Sulforaphane"
+],
+[
+"41901189",
+"nongene",
+"sulforaphane"
+],
+[
+"41454951",
+"nongene",
+"Sulforaphane"
+],
+[
+"41580778",
+"nongene",
+"Sulforaphane"
+],
+[
+"41373981",
+"nongene",
+"sulforaphane found in broccoli sprouts"
+]
+]
+},
+"ARG1": {
+"own": 26,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ND1": {
+"own": 3,
+"other": {
+"NEUROD1": 2
+},
+"nongene": 0,
+"examples": [
+[
+"22449227",
+"other:NEUROD1",
+"NeuroD1"
+],
+[
+"23530560",
+"other:NEUROD1",
+"NeuroD1"
+]
+]
+},
+"PMP22": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CDH3": {
+"own": 2,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"40457272",
+"nongene",
+"cadherin3 gene"
+]
+]
+},
+"DBP": {
+"own": 1,
+"other": {
+"RREB1": 1
+},
+"nongene": 15,
+"examples": [
+[
+"39594226",
+"nongene",
+"dynamic BH3 profiling"
+],
+[
+"41155171",
+"nongene",
+"Dibutyl phthalate"
+],
+[
+"40299687",
+"nongene",
+"diastolic blood pressure"
+],
+[
+"38541726",
+"nongene",
+"dibutyl phthalate"
+],
+[
+"37997818",
+"nongene",
+"di-n-butyl phthalate"
+],
+[
+"35688051",
+"nongene",
+"Dibutyl phthalate"
+]
+]
+},
+"LIPA": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"SP1": {
+"own": 100,
+"other": {
+"EREG": 2,
+"VSIR": 3,
+"F3": 1
+},
+"nongene": 12,
+"examples": [
+[
+"41725031",
+"other:EREG",
+"ER"
+],
+[
+"37686205",
+"nongene",
+"ov-SP1"
+],
+[
+"37686205",
+"other:VSIR",
+"si-SP1"
+],
+[
+"35310909",
+"nongene",
+"specific protein 1"
+],
+[
+"34804778",
+"other:EREG",
+"ER"
+],
+[
+"35068341",
+"nongene",
+"shSP1"
+]
+]
+},
+"NPR2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ME3": {
+"own": 2,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"37095735",
+"nongene",
+"pcDNA3.1/Flag-ME3"
+]
+]
+},
+"RAC3": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"DIO1": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HLP": {
+"own": 0,
+"other": {},
+"nongene": 4,
+"examples": [
+[
+"32186153",
+"nongene",
+"high-dose LWDHP"
+],
+[
+"40606603",
+"nongene",
+"hyperlipidemia"
+],
+[
+"39367346",
+"nongene",
+"histone-like protein"
+],
+[
+"39367346",
+"nongene",
+"histone-like proteins"
+]
+]
+},
+"GCKR": {
+"own": 5,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"37771430",
+"nongene",
+"glucose kinase regulator"
+]
+]
+},
+"FAS": {
+"own": 17,
+"other": {
+"FASN": 66
+},
+"nongene": 18,
+"examples": [
+[
+"41696734",
+"other:FASN",
+"fatty acid synthase"
+],
+[
+"42563153",
+"nongene",
+"full analysis set"
+],
+[
+"42425977",
+"nongene",
+"ferrous ammonium sulfate"
+],
+[
+"38201888",
+"other:FASN",
+"fatty acid synthase"
+],
+[
+"30319689",
+"nongene",
+"FA synthase"
+],
+[
+"30319689",
+"other:FASN",
+"fatty acid synthase"
+]
+]
+},
+"PCDH11Y": {
+"own": 0,
+"other": {
+"ANKFY1": 1
+},
+"nongene": 0,
+"examples": [
+[
+"16255778",
+"other:ANKFY1",
+"rank 5"
+]
+]
+},
+"EBF3": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"DCR": {
+"own": 0,
+"other": {},
+"nongene": 47,
+"examples": [
+[
+"41201585",
+"nongene",
+"Disease control rate"
+],
+[
+"40619749",
+"nongene",
+"disease control rate"
+],
+[
+"42061029",
+"nongene",
+"disease control rate"
+],
+[
+"41049266",
+"nongene",
+"disease control rate"
+],
+[
+"39780291",
+"nongene",
+"disease control rate"
+],
+[
+"39554747",
+"nongene",
+"disease control rate"
+]
+]
+},
+"C7": {
+"own": 2,
+"other": {
+"ARHGAP4": 1
+},
+"nongene": 1,
+"examples": [
+[
+"39937829",
+"other:ARHGAP4",
+"C1"
+],
+[
+"19484134",
+"nongene",
+"C7 depleted"
+]
+]
+},
+"DAP3": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"FAP": {
+"own": 65,
+"other": {
+"AFAP1": 4,
+"TBX1": 1
+},
+"nongene": 97,
+"examples": [
+[
+"38247798",
+"nongene",
+"Familial Adenomatous Polyposis"
+],
+[
+"41360825",
+"nongene",
+"familial adenomatous polyposis"
+],
+[
+"35456450",
+"nongene",
+"familial adenomatous polyposis"
+],
+[
+"42048609",
+"nongene",
+"familial adenomatous polyposis"
+],
+[
+"42122263",
+"nongene",
+"familial adenomatous polyposis"
+],
+[
+"41857189",
+"nongene",
+"familial adenomatous polyposis"
+]
+]
+},
+"CKB": {
+"own": 5,
+"other": {
+"CHKA": 1
+},
+"nongene": 2,
+"examples": [
+[
+"40805145",
+"nongene",
+"Clinical Knowledgebase Boost"
+],
+[
+"27294413",
+"nongene",
+"Clinical Knowledgebase"
+],
+[
+"40565099",
+"other:CHKA",
+"CK"
+]
+]
+},
+"GJA10": {
+"own": 0,
+"other": {
+"GJA9": 1
+},
+"nongene": 0,
+"examples": [
+[
+"40285453",
+"other:GJA9",
+"gap junction alpha-10"
+]
+]
+},
+"PRF1": {
+"own": 14,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"NAT1": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"BEX2": {
+"own": 3,
+"other": {
+"TWSG1": 1
+},
+"nongene": 0,
+"examples": [
+[
+"19835597",
+"other:TWSG1",
+"TSG"
+]
+]
+},
+"GPI": {
+"own": 8,
+"other": {},
+"nongene": 30,
+"examples": [
+[
+"40170854",
+"nongene",
+"glycosylphosphatidylinositol"
+],
+[
+"39717767",
+"nongene",
+"Glycosylphosphatidylinositol"
+],
+[
+"38706844",
+"nongene",
+"glycosylphosphatidyl inositol"
+],
+[
+"38378679",
+"nongene",
+"glycosylphosphatidylinositol"
+],
+[
+"32530786",
+"nongene",
+"glycosyl phosphatidylinositol"
+],
+[
+"33171372",
+"nongene",
+"Glycosyl-Phosphatidyl-Inositol"
+]
+]
+},
+"SF": {
+"own": 0,
+"other": {
+"SLU7": 4,
+"IGFBP7": 1,
+"CASP4": 1
+},
+"nongene": 33,
+"examples": [
+[
+"40546817",
+"other:SLU7",
+"splicing factor"
+],
+[
+"42273916",
+"nongene",
+"short form"
+],
+[
+"36944332",
+"other:SLU7",
+"splicing factor"
+],
+[
+"38743185",
+"nongene",
+"Short Form"
+],
+[
+"37968653",
+"nongene",
+"survival fraction"
+],
+[
+"34834420",
+"other:SLU7",
+"splicing factor"
+]
+]
+},
+"LAT": {
+"own": 3,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"38841373",
+"nongene",
+"Limma algorithm"
+],
+[
+"39880866",
+"nongene",
+"latency-associated transcript"
+]
+]
+},
+"CAT": {
+"own": 70,
+"other": {},
+"nongene": 31,
+"examples": [
+[
+"41811965",
+"nongene",
+"Center for Advanced Technology"
+],
+[
+"41620724",
+"nongene",
+"catalytic domain"
+],
+[
+"41516107",
+"nongene",
+"Chloramphenicol Acetyltransferase"
+],
+[
+"40501975",
+"nongene",
+"Center for Advanced Technologies"
+],
+[
+"40501975",
+"nongene",
+"Center of Advanced Technologies"
+],
+[
+"40501975",
+"nongene",
+"Center for Advanced Technology"
+]
+]
+},
+"SF1": {
+"own": 3,
+"other": {
+"NR5A1": 4
+},
+"nongene": 0,
+"examples": [
+[
+"40505346",
+"other:NR5A1",
+"steroidogenic factor 1"
+],
+[
+"41483302",
+"other:NR5A1",
+"steroidogenic factor 1"
+],
+[
+"41112428",
+"other:NR5A1",
+"steroidogenic factor 1"
+],
+[
+"40864301",
+"other:NR5A1",
+"Steroidogenic Factor 1"
+]
+]
+},
+"SCAF1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PGAM1": {
+"own": 9,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"SIK1": {
+"own": 6,
+"other": {
+"AR": 1
+},
+"nongene": 0,
+"examples": [
+[
+"26778753",
+"other:AR",
+"KD"
+]
+]
+},
+"ST3": {
+"own": 0,
+"other": {
+"MMP11": 1
+},
+"nongene": 0,
+"examples": [
+[
+"16606608",
+"other:MMP11",
+"stromelysin-3"
+]
+]
+},
+"XIST": {
+"own": 31,
+"other": {
+"MS4A1": 1
+},
+"nongene": 4,
+"examples": [
+[
+"31992954",
+"nongene",
+"Xi-specific transcript"
+],
+[
+"37208732",
+"other:MS4A1",
+"B1"
+],
+[
+"40214508",
+"nongene",
+"X inactivation-specific transcript"
+],
+[
+"PPR1213235",
+"nongene",
+"X-inactivation specific transcript"
+],
+[
+"42763567",
+"nongene",
+"X\u2010inactivation specific transcript"
+]
+]
+},
+"ARX": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MTTP": {
+"own": 5,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"NME1": {
+"own": 7,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"HBB": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MS2": {
+"own": 0,
+"other": {},
+"nongene": 2,
+"examples": [
+[
+"40221437",
+"nongene",
+"mass accuracies were fixed to 2e-05"
+],
+[
+"39151008",
+"nongene",
+"mass range from m/z 200 to 2000"
+]
+]
+},
+"MBD2": {
+"own": 37,
+"other": {
+"MECP2": 1
+},
+"nongene": 5,
+"examples": [
+[
+"24204564",
+"nongene",
+"Methylated DNA binding domain protein 2"
+],
+[
+"24204564",
+"nongene",
+"Methylated DNA binding protein 2"
+],
+[
+"25753662",
+"nongene",
+"MBD2IDR"
+],
+[
+"42188364",
+"nongene",
+"MBD2-Fc"
+],
+[
+"20062804",
+"other:MECP2",
+"the methyl-CpG-binding protein 2"
+],
+[
+"24130964",
+"nongene",
+"methylated DNA-binding protein 2"
+]
+]
+},
+"MAST1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CDS1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MAGI1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PLD1": {
+"own": 9,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"AMN": {
+"own": 1,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"40938275",
+"nongene",
+"\u201cassociated myeloid neoplasm"
+]
+]
+},
+"ASL": {
+"own": 10,
+"other": {},
+"nongene": 4,
+"examples": [
+[
+"39768232",
+"nongene",
+"arterial spin labeling"
+],
+[
+"41708583",
+"nongene",
+"ASL OE"
+],
+[
+"31796844",
+"nongene",
+"angiosarcoma of the liver"
+],
+[
+"38664797",
+"nongene",
+"airway surface liquid"
+]
+]
+},
+"MAML2": {
+"own": 1,
+"other": {
+"MGR1": 1
+},
+"nongene": 0,
+"examples": [
+[
+"40781158",
+"other:MGR1",
+"MA"
+]
+]
+},
+"BCAM": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CHAT": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PIM1": {
+"own": 3,
+"other": {
+"CILK1": 2,
+"CDK7": 1
+},
+"nongene": 0,
+"examples": [
+[
+"41049266",
+"other:CILK1",
+"serine/threonine\u2013protein kinase"
+],
+[
+"40992658",
+"other:CDK7",
+"serine/threonine-protein kinase 1"
+],
+[
+"42293725",
+"other:CILK1",
+"serine/threonine-protein kinase"
+]
+]
+},
+"RGS13": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"FMO2": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RNH1": {
+"own": 3,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"41319275",
+"nongene",
+"RNASENH1"
+]
+]
+},
+"TUBB": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RCD1": {
+"own": 0,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"35740429",
+"nongene",
+"RCD is classified into type 1 RCD"
+]
+]
+},
+"CYP2D6": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"NLK": {
+"own": 13,
+"other": {
+"GPI": 1
+},
+"nongene": 0,
+"examples": [
+[
+"15010821",
+"other:GPI",
+"neuroleukin"
+]
+]
+},
+"FCGR3B": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CPT1B": {
+"own": 5,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ELN": {
+"own": 2,
+"other": {
+"MLLT1": 1
+},
+"nongene": 72,
+"examples": [
+[
+"41867887",
+"nongene",
+"European Leukemia Net"
+],
+[
+"42232986",
+"nongene",
+"European LeukemiaNet"
+],
+[
+"41882099",
+"nongene",
+"European Leukemia Net"
+],
+[
+"41798677",
+"nongene",
+"European LeukemiaNet"
+],
+[
+"42017046",
+"nongene",
+"European LeukemiaNet"
+],
+[
+"41854887",
+"nongene",
+"European LeukemiaNet"
+]
+]
+},
+"ACAT1": {
+"own": 6,
+"other": {
+"SOAT1": 1
+},
+"nongene": 2,
+"examples": [
+[
+"42653493",
+"nongene",
+"acyl-CoA cholesterol acyltransferase 1"
+],
+[
+"41581144",
+"other:SOAT1",
+"SOAT1"
+],
+[
+"41238574",
+"nongene",
+"acyl-CoA cholesterol acyltransferase 1"
+]
+]
+},
+"POP1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PLAC8": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"DLG3": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"PCM1": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CREB3": {
+"own": 5,
+"other": {
+"HSPB3": 2
+},
+"nongene": 0,
+"examples": [
+[
+"38164349",
+"other:HSPB3",
+"protein 3"
+],
+[
+"40530130",
+"other:HSPB3",
+"protein 3"
+]
+]
+},
+"SCLL": {
+"own": 1,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"31628193",
+"nongene",
+"stem cell leukemia/lymphoma"
+]
+]
+},
+"CIC": {
+"own": 12,
+"other": {
+"SLC25A1": 1
+},
+"nongene": 10,
+"examples": [
+[
+"39563370",
+"nongene",
+"cancer-initiating cell"
+],
+[
+"38302412",
+"nongene",
+"cancer-immunity cycle"
+],
+[
+"42758364",
+"other:SLC25A1",
+"mitochondrial citrate carrier"
+],
+[
+"39354533",
+"nongene",
+"cancer-immunity cycle"
+],
+[
+"39132148",
+"nongene",
+"Cancer-Immunity Cycle"
+],
+[
+"28424421",
+"nongene",
+"cancer initiating cells"
+]
+]
+},
+"CAPS2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"FAAH": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"MMP25": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"TPH2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"GAB1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"AGT": {
+"own": 4,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"40201311",
+"nongene",
+"O6-alkylguanine-DNA-alkyltransferase"
+]
+]
+},
+"MED25": {
+"own": 0,
+"other": {
+"MED9": 1
+},
+"nongene": 0,
+"examples": [
+[
+"28728983",
+"other:MED9",
+"Mediator subunit 25"
+]
+]
+},
+"TRD": {
+"own": 0,
+"other": {},
+"nongene": 7,
+"examples": [
+[
+"41987339",
+"nongene",
+"target recognition domain"
+],
+[
+"37838757",
+"nongene",
+"transcriptional regulatory domain"
+],
+[
+"PPR1093969",
+"nongene",
+"transrepression domain"
+],
+[
+"35527972",
+"nongene",
+"target recognition domain"
+],
+[
+"35761256",
+"nongene",
+"transcriptional repression domain"
+],
+[
+"20659153",
+"nongene",
+"T-cell receptor delta gene"
+]
+]
+},
+"UGT1A": {
+"own": 2,
+"other": {
+"UGT1A1": 1
+},
+"nongene": 1,
+"examples": [
+[
+"36951168",
+"other:UGT1A1",
+"the UDP-glucuronosyltransferase 1A"
+],
+[
+"35155573",
+"nongene",
+"UGT1A is one of the three subfamilies"
+]
+]
+},
+"PAM": {
+"own": 0,
+"other": {},
+"nongene": 53,
+"examples": [
+[
+"42116148",
+"nongene",
+"PI3K-AKT-mTOR"
+],
+[
+"39927613",
+"nongene",
+"Partitioning Around Medoids"
+],
+[
+"37361575",
+"nongene",
+"partitioning around medoids"
+],
+[
+"40225162",
+"nongene",
+"protospacer adjacent motif"
+],
+[
+"41141392",
+"nongene",
+"PI3K/AKT/mTOR"
+],
+[
+"41375031",
+"nongene",
+"polyacrylamide"
+]
+]
+},
+"PIGF": {
+"own": 1,
+"other": {
+"PGF": 4
+},
+"nongene": 0,
+"examples": [
+[
+"40791817",
+"other:PGF",
+"placental growth factor"
+],
+[
+"39031216",
+"other:PGF",
+"placental growth factor"
+],
+[
+"37275453",
+"other:PGF",
+"placental growth factor"
+],
+[
+"39199376",
+"other:PGF",
+"placental growth factor"
+]
+]
+},
+"ME1": {
+"own": 7,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"RAE1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"ZNF474": {
+"own": 0,
+"other": {
+"ZNF106": 1
+},
+"nongene": 0,
+"examples": [
+[
+"37098532",
+"other:ZNF106",
+"ZNF106"
+]
+]
+},
+"CLK2": {
+"own": 3,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CSNK2A1": {
+"own": 5,
+"other": {
+"PSMA6": 1
+},
+"nongene": 0,
+"examples": [
+[
+"39931818",
+"other:PSMA6",
+"alpha 1"
+]
+]
+},
+"SCP2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"EAF2": {
+"own": 3,
+"other": {},
+"nongene": 1,
+"examples": [
+[
+"32878637",
+"nongene",
+"ELL protein-associated factor 2"
+]
+]
+},
+"ATR": {
+"own": 83,
+"other": {
+"ATM": 1,
+"ARHGAP4": 1
+},
+"nongene": 10,
+"examples": [
+[
+"39395083",
+"other:ATM",
+"ataxia telangiectasia mutated"
+],
+[
+"39532854",
+"other:ARHGAP4",
+"C-1"
+],
+[
+"31146998",
+"nongene",
+"attenuated total reflection"
+],
+[
+"42312508",
+"nongene",
+"atorvastatin"
+],
+[
+"30287873",
+"nongene",
+"Attenuated Total Reflectance"
+],
+[
+"41333420",
+"nongene",
+"p-ATR"
+]
+]
+},
+"RP2": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CHRNA7": {
+"own": 2,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"FLG": {
+"own": 4,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CCK": {
+"own": 2,
+"other": {},
+"nongene": 36,
+"examples": [
+[
+"39329212",
+"nongene",
+"Cell Counting Kit"
+],
+[
+"42310709",
+"nongene",
+"Cell counting kit"
+],
+[
+"37326062",
+"nongene",
+"Cell Counting Kit"
+],
+[
+"35898936",
+"nongene",
+"cell counting kit"
+],
+[
+"34457047",
+"nongene",
+"Cell Counting Kit"
+],
+[
+"26017281",
+"nongene",
+"cell counting kit"
+]
+]
+},
+"HES1": {
+"own": 42,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"GK": {
+"own": 1,
+"other": {
+"GCK": 1
+},
+"nongene": 2,
+"examples": [
+[
+"40628732",
+"nongene",
+"Gamma knife"
+],
+[
+"24056026",
+"other:GCK",
+"Glucokinase"
+],
+[
+"37993879",
+"nongene",
+"Goto-Kakizaki"
+]
+]
+},
+"SMO": {
+"own": 57,
+"other": {
+"SMOX": 3
+},
+"nongene": 5,
+"examples": [
+[
+"35989139",
+"nongene",
+"smoothed"
+],
+[
+"41002293",
+"nongene",
+"Sequential minimal optimization"
+],
+[
+"22132744",
+"other:SMOX",
+"spermine oxidase"
+],
+[
+"21874531",
+"other:SMOX",
+"spermine oxidase"
+],
+[
+"38927059",
+"nongene",
+"signaling pathway components"
+],
+[
+"39962447",
+"nongene",
+"SMOi"
+]
+]
+},
+"COX2": {
+"own": 0,
+"other": {
+"PTGS2": 27,
+"ST6GALNAC4": 1
+},
+"nongene": 9,
+"examples": [
+[
+"18801183",
+"other:PTGS2",
+"PTGS2"
+],
+[
+"41596524",
+"other:PTGS2",
+"PTGS2"
+],
+[
+"39497943",
+"other:PTGS2",
+"cyclooxygenase 2"
+],
+[
+"39282472",
+"other:PTGS2",
+"cyclooxygenase 2"
+],
+[
+"38785550",
+"other:PTGS2",
+"cyclooxygenase 2"
+],
+[
+"29980788",
+"nongene",
+"E2/cyclooxygenase-2"
+]
+]
+},
+"TXN": {
+"own": 11,
+"other": {},
+"nongene": 3,
+"examples": [
+[
+"37722711",
+"nongene",
+"Tamoxifen"
+],
+[
+"39765887",
+"nongene",
+"tetrahydro-XN"
+],
+[
+"40897711",
+"nongene",
+"TXN-S 2"
+]
+]
+},
+"SOCS4": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+},
+"CLK1": {
+"own": 1,
+"other": {},
+"nongene": 0,
+"examples": []
+}
+}
+}

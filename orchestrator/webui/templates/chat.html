@@ -1,0 +1,763 @@
+{% extends "_base.html" %}
+{% block title %}MRAG Agent — Chat{% endblock %}
+{% block extra_head %}
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+<style>
+  main.container { max-width: 100%; padding-left: 1rem; padding-right: 1rem; }
+  #twopane { display:flex; gap:0.6rem; height:80vh; min-height:620px; }
+  .pane { border:1px solid #ddd; border-radius:8px; background:var(--card-background-color,#fafafa);
+          display:flex; flex-direction:column; min-width:0; overflow:hidden; }
+  #chat-pane  { flex:0 0 36%; }
+  #plot-pane  { flex:1 1 auto; }
+  #splitter   { flex:0 0 6px; cursor:col-resize; background:transparent; border-radius:3px; }
+  #splitter:hover { background:#cbd5e1; }
+  #chat-window { flex:1 1 auto; padding:0.8em; overflow-y:auto; }
+  .plot-head   { display:flex; align-items:center; gap:0.5em; padding:0.45em 0.7em;
+                 border-bottom:1px solid #e3e3e3; font-size:0.9em; flex:0 0 auto; }
+  .plot-head select { margin:0; padding:0.2em 0.4em; font-size:0.85em; width:auto; }
+  #plot-body   { flex:1 1 auto; display:flex; min-height:0; }
+  #plot-main   { flex:1 1 auto; overflow:auto; background:#fff; padding:8px;
+                 display:flex; flex-direction:column; min-width:0; }
+  #plot-main img { display:block; margin:0 auto; max-width:100%; height:auto; }
+  #plot-empty  { color:#999; text-align:center; margin-top:18%; }
+  /* right vertical pipeline list */
+  #plot-list   { flex:0 0 232px; overflow-y:auto; border-left:1px solid #e3e3e3;
+                 background:#f3f4f6; padding:0.4em; }
+  .litem { display:flex; align-items:center; gap:0.4em; border:1px solid #d8d8d8;
+           border-radius:6px; padding:0.34em 0.5em; margin:0.2em 0; font-size:0.8em;
+           cursor:pointer; background:#fff; }
+  .litem.active { border-color:#1f77b4; background:#e3f2fd; font-weight:600; }
+  .litem.pending { opacity:0.42; cursor:default; }
+  .litem .ty { margin-left:auto; color:#888; font-size:0.95em; }
+  .zbtn { width:auto; margin:0; padding:0.15em 0.55em; font-size:0.85em; }
+  .zbtn.active { background:#1f77b4; }
+  #ptbl { border-collapse:collapse; font-size:0.8em; margin:0 auto; }
+  #ptbl th, #ptbl td { border:1px solid #ddd; padding:3px 8px; text-align:right; white-space:nowrap; }
+  #ptbl th { background:#1f77b4; color:#fff; position:sticky; top:0; }
+  #ptbl td:first-child, #ptbl th:first-child { text-align:left; font-weight:600; }
+  #ptbl tr:nth-child(even) td { background:#f7f9fc; }
+  .cy-lyt { width:auto; margin:0; padding:0.25em 0.7em; font-size:0.78em; }
+  .cy-lyt.active { background:#1f77b4; }
+  /* pipeline progress stepper */
+  #prog-wrap { max-width:760px; margin:4% auto 0; padding:0 14px; }
+  #prog-cols { display:grid; grid-template-columns:1fr 1fr; gap:6px 26px; }
+  .pcol { min-width:0; }
+  .pphase-h { font-size:0.72em; text-transform:uppercase; letter-spacing:0.05em;
+              color:#7a7f85; font-weight:700; margin:14px 0 3px; padding-bottom:3px;
+              border-bottom:1px solid #e3e3e3; }
+  .pcol > .pphase-h:first-child { margin-top:4px; }
+  #prog-head { display:flex; align-items:baseline; gap:0.6em; margin-bottom:4px; }
+  #prog-head .pct { font-size:2.1em; font-weight:700; color:#1f77b4; line-height:1; }
+  #prog-head .cur { color:#555; font-size:0.95em; }
+  #prog-bar { height:8px; border-radius:5px; background:#e6e8eb; overflow:hidden; margin:8px 0 20px; }
+  #prog-bar > i { display:block; height:100%; background:linear-gradient(90deg,#1f77b4,#4ea3e0);
+                  border-radius:5px; transition:width .5s ease; }
+  .pstage { display:flex; align-items:center; gap:0.7em; position:relative;
+            padding:7px 8px; border-radius:8px; margin:1px 0; transition:background .25s; }
+  .pstage .dot { flex:0 0 26px; height:26px; border-radius:50%; display:flex;
+                 align-items:center; justify-content:center; font-size:0.85em;
+                 background:#e6e8eb; color:#9aa0a6; border:2px solid #e6e8eb; z-index:1; }
+  .pstage::before { display:none; }
+  .pstage .lbl { font-size:0.92em; color:#444; }
+  .pstage .ic  { margin-left:auto; opacity:0.5; font-size:1.05em; }
+  .pstage.done .dot { background:#2e9e5b; border-color:#2e9e5b; color:#fff; }
+  .pstage.done .lbl { color:#2e7d46; }
+  .pstage.running .dot { background:#fff; border-color:#cfe3f5;
+                         border-top-color:#1f77b4; color:transparent;
+                         animation:pspin .8s linear infinite; }
+  .pstage.running { background:#eaf4fc; }
+  .pstage.running .lbl { color:#155a8a; font-weight:700; }
+  .pstage.error .dot { background:#d64545; border-color:#d64545; color:#fff; }
+  .pstage.error .lbl { color:#b03030; font-weight:700; }
+  .pstage.pending .lbl { color:#9aa0a6; }
+  .pstage .sub { font-size:0.82em; font-weight:600; color:#1f7ac0; }
+  @keyframes pspin { to { transform:rotate(360deg); } }
+  @keyframes mragStarSpin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+  @keyframes mragStarPulse { 0%,100%{opacity:.4;transform:scale(.82)} 50%{opacity:1;transform:scale(1.12)} }
+  .mrag-thinking{display:flex;align-items:center;gap:.5em;margin:0.5em 0;padding:0.5em 0.8em}
+  .mrag-thinking .star{display:inline-block;color:#c2653f;font-size:1.3em;line-height:1;
+    animation:mragStarSpin 1.7s linear infinite, mragStarPulse 1.15s ease-in-out infinite}
+  .mrag-thinking .lbl{color:#999;font-size:0.9em}
+  /* live SRA download panel — sits between the transcript and the composer */
+  #sra-panel { flex:0 0 auto; border-top:1px solid #e3e3e3; background:#f4f9ff;
+               padding:0.45em 0.65em 0.5em; font-size:0.82em; }
+  #sra-panel.sra-ok   { background:#f2fbf5; }
+  #sra-panel.sra-warn { background:#fffaf0; }
+  #sra-panel.sra-bad  { background:#fdf2f2; }
+  #sra-head { display:flex; align-items:center; gap:0.4em; }
+  #sra-head-txt { flex:1 1 auto; font-weight:700; color:#155a8a; overflow:hidden;
+                  text-overflow:ellipsis; white-space:nowrap; }
+  #sra-panel.sra-ok  #sra-head-txt { color:#2e7d46; }
+  #sra-panel.sra-bad #sra-head-txt { color:#b03030; }
+  #sra-panel.sra-warn #sra-head-txt{ color:#94690f; }
+  .sra-x { width:auto; margin:0; padding:0 0.35em; font-size:1em; line-height:1;
+           background:none; border:none; color:#9aa0a6; cursor:pointer; }
+  #sra-bar { height:6px; border-radius:4px; background:#e6e8eb; overflow:hidden;
+             margin:5px 0 4px; }
+  #sra-bar > i { display:block; height:100%; width:0%; border-radius:4px;
+                 background:linear-gradient(90deg,#1f77b4,#4ea3e0);
+                 transition:width .5s ease; }
+  #sra-panel.sra-ok  #sra-bar > i { background:#2e9e5b; }
+  #sra-panel.sra-bad #sra-bar > i { background:#d64545; }
+  #sra-panel.sra-warn #sra-bar > i{ background:#e0a32e; }
+  #sra-lines .sl { font-family:ui-monospace,monospace; font-size:0.93em; color:#555;
+                   white-space:pre; overflow:hidden; text-overflow:ellipsis; }
+</style>
+{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:baseline;justify-content:space-between;margin:0 0 0.4rem">
+  <h2 style="margin:0">MRAG Agent — Chat</h2>
+  <small id="run-tag" style="color:#888"></small>
+</div>
+
+<div id="twopane">
+
+  <!-- LEFT: chat -->
+  <div id="chat-pane" class="pane">
+    <div class="plot-head" style="justify-content:space-between">
+      <span>
+        <button id="new-chat-btn" onclick="newChat()" class="secondary outline"
+                style="padding:0.2em 0.6em;font-size:0.8em;margin:0;width:auto">+ New chat</button>
+        <button onclick="toggleDrawer()" class="secondary outline"
+                style="padding:0.2em 0.6em;font-size:0.8em;margin:0;width:auto">History</button>
+      </span>
+      <small style="color:#888">session: <span id="sess-id">(new)</span></small>
+    </div>
+    <div id="conv-drawer" style="display:none;border-bottom:1px solid #e3e3e3;
+         max-height:180px;overflow-y:auto;padding:0.4em;font-size:0.82em;background:#f9fafb">
+      <small style="color:#888">Loading…</small>
+    </div>
+    <div id="chat-window"></div>
+    <!-- live download progress; driven by the dest, refreshed by its own poll,
+         hidden whenever no fetch owns a directory -->
+    <div id="sra-panel" style="display:none">
+      <div id="sra-head">
+        <span id="sra-head-txt"></span>
+        <button type="button" class="sra-x" onclick="sraDismiss()"
+                title="Hide (the download keeps running)">&times;</button>
+      </div>
+      <div id="sra-bar"><i></i></div>
+      <div id="sra-lines"></div>
+    </div>
+    <div id="upload-panel" style="display:none;border-top:1px solid #e3e3e3;padding:0.55em 0.65em;background:#f9fafb;font-size:0.85em">
+      <div style="font-weight:600;margin-bottom:0.35em">Upload processed data &mdash; no FASTQ needed</div>
+      <div id="up-dropzone" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event)"
+           style="border:2px dashed #c3c9d2;border-radius:7px;padding:0.7em;text-align:center;color:#888;margin-bottom:0.5em;transition:all .12s">
+        Drag &amp; drop files here &mdash; auto-sorted into RNA / ATAC / metadata by filename
+      </div>
+      <div style="margin:0.22em 0">RNA matrix (log2 / counts / TPM):
+        <div style="display:flex;align-items:center;gap:0.5em;margin-top:0.15em">
+          <button type="button" class="zbtn" onclick="document.getElementById('up-rna').click()">Choose files</button>
+          <span id="up-rna-name" style="color:#888">no file selected</span>
+          <input type="file" id="up-rna" accept=".txt,.tsv,.csv,.gz" multiple style="display:none" onchange="upName('up-rna')"></div></div>
+      <div style="margin:0.22em 0">ATAC peak-count matrix or peaks BED:
+        <div style="display:flex;align-items:center;gap:0.5em;margin-top:0.15em">
+          <button type="button" class="zbtn" onclick="document.getElementById('up-atac').click()">Choose files</button>
+          <span id="up-atac-name" style="color:#888">no file selected</span>
+          <input type="file" id="up-atac" accept=".txt,.tsv,.csv,.bed,.narrowPeak,.gz" multiple style="display:none" onchange="upName('up-atac')"></div></div>
+      <div style="margin:0.22em 0">ATAC per-sample bigWig coverage <small style="color:#b23">(required for processed ATAC data)</small>:
+        <div style="display:flex;align-items:center;gap:0.5em;margin-top:0.15em">
+          <button type="button" class="zbtn" onclick="document.getElementById('up-bw').click()">Choose files</button>
+          <span id="up-bw-name" style="color:#888">no file selected</span>
+          <input type="file" id="up-bw" accept=".bw,.bigwig,.bigWig" multiple style="display:none" onchange="upName('up-bw')"></div></div>
+      <div style="margin:0.22em 0">Sample&#8596;group / metadata sheet <small style="color:#888">(optional but recommended)</small>:
+        <div style="display:flex;align-items:center;gap:0.5em;margin-top:0.15em">
+          <button type="button" class="zbtn" onclick="document.getElementById('up-meta').click()">Choose files</button>
+          <span id="up-meta-name" style="color:#888">no file selected</span>
+          <input type="file" id="up-meta" accept=".txt,.tsv,.csv" multiple style="display:none" onchange="upName('up-meta')"></div></div>
+      <div style="display:flex;gap:0.4em;margin-top:0.5em;align-items:center;flex-wrap:wrap">
+        <button type="button" class="zbtn" onclick="doUpload()">Upload &amp; detect</button>
+        <button type="button" class="zbtn" onclick="toggleUpload()">Cancel</button>
+        <span id="up-status" style="color:#666;font-size:0.82em"></span>
+        <div id="up-progwrap" style="display:none;flex:1 1 140px;min-width:120px;height:10px;background:#e3e7ec;border-radius:5px;overflow:hidden"><div id="up-progbar" style="width:0%;height:100%;background:#2b6cb0;transition:width .15s"></div></div>
+      </div>
+    </div>
+    <form id="chat-form" onsubmit="return sendMessage(event)"
+          style="display:flex;gap:0.4em;padding:0.5em;border-top:1px solid #e3e3e3;margin:0">
+      <button type="button" id="upload-btn" onclick="toggleUpload()" title="Upload processed RNA/ATAC data"
+              style="flex:0 0 auto;width:auto;margin:0;padding:0 0.7em">&#8593;</button>
+      <input id="chat-input" name="message" placeholder="Type a message..."
+             autocomplete="off" autofocus style="flex:1 1 auto;min-width:0;margin:0">
+      <button type="submit" id="chat-send" style="flex:0 0 auto;width:auto;margin:0;padding:0 1.1em">Send</button>
+    </form>
+  </div>
+
+  <div id="splitter"></div>
+
+  <!-- RIGHT: plot pane -->
+  <div id="plot-pane" class="pane">
+    <div class="plot-head">
+      <select id="run-select" onchange="onRunSelect()"><option value="">— no run —</option></select>
+      <span id="plot-title" style="flex:1 1 auto;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+      <span id="zoom-ctl" style="flex:0 0 auto;display:none;align-items:center;gap:0.15em">
+        <button class="zbtn" onclick="zoomOut()" title="Zoom out">−</button>
+        <span id="zoom-lbl" style="font-size:0.78em;color:#666;min-width:38px;text-align:center">100%</span>
+        <button class="zbtn" onclick="zoomIn()" title="Zoom in">＋</button>
+        <button class="zbtn" onclick="zoomReset()" title="Reset">⤢</button>
+      </span>
+      <button id="plot-dl-png" class="zbtn" onclick="downloadPlot('png')"
+              style="flex:0 0 auto;display:none;white-space:nowrap" title="Download figure as high-resolution PNG">⬇ PNG</button>
+      <button id="plot-dl-svg" class="zbtn" onclick="downloadPlot('svg')"
+              style="flex:0 0 auto;display:none;white-space:nowrap" title="Download figure as vector SVG">⬇ SVG</button>
+      <button id="report-btn" class="zbtn" onclick="toggleReport()"
+              style="flex:0 0 auto;display:none">📄 Report</button>
+      <button id="report-dl-btn" class="zbtn" onclick="downloadReport()"
+              style="flex:0 0 auto;display:none" title="Download report HTML">⬇ Report</button>
+    </div>
+    <div id="plot-body">
+      <div id="plot-main"><div id="plot-empty">No plots yet.<br><small>Start a run from the chat and results will appear here in pipeline order.</small></div></div>
+      <div id="plot-list"><small style="color:#999">Select a run</small></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const win = document.getElementById('chat-window');
+const inp = document.getElementById('chat-input');
+const sendBtn = document.getElementById('chat-send');
+const drawer = document.getElementById('conv-drawer');
+const listEl = document.getElementById('plot-list');
+const plotMain = document.getElementById('plot-main');
+const plotTitle = document.getElementById('plot-title');
+const runSelect = document.getElementById('run-select');
+const reportBtn = document.getElementById('report-btn');
+const reportDlBtn = document.getElementById('report-dl-btn');
+const zoomCtl = document.getElementById('zoom-ctl');
+const plotDlPng = document.getElementById('plot-dl-png');
+const plotDlSvg = document.getElementById('plot-dl-svg');
+function _dlSlug(s){return String(s||'figure').trim().replace(/[^A-Za-z0-9._-]+/g,'_').slice(0,60)||'figure';}
+function _dlAnchor(href,name){var a=document.createElement('a');a.href=href;a.download=name;document.body.appendChild(a);a.click();a.remove();}
+function setDlButtons(type){
+  // image + cytoscape -> PNG only; plotly -> PNG + SVG; table/section -> none
+  var showPng = (type==='image'||type==='plotly'||type==='cytoscape');
+  var showSvg = (type==='plotly');
+  plotDlPng.style.display = showPng ? 'inline-block' : 'none';
+  plotDlSvg.style.display = showSvg ? 'inline-block' : 'none';
+}
+function downloadPlot(fmt){
+  const e=plotState[activePath]; if(!e)return;
+  const base=_dlSlug(e.title);
+  if(e.type==='image'){
+    _dlAnchor(e.url, base+'.png'); return;
+  }
+  if(e.type==='plotly'){
+    const gd=document.getElementById('plot-canvas'); if(!gd||typeof Plotly==='undefined')return;
+    Plotly.downloadImage(gd,{format:fmt,scale:4,filename:base}); return;
+  }
+  if(e.type==='cytoscape'){
+    if(!_cy)return;
+    _dlAnchor(_cy.png({scale:3,full:true,bg:'white'}), base+'.png'); return;
+  }
+}
+const zoomLbl = document.getElementById('zoom-lbl');
+let sessionId = localStorage.getItem('mrag-chat-session') || '';
+let curRun = '';
+let plotState = {};      // path -> entry (insertion order = pipeline order)
+let plotOrder = [];      // ordered paths
+let activePath = '';
+let userPicked = false;
+let reportMode = false;
+let pollTimer = null;
+let imgScale = 100, canvasH = 480;
+document.getElementById('sess-id').textContent = sessionId || '(new)';
+
+function esc(s){return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function appendMsg(role, text){
+  /* never surface raw tool-call results in the chat transcript (live or
+     reloaded history); run/plot wiring is handled separately by captureRun */
+  if(typeof role==='string' && role.indexOf('tool')===0) return;
+  const div=document.createElement('div');
+  div.style.cssText="margin:0.5em 0;padding:0.5em 0.8em;border-radius:8px;font-size:0.92em;"+
+    (role==='user'?"background:#e3f2fd;text-align:right;margin-left:15%":
+     role.startsWith('tool')?"background:#f5f5f5;border:1px solid #e0e0e0;font-family:ui-monospace,monospace;font-size:0.8em":
+     role==='error'?"background:#fdecea;border:1px solid #f5c6cb":
+     "background:#fff;border:1px solid #e0e0e0;margin-right:15%");
+  div.innerHTML='<small style="color:#888">'+esc(role)+'</small><br>'+esc(text).replace(/\n/g,'<br>');
+  win.appendChild(div); win.scrollTop=win.scrollHeight;
+}
+
+/* ---------- conversation drawer ---------- */
+function toggleDrawer(){ drawer.style.display = drawer.style.display==='none'?'block':'none'; if(drawer.style.display==='block') refreshConvList(); }
+async function refreshConvList(){
+  try{
+    const d=await (await fetch('/api/conversations')).json();
+    const items=d.conversations||[];
+    if(!items.length){drawer.innerHTML='<small style="color:#888">No saved chats yet.</small>';return;}
+    drawer.innerHTML=items.map(c=>{
+      const active=c.session_id===sessionId?'background:#e3f2fd;font-weight:600':'';
+      const t=(c.title||'Untitled').replace(/</g,'&lt;');
+      const dt=(c.updated||'').slice(0,16).replace('T',' ');
+      return `<div data-sid="${esc(c.session_id)}" style="padding:0.3em 0.4em;border-radius:6px;margin:0.1em 0;cursor:pointer;${active}" onclick="loadConv(this.dataset.sid)">
+        <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t}</div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85em;color:#888">
+          <span>${dt} · ${c.n_msgs} msgs</span>
+          <a href="#" style="color:#c33" onclick="event.stopPropagation();deleteConv(this.closest('[data-sid]').dataset.sid);return false">✕</a>
+        </div></div>`;
+    }).join('');
+  }catch(e){drawer.innerHTML='<small style="color:#c33">Failed to load history</small>';}
+}
+async function loadConv(sid){
+  const r=await fetch('/api/conversations/'+sid); if(!r.ok)return;
+  const d=await r.json(); sessionId=d.session_id;
+  sraForget();                      /* re-resolved below from THIS conversation */
+  localStorage.setItem('mrag-chat-session',sessionId);
+  document.getElementById('sess-id').textContent=sessionId;
+  win.innerHTML=''; (d.messages||[]).forEach(m=>appendMsg(m.role,m.content));
+  refreshConvList();
+  sraPoll();        /* this conversation may own a download that is still running */
+}
+async function deleteConv(sid){
+  if(!confirm('Delete this chat?'))return;
+  await fetch('/api/conversations/'+sid,{method:'DELETE'});
+  if(sid===sessionId){sessionId='';localStorage.removeItem('mrag-chat-session');sraForget();document.getElementById('sess-id').textContent='(new)';win.innerHTML='';}
+  refreshConvList();
+}
+function newChat(){
+  sessionId='';localStorage.removeItem('mrag-chat-session');sraForget();
+  document.getElementById('sess-id').textContent='(new)';win.innerHTML='';inp.focus();
+  if(drawer.style.display!=='none')refreshConvList();
+}
+
+/* ---------- chat send ---------- */
+function dzOver(ev){ ev.preventDefault(); const z=document.getElementById('up-dropzone');
+  z.style.borderColor='#2b6cb0'; z.style.background='#eef4fb'; z.style.color='#2b6cb0'; }
+function dzLeave(ev){ ev.preventDefault(); const z=document.getElementById('up-dropzone');
+  z.style.borderColor='#c3c9d2'; z.style.background=''; z.style.color='#888'; }
+function _dzGuess(name){
+  const n=name.toLowerCase();
+  if(/(sheet|meta|group|sample|design|coldata|manifest)/.test(n)) return 'up-meta';
+  if(/(\.bw$|\.bigwig$|bigwig|insertions)/.test(n)) return 'up-bw';
+  if(/(atac|peak|narrowpeak|\.bed|accessib|counts?_matrix|raw_counts)/.test(n)) return 'up-atac';
+  if(/(rna|expr|log2|tpm|fpkm|deseq|rsem|geneexp|transcript)/.test(n)) return 'up-rna';
+  return 'up-rna';
+}
+function _dzAdd(inputId, file){
+  const el=document.getElementById(inputId);
+  const dt=new DataTransfer();
+  for(const f of el.files) dt.items.add(f);
+  dt.items.add(file);
+  el.files=dt.files; upName(inputId);
+}
+function dzDrop(ev){
+  ev.preventDefault(); dzLeave(ev);
+  const files=(ev.dataTransfer && ev.dataTransfer.files) ? ev.dataTransfer.files : [];
+  if(!files.length) return;
+  let n=0;
+  for(const f of files){ _dzAdd(_dzGuess(f.name), f); n++; }
+  const st=document.getElementById('up-status');
+  if(st) st.textContent='added '+n+' file(s) \u2014 review slots then Upload';
+}
+function upName(id){
+  const f=document.getElementById(id).files;
+  const el=document.getElementById(id+'-name');
+  el.textContent = f.length===0 ? 'no file selected'
+    : (f.length===1 ? f[0].name : f.length+' files selected');
+  el.style.color = f.length ? '#333' : '#888';
+}
+function toggleUpload(){
+  const p=document.getElementById('upload-panel');
+  p.style.display = (p.style.display==='none'||!p.style.display) ? 'block':'none';
+}
+function doUpload(){
+  const st=document.getElementById('up-status');
+  const bw=document.getElementById('up-progwrap');
+  const bb=document.getElementById('up-progbar');
+  const rna=document.getElementById('up-rna').files;
+  const atac=document.getElementById('up-atac').files;
+  const bwig=document.getElementById('up-bw').files;
+  const meta=document.getElementById('up-meta').files;
+  if(rna.length+atac.length+bwig.length+meta.length===0){ st.textContent='pick at least one file'; return; }
+  const fd=new FormData(); fd.append('session_id', sessionId||'');
+  for(const f of rna) fd.append('rna', f);
+  for(const f of atac) fd.append('atac', f);
+  for(const f of bwig) fd.append('bw', f);
+  for(const f of meta) fd.append('meta', f);
+  const setPct=function(pct){ bb.style.width=pct+'%'; st.textContent='uploading '+pct+'%'; };
+  bw.style.display='block'; setPct(0);
+  const xhr=new XMLHttpRequest();
+  xhr.open('POST','/api/chat/upload');
+  xhr.upload.onprogress=function(e){
+    if(e.lengthComputable){ setPct(Math.round(e.loaded/e.total*100)); }
+  };
+  xhr.upload.onload=function(){ setPct(100); st.textContent='processing on server...'; };
+  xhr.onerror=function(){ bw.style.display='none'; st.textContent='upload failed'; };
+  xhr.onload=function(){
+    let d; try{ d=JSON.parse(xhr.responseText); }
+    catch(e){ bw.style.display='none'; st.textContent='upload failed'; return; }
+    if(d.error){ bw.style.display='none'; st.textContent=d.error; return; }
+    if(d.session_id && !sessionId){ sessionId=d.session_id;
+      localStorage.setItem('mrag-chat-session',sessionId);
+      document.getElementById('sess-id').textContent=sessionId; }
+    st.textContent='uploaded '+d.n_files+' file(s)';
+    setTimeout(function(){ bw.style.display='none'; bb.style.width='0%'; }, 800);
+    ['up-rna','up-atac','up-bw','up-meta'].forEach(function(i){
+      document.getElementById(i).value=''; upName(i); });
+    toggleUpload();
+    const base=x=>x.split('/').pop(); const parts=[];
+    if(d.saved.rna.length)  parts.push('RNA: '+d.saved.rna.map(base).join(', '));
+    if(d.saved.atac.length) parts.push('ATAC: '+d.saved.atac.map(base).join(', '));
+    if(d.saved.bw && d.saved.bw.length) parts.push('bigWigs: '+d.saved.bw.length+' file(s)');
+    if(d.saved.meta.length) parts.push('metadata: '+d.saved.meta.map(base).join(', '));
+    inp.value='I uploaded processed data to `'+d.upload_dir+'` ('+parts.join('; ')+
+      '). Run detect on that directory, check data compatibility for MRAG, and tell me '+
+      'the inferred conditions (treatment vs control) before starting the run.';
+    sendMessage({preventDefault:function(){}});
+  };
+  xhr.send(fd);
+}
+
+function showThinking(){
+  hideThinking();
+  const div=document.createElement('div');
+  div.className='mrag-thinking'; div.id='mrag-thinking';
+  div.innerHTML='<span class="star">\u2733</span><span class="lbl">thinking\u2026</span>';
+  win.appendChild(div); win.scrollTop=win.scrollHeight;
+}
+function hideThinking(){ const t=document.getElementById('mrag-thinking'); if(t)t.remove(); }
+
+async function sendMessage(ev){
+  ev.preventDefault();
+  const msg=inp.value.trim(); if(!msg)return false;
+  appendMsg('user',msg); inp.value=''; sendBtn.disabled=true; sendBtn.textContent='…'; showThinking();
+  try{
+    const data=await (await fetch('/api/chat',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:msg,session_id:sessionId})})).json();
+    hideThinking();
+    if(data.error){appendMsg('error',data.error);}
+    else{
+      sessionId=data.session_id; localStorage.setItem('mrag-chat-session',sessionId);
+      document.getElementById('sess-id').textContent=sessionId;
+      appendMsg('assistant',data.reply||'(no reply)');
+      if(data.tool_calls&&data.tool_calls.length){
+        for(const tc of data.tool_calls){
+          /* tool call results are wired silently; not surfaced in chat */
+          captureRun(tc.result);
+        }
+      }
+      /* a turn that started, resumed, stopped or polled a download hands back
+         the directory to watch; the panel does the rest by itself */
+      if(data.sra_dest) sraAttach(data.sra_dest);
+    }
+  }catch(e){appendMsg('error',e.toString());}
+  finally{hideThinking();sendBtn.disabled=false;sendBtn.textContent='Send';inp.focus();}
+  return false;
+}
+
+/* == SRA PANEL JS START == */
+/* Live download panel. The browser polls a read-only endpoint; the LLM never
+   polls in a loop. State lives in the DEST (localStorage + the saved
+   conversation on the server), so a page reload picks the download back up. */
+let sraDest = localStorage.getItem('mrag-sra-dest') || '';
+let sraTimer = null;
+let sraDismissed = '';
+
+function sraLines(d){            /* panel text, pure function of the payload */
+  if(!d || !d.show) return [];
+  return (d.lines || []).slice();
+}
+function sraRender(d){
+  const panel=document.getElementById('sra-panel');
+  const lines=sraLines(d);
+  if(!lines.length || (sraDismissed && sraDismissed===d.dest && !d.active)){
+    panel.style.display='none'; return lines;
+  }
+  const st=d.state||'';
+  panel.className = (st==='running'||st==='starting') ? 'sra-run'
+                  : st==='done' ? 'sra-ok'
+                  : (st==='cancelled'||st==='partial') ? 'sra-warn' : 'sra-bad';
+  let pct=Number(d.pct); if(!isFinite(pct)) pct=0;
+  pct=Math.max(0,Math.min(100,pct));
+  document.getElementById('sra-bar').firstElementChild.style.width=pct+'%';
+  document.getElementById('sra-head-txt').textContent=lines[0];
+  document.getElementById('sra-lines').innerHTML=
+    lines.slice(1).map(function(l){return '<div class="sl">'+esc(l)+'</div>';}).join('');
+  panel.style.display='block';
+  return lines;
+}
+function sraSchedule(ms){
+  if(sraTimer){ clearTimeout(sraTimer); sraTimer=null; }
+  if(ms>0) sraTimer=setTimeout(sraPoll, ms);
+}
+async function sraPoll(){
+  try{
+    const q=[];
+    if(sraDest)   q.push('dest='+encodeURIComponent(sraDest));
+    if(sessionId) q.push('session_id='+encodeURIComponent(sessionId));
+    const d=await (await fetch('/api/sra/progress'+(q.length?'?'+q.join('&'):''))).json();
+    if(d.dest && d.dest!==sraDest){
+      sraDest=d.dest;
+      try{ localStorage.setItem('mrag-sra-dest',sraDest); }catch(e){}
+    }
+    sraRender(d);
+    sraSchedule(d.poll_ms||0);      /* 0 = terminal state: stop polling */
+  }catch(e){ sraSchedule(0); }
+}
+function sraAttach(dest){           /* a turn started/touched a download */
+  if(!dest) return;
+  sraDest=dest; sraDismissed='';
+  try{ localStorage.setItem('mrag-sra-dest',dest); }catch(e){}
+  sraSchedule(0); sraPoll();
+}
+function sraDismiss(){
+  sraDismissed=sraDest;
+  document.getElementById('sra-panel').style.display='none';
+}
+function sraForget(){               /* new chat: forget the watched directory */
+  sraDest=''; sraDismissed='';
+  try{ localStorage.removeItem('mrag-sra-dest'); }catch(e){}
+  sraSchedule(0);
+  document.getElementById('sra-panel').style.display='none';
+}
+/* == SRA PANEL JS END == */
+
+/* ---------- run / plot wiring ---------- */
+function captureRun(result){
+  if(!result||typeof result!=='object')return;
+  if(result.run_id){ addRunOption(result.run_id); selectRun(result.run_id); }
+}
+function addRunOption(rid){
+  if([...runSelect.options].some(o=>o.value===rid))return;
+  const o=document.createElement('option'); o.value=rid; o.textContent=rid; runSelect.appendChild(o);
+}
+function onRunSelect(){ if(runSelect.value) selectRun(runSelect.value); }
+function selectRun(rid){
+  if(curRun===rid && pollTimer){ runSelect.value=rid; return; }
+  curRun=rid; runSelect.value=rid; userPicked=false; activePath=''; reportMode=false; progFinished=false;
+  plotState={}; plotOrder=[]; listEl.innerHTML='<small style="color:#999">Loading…</small>';
+  plotTitle.textContent=''; zoomCtl.style.display='none'; reportBtn.style.display='none'; reportDlBtn.style.display='none'; setDlButtons(null);
+  plotMain.innerHTML='<div id="plot-empty">Loading pipeline status…</div>';
+  document.getElementById('run-tag').textContent=rid;
+  startPolling();
+}
+function startPolling(){ if(pollTimer)clearInterval(pollTimer); pollPlots(); pollTimer=setInterval(pollPlots,2500); }
+let progFinished=false;
+function _stageRow(s){
+  // no per-stage emoji: a pending stage shows an empty dot
+  const mark = s.status==='done'?'\u2713' : s.status==='error'?'\u2715' : '';
+  const det = (s.detail && s.status==='running')
+            ? ' <span class="sub">\u2014 '+esc(s.detail)+'</span>' : '';
+  return '<div class="pstage '+s.status+'"><span class="dot">'+mark+'</span>'+
+         '<span class="lbl">'+esc(s.label)+det+'</span></div>';
+}
+function _phaseBlock(name, stages){
+  return '<div class="pphase-h">'+esc(name)+'</div>'+stages.map(_stageRow).join('');
+}
+function renderProgress(d){
+  const phases = d.phases || [];
+  const byPhase = {}; phases.forEach(p=>byPhase[p]=[]);
+  (d.stages||[]).forEach(s=>{ (byPhase[s.phase]=byPhase[s.phase]||[]).push(s); });
+  const half = Math.ceil(phases.length/2);
+  const left = phases.slice(0,half), right = phases.slice(half);
+  const colHtml = ph => '<div class="pcol">'+
+    ph.map(n=>_phaseBlock(n, byPhase[n]||[])).join('')+'</div>';
+  const cur = d.finished ? 'Completed'
+            : (d.current ? esc(d.current)+'\u2026'
+            : (d.alive ? 'starting\u2026' : 'idle'));
+  plotMain.innerHTML='<div id="prog-wrap"><div id="prog-head">'+
+    '<span class="pct">'+(d.percent||0)+'%</span>'+
+    '<span class="cur">'+cur+'</span></div>'+
+    '<div id="prog-bar"><i style="width:'+(d.percent||0)+'%"></i></div>'+
+    '<div id="prog-cols">'+colHtml(left)+colHtml(right)+'</div></div>';
+}
+async function pollPlots(){
+  if(!curRun)return;
+  let prog=null;
+  try{ const pr=await fetch('/api/run/'+curRun+'/progress'); if(pr.ok) prog=await pr.json(); }catch(e){}
+  let d; try{ const r=await fetch('/api/run/'+curRun+'/plots'); if(!r.ok)return; d=await r.json(); }catch(e){return;}
+  if(d.report_ready){ reportBtn.style.display='inline-block'; reportDlBtn.style.display='inline-block'; }
+  let newest=null;
+  for(const e of (d.plots||[])){
+    const prev=plotState[e.path];
+    if(!prev) plotOrder.push(e.path);
+    plotState[e.path]=e;
+    if(e.ready && (!prev||!prev.ready)) newest=e;
+  }
+  renderList();
+  if(reportMode || userPicked) return;
+  const finished = prog ? prog.finished : false;
+  if(!finished){
+    if(prog) renderProgress(prog);            // live stepper while running
+    return;
+  }
+  // finished -> hand the stage over to plots
+  if(!progFinished){                          // first finished poll: force a plot
+    progFinished=true;
+    const first=plotOrder.map(p=>plotState[p]).find(p=>p.ready);
+    if(first){ showPlot(first.path); }
+    return;
+  }
+  if(newest){ showPlot(newest.path); }
+  else if(!activePath){ const first=plotOrder.map(p=>plotState[p]).find(p=>p.ready); if(first) showPlot(first.path); }
+}
+function tyIcon(t){ return t==='plotly'?'⬡':t==='cytoscape'?'❖':t==='table'?'▦':t==='section'?'📄':'▣'; }
+function renderList(){
+  if(!plotOrder.length){ listEl.innerHTML='<small style="color:#999">No results</small>'; return; }
+  listEl.innerHTML=plotOrder.map(p=>{
+    const e=plotState[p];
+    const cls='litem'+(p===activePath?' active':'')+(e.ready?'':' pending');
+    return `<div class="${cls}" ${e.ready?`onclick="userShow('${p}')"`:''} title="${esc(e.title)}">
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.title)}</span>
+      <span class="ty">${tyIcon(e.type)}</span></div>`;
+  }).join('');
+}
+function userShow(path){ userPicked=true; reportMode=false; reportBtn.classList.remove('active'); showPlot(path); }
+
+async function showPlot(path){
+  const e=plotState[path]; if(!e||!e.ready)return;
+  reportMode=false; reportBtn.classList.remove('active');
+  activePath=path; renderList();
+  plotTitle.textContent=e.title;
+  imgScale=100; canvasH=480; zoomLbl.textContent='100%';
+  zoomCtl.style.display = (e.type==='table'||e.type==='section') ? 'none' : 'inline-flex';
+  setDlButtons(e.type);
+  if(e.type==='section'){
+    const j = e.url.indexOf('?')>=0 ? '&' : '?';
+    plotMain.innerHTML='<iframe src="'+e.url+j+'t='+Date.now()+
+      '" style="width:100%;height:100%;flex:1 1 auto;border:0"></iframe>';
+    return;
+  }
+  if(e.type==='image'){
+    plotMain.innerHTML='<img src="'+e.url+'&t='+Date.now()+'" alt="'+esc(e.title)+'">';
+    return;
+  }
+  if(e.type==='table'){ await renderTable(e); return; }
+  let spec;
+  try{ spec=await (await fetch(e.url+'&t='+Date.now())).json(); }
+  catch(err){ plotMain.innerHTML='<div id="plot-empty">Failed to load plot</div>'; return; }
+  if(e.type==='plotly'){
+    plotMain.innerHTML='<div id="plot-canvas" style="width:100%;height:'+canvasH+'px;min-height:300px"></div>';
+    Plotly.newPlot(document.getElementById('plot-canvas'), spec.data||[], spec.layout||{}, {responsive:true,displaylogo:false});
+  }else if(e.type==='cytoscape'){
+    renderCytoscape(spec);
+  }
+}
+
+async function renderTable(e){
+  let d;
+  try{ d=await (await fetch(e.url+'&t='+Date.now())).json(); }
+  catch(err){ plotMain.innerHTML='<div id="plot-empty">Failed to load table</div>'; return; }
+  const cols=d.columns||[], rows=d.rows||[];
+  let h='<div style="overflow:auto;width:100%"><table id="ptbl"><thead><tr>';
+  h+=cols.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr></thead><tbody>';
+  for(const r of rows){ h+='<tr>'+r.map(v=>'<td>'+esc(v)+'</td>').join('')+'</tr>'; }
+  h+='</tbody></table></div>';
+  plotMain.innerHTML=h;
+}
+
+/* ---------- cytoscape (mirror report layouts/style) ---------- */
+const CY_LAYOUTS={
+  cose:{name:'cose',idealEdgeLength:90,nodeOverlap:24,refresh:20,fit:true,padding:30,
+        randomize:false,nodeRepulsion:()=>12000,edgeElasticity:()=>80,animate:false},
+  concentric:{name:'concentric',concentric:n=>(n.data('is_tf')||n.data('type')==='TF')?10:1,
+        levelWidth:()=>1,spacingFactor:1.5,minNodeSpacing:14,animate:false},
+  breadthfirst:{name:'breadthfirst',directed:true,spacingFactor:1.3,animate:false},
+};
+let _cy=null;
+function _cyApply(name){
+  if(!_cy)return;
+  const cfg=CY_LAYOUTS[name];
+  if(name==='breadthfirst'){
+    const roots=_cy.nodes('[is_tf]').length?_cy.nodes('[is_tf]'):_cy.nodes('[type = "TF"]');
+    _cy.layout(Object.assign({},cfg,{roots:roots.map(n=>n.id())})).run();
+  }else{ _cy.layout(cfg).run(); }
+  document.querySelectorAll('.cy-lyt[data-lyt]').forEach(b=>b.classList.toggle('active',b.dataset.lyt===name));
+}
+function renderCytoscape(spec){
+  const fallbackStyle=[
+    {selector:'node',style:{'label':'data(label)','font-size':9,'width':18,'height':18,
+      'background-color':'#1f77b4','color':'#222','text-valign':'center','text-halign':'center'}},
+    {selector:'edge',style:{'width':1,'line-color':'#bbb','curve-style':'bezier',
+      'target-arrow-shape':'triangle','target-arrow-color':'#bbb','arrow-scale':0.7}}];
+  plotMain.innerHTML=
+    '<div style="display:flex;gap:0.4em;padding:0 0 6px;flex:0 0 auto">'+
+    '<button class="cy-lyt active" data-lyt="cose">Spring</button>'+
+    '<button class="cy-lyt" data-lyt="concentric">Concentric</button>'+
+    '<button class="cy-lyt" data-lyt="breadthfirst">Tree</button>'+
+    '<button class="cy-lyt" id="cy-fit">Fit</button></div>'+
+    '<div id="plot-canvas" style="width:100%;height:100%;min-height:460px"></div>';
+  _cy=cytoscape({container:document.getElementById('plot-canvas'),
+    elements:spec.elements||spec,
+    style:(Array.isArray(spec.style)&&spec.style.length)?spec.style:fallbackStyle,
+    layout:{name:'preset'}});
+  document.querySelectorAll('.cy-lyt[data-lyt]').forEach(b=>b.addEventListener('click',()=>_cyApply(b.dataset.lyt)));
+  document.getElementById('cy-fit').addEventListener('click',()=>_cy.fit(null,30));
+  _cyApply('cose');
+}
+
+/* ---------- zoom ---------- */
+function _atype(){ const e=plotState[activePath]; return reportMode?null:(e?e.type:null); }
+function zoomIn(){ _zoom(1); }
+function zoomOut(){ _zoom(-1); }
+function _zoom(dir){
+  const t=_atype();
+  if(t==='image'){ imgScale=Math.max(20,Math.min(400,imgScale+dir*20));
+    const img=plotMain.querySelector('img'); if(img){img.style.maxWidth='none';img.style.width=imgScale+'%';}
+    zoomLbl.textContent=imgScale+'%'; }
+  else if(t==='plotly'){ canvasH=Math.max(260,Math.min(1800,canvasH+dir*140));
+    const c=document.getElementById('plot-canvas'); if(c){c.style.height=canvasH+'px';Plotly.Plots.resize(c);}
+    zoomLbl.textContent=Math.round(canvasH/480*100)+'%'; }
+  else if(t==='cytoscape'){ if(_cy)_cy.zoom(_cy.zoom()*(dir>0?1.2:1/1.2)); }
+}
+function zoomReset(){
+  const t=_atype();
+  if(t==='image'){ imgScale=100; const img=plotMain.querySelector('img'); if(img){img.style.width='';img.style.maxWidth='100%';} zoomLbl.textContent='100%'; }
+  else if(t==='plotly'){ canvasH=480; const c=document.getElementById('plot-canvas'); if(c){c.style.height='480px';Plotly.Plots.resize(c);} zoomLbl.textContent='100%'; }
+  else if(t==='cytoscape'){ if(_cy)_cy.fit(null,30); }
+}
+
+/* ---------- report iframe (full interactive report view) ---------- */
+function downloadReport(){ if(!curRun)return; window.location='/report/'+curRun+'/download'; }
+function toggleReport(){
+  reportMode=!reportMode;
+  if(reportMode){
+    reportBtn.classList.add('active');
+    zoomCtl.style.display='none';
+    setDlButtons(null);
+    plotTitle.textContent='Report (full interactive)';
+    activePath=''; renderList();
+    plotMain.innerHTML='<iframe src="/report/'+curRun+'?t='+Date.now()+
+      '" style="width:100%;height:100%;flex:1 1 auto;border:0"></iframe>';
+  }else{
+    reportBtn.classList.remove('active');
+    const first=plotOrder.map(p=>plotState[p]).find(p=>p.ready);
+    if(first) showPlot(first.path);
+  }
+}
+
+/* ---------- splitter ---------- */
+(function(){
+  const sp=document.getElementById('splitter'), chat=document.getElementById('chat-pane'), pane=document.getElementById('twopane');
+  let drag=false;
+  sp.addEventListener('mousedown',()=>{drag=true;document.body.style.userSelect='none';});
+  window.addEventListener('mouseup',()=>{drag=false;document.body.style.userSelect='';});
+  window.addEventListener('mousemove',e=>{
+    if(!drag)return;
+    const rect=pane.getBoundingClientRect();
+    let pct=(e.clientX-rect.left)/rect.width*100;
+    pct=Math.max(22,Math.min(70,pct));
+    chat.style.flex='0 0 '+pct+'%';
+  });
+})();
+
+/* ---------- bootstrap ---------- */
+async function loadRunOptions(){
+  try{
+    const d=await (await fetch('/api/runs_list')).json();
+    (d.runs||[]).forEach(r=>addRunOption(r));
+    // do NOT auto-select: plot pane stays empty until user picks a run
+  }catch(e){}
+}
+(async function(){
+  if(sessionId){
+    try{ const r=await fetch('/api/conversations/'+sessionId);
+      if(r.ok){const d=await r.json();(d.messages||[]).forEach(m=>appendMsg(m.role,m.content));}
+    }catch(e){}
+  }
+  loadRunOptions();
+  sraPoll();          /* a download may already be running from an earlier page */
+})();
+</script>
+{% endblock %}

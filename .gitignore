@@ -1,0 +1,86 @@
+# ---- data, not code -------------------------------------------------------
+# Genome indexes (128G), run outputs (41G), HOMER cache (16G). Rebuildable or
+# reproducible; none of it belongs in a source repository.
+# Reference/ is data except the wrapper scripts the agent runs and the patched
+# deepTools copy they call. A file can only be re-included once its parent
+# directory is, hence the dir-level negations.
+/Reference/*
+!/Reference/cistrome/
+/Reference/cistrome/*
+!/Reference/cistrome/run_giggle.sh
+!/Reference/peakheatmap/
+/Reference/peakheatmap/*
+!/Reference/peakheatmap/run_peakheatmap.sh
+!/Reference/peakheatmap/run_peakheatmap_matrix.sh
+!/Reference/peakheatmap/deeptools_patched/
+/Reference/peakheatmap/deeptools_patched/deeptools/test/
+orchestrator/webui/runs/
+orchestrator/webui/conversations/
+cache/
+
+# ---- vendored third-party trees -------------------------------------------
+bin/
+# libs/paperqa/ is the literature corpus (Qdrant store, parsed papers, cache,
+# backups, ledgers) plus its build scripts. Only the retriever package and the
+# CLI the report calls are code the agent runs.
+/libs/paperqa/*
+!/libs/paperqa/mrag_paperqa/
+!/libs/paperqa/scripts/
+/libs/paperqa/scripts/*
+!/libs/paperqa/scripts/retrieve_cli.py
+libs/genegpt_ref/
+libs/*/.venv/
+
+# ---- backup copies --------------------------------------------------------
+*.bak
+*.bak_*
+*.bak2_*
+_bak_archive/
+_archive/
+_backups/
+
+# ---- scratch --------------------------------------------------------------
+# HOMER writes <random>.seq/.pos/.tmp into its working directory.
+[0-9].[0-9]*.seq
+[0-9].[0-9]*.seq.fa
+[0-9].[0-9]*.pos
+[0-9].[0-9]*.clean.pos
+[0-9].[0-9]*.tmp
+
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# ---- secrets --------------------------------------------------------------
+# The AlphaGenome key lives outside this tree; keep it that way.
+*.key
+.env
+secrets/
+
+# Test fixtures and smoke outputs (the test suite is not part of this snapshot).
+mcps/*/tests/golden_validation/
+mcps/*/tests/smoke/*.html
+*.rds
+*.narrowPeak.filt
+
+# ---- host-local compatibility symlinks ------------------------------------
+# tools -> bin/tools, paperqa -> libs/paperqa, etc. Still referenced from a
+# handful of modules, so they stay on the host. They point into gitignored
+# trees, so tracking them would give every clone broken links.
+/tools
+/paperqa
+/cytoscape_setup
+/cytoscape-3.10.3
+/alphagenome_client
+/_pre_restructure_tree.txt
+
+# ---- dev smoke scripts ----------------------------------------------------
+# per-package one-off smoke scripts (not a test suite)
+mcps/*/tests/
+
+# ---- build reports --------------------------------------------------------
+# Rendered HTML from past runs. Useful on the host, but the published source
+# tree is code only.
+reports/

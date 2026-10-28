@@ -1,0 +1,25 @@
+[project]
+name = "viz-report-mcp"
+version = "0.1.0"
+description = "MRAG viz/report MCP: interactive HTML report (Plotly + cytoscape.js + DataTables + pyGenomeTracks)"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = [
+    "mcp[cli]>=1.0.0",
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "plotly>=5.18",
+    "jinja2>=3.1",
+    "Pillow>=10.0",
+]
+
+[project.scripts]
+viz-report-mcp = "viz_report_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/viz_report_mcp"]

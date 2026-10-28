@@ -1,0 +1,98 @@
+{% extends "_base.html" %}
+{% block content %}
+<h1>Step 2 — Configure and run</h1>
+<p>Review the detected samples below. Provide precomputed artifact paths
+(at least one of <em>INTEGRATED.csv</em> OR (<em>atac_md_csv + deseq_csv</em>))
+to skip the matching upstream stage. Aux metadata (tfs_summary,
+targets_summary, conditions_meta) is auto-derived.</p>
+
+<h3>Detected samples</h3>
+<table class="steps">
+  <thead><tr><th>Name</th><th>Modality</th><th>Arm</th><th>Rep</th></tr></thead>
+  <tbody>
+    {% for s in sheet.samples %}
+    <tr><td class="mono">{{ s.name }}</td><td>{{ s.modality }}</td>
+        <td>{{ s.arm }}</td><td>{{ s.replicate }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<form method="post" action="/api/confirm">
+  <input type="hidden" name="sheet_id" value="{{ sheet_id }}">
+
+  <h3>Run options</h3>
+  <label>
+    Canonical N (whose narrative becomes the main HTML body)
+    <select name="canonical_N">
+      <option value="4">Top 4</option>
+      <option value="6">Top 6</option>
+      <option value="8">Top 8</option>
+      <option value="10" selected>Top 10 (recommended)</option>
+    </select>
+  </label>
+
+  <h3>Section 13 (in silico axis validation)</h3>
+  <small>Which model set the section <em>leads</em> with (its first tab and emphasised row; all
+  three are always printed), and whether the AR cross-condition row is reported. Both are declared
+  here, never chosen by the smallest <em>p</em>. A bulk prostate-adenocarcinoma (PRAD) tumour cohort
+  declares AlphaGenome + the AR gate; a cell-line run (e.g. LNCaP / OC2) leaves auto. See
+  <a href="/about#section13">About</a>.</small>
+  {% if axis_sug and axis_sug.why %}<p class="mono" style="font-size:0.85em">{{ axis_sug.why }}</p>{% endif %}
+  <label>Leading model set (run.toml <code>axis_headline</code>)
+    <select name="axis_headline">
+      {% for v, lab in (("auto", "auto — the default rule (consensus when both arms ran and both single-model tests survive Holm)"),
+                        ("both", "both models (consensus)"),
+                        ("alphagenome", "AlphaGenome"),
+                        ("corgi", "Corgi")) %}
+      <option value="{{ v }}"{% if (axis_sug.axis_headline if axis_sug else "auto") == v %} selected{% endif %}>{{ lab }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>
+    <input type="checkbox" name="axis_ar_gate" value="true"{% if axis_sug and axis_sug.axis_ar_gate %} checked{% endif %}>
+    Report the AR cross-condition row (run.toml <code>axis_ar_gate</code>; PRAD only)
+  </label>
+
+  <h3>Precomputed artifacts</h3>
+  <small>Provide absolute paths on the server. Leave empty to compute from FASTQ
+  (heavy stages may take a long time; for now provide them).</small>
+
+  <label>INTEGRATED.csv (combined output)
+    <input type="text" name="integrated_csv" placeholder="/path/to/INTEGRATED.csv">
+  </label>
+  <details>
+    <summary>or separate combined inputs</summary>
+    <label>ATAC differential MD-score (DAStk output)
+      <input type="text" name="atac_md_csv"
+             placeholder="/path/to/treatment.narrowPeak_vs_control.narrowPeak_differential_md_scores.txt">
+    </label>
+    <label>DESeq2 gene CSV (RNA)
+      <input type="text" name="deseq_csv"
+             placeholder="/path/to/DESeq2.gene.csv">
+    </label>
+  </details>
+
+  <label>DiffBind output CSV (peak-level Fold/p-values)
+    <input type="text" name="diffbind_out_csv"
+           placeholder="/path/to/DiffBind_out.csv">
+  </label>
+
+  <label>HOMER annotated motif TSV (canonical sample)
+    <input type="text" name="motif_tsv"
+           placeholder="/path/to/sample.motif.tsv">
+  </label>
+
+  <label>DESeq2 gene CSV (also used by TRN — same as above if shared)
+    <input type="text" name="deseq_csv" placeholder="/path/to/DESeq2.gene.csv">
+  </label>
+
+  <details>
+    <summary>Optional visualization passthroughs</summary>
+    <label>TF table CSV (for HTML table)
+      <input type="text" name="tf_table_csv">
+    </label>
+  </details>
+
+  <button type="submit">Start run</button>
+</form>
+{% endblock %}

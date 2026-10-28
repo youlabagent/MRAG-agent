@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}MRAG Agent{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <style>
+    .step-ok       { color: #2ca02c; }
+    .step-fail     { color: #d62728; }
+    .step-skipped  { color: #888; }
+    .step-running  { color: #1f77b4; }
+    .step-provided { color: #9467bd; }
+    .step-queued   { color: #aaa; }
+    .nav-strip a { margin-right: 1.5rem; }
+    .pill { display:inline-block; padding:2px 8px; border-radius:10px;
+            font-size:0.8em; background:#eee; color:#333; }
+    .pill.ok      { background:#d4edda; color:#155724; }
+    .pill.fail    { background:#f8d7da; color:#721c24; }
+    .pill.running { background:#cce5ff; color:#004085; }
+    .pill.partial { background:#fff3cd; color:#856404; }
+    table.steps td.status { width: 130px; }
+    .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.85em; }
+    details.diag { padding: 0.5em; background: #fff3cd; border-radius: 6px; margin-top: 0.5em; }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="container">
+    <nav class="nav-strip">
+      <a href="/" style="text-decoration:none;color:inherit"><strong style="font-size:1.2em">MRAG Agent</strong></a>
+      &nbsp;&nbsp;
+      <a href="/">Home</a>
+      <a href="/about">About MRAG</a>
+      <a href="/chat">Chat</a>
+      <a href="/runs">Runs</a>
+      <a href="/contact">Contact</a>
+      
+    </nav>
+    
+    <hr>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="container">
+    <hr>
+    <small>MRAG Agent v0.1.0 · LLMs: Qwen3.6 (report text), Qwen3.8 (target scoring, chat)</small>
+  </footer>
+</body>
+</html>

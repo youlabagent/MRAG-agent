@@ -1,0 +1,43 @@
+{% extends "_base.html" %}
+{% block content %}
+<h1>MRAG Agent</h1>
+<p><strong>MRAG</strong> (Master Regulator analysis of Accessible Genome) integrates
+ATAC-seq (chromatin accessibility) and RNA-seq (gene expression) to identify
+the transcription factors that drive condition-specific gene regulation.</p>
+
+<article style="background:#f4f6fa;padding:1rem 1.25rem;margin:1rem 0;">
+  <strong>How to use this app</strong>
+  <ul style="margin:0.5rem 0 0;padding-left:1.2rem;line-height:1.6">
+    <li><strong>About MRAG</strong> &mdash; what MRAG is, what it does, and what kind of biology it answers.</li>
+    <li><strong>Chat</strong> &mdash; the main entry point. Launch and monitor runs through natural conversation with the agent.</li>
+    <li><strong>Runs</strong> &mdash; review every past run: live progress, manifest, and the final report.</li>
+  </ul>
+</article>
+
+<h3>Start</h3>
+<ul>
+  <li><a href="/chat" role="button">Open Chat</a></li>
+  <li><a href="/runs">Browse previous runs</a></li>
+</ul>
+
+{% if runs %}
+<h3>Recent runs</h3>
+<table class="steps">
+  <thead><tr><th>Run ID</th><th>Created</th><th>Status</th><th>Steps</th><th></th></tr></thead>
+  <tbody>
+  {% for r in runs %}
+    <tr>
+      <td class="mono">{{ r.run_id }}</td>
+      <td>{{ r.created }}</td>
+      <td><span class="pill {{ r.status }}">{{ r.status }}</span></td>
+      <td>{{ r.n_steps | default(0) }}</td>
+      <td>
+        <a href="/run/{{ r.run_id }}">view</a>
+        {% if r.final_html %}· <a href="/report/{{ r.run_id }}" target="_blank">report</a>{% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

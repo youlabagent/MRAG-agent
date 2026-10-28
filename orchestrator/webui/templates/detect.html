@@ -1,0 +1,79 @@
+{% extends "_base.html" %}
+{% block content %}
+<h1>Step 1 — Detect samples</h1>
+<p>Point MRAG at a directory of FASTQ files. The orchestrator pairs R1/R2,
+infers the experimental arm (e.g. <code>ONECUT2-OE</code> vs <code>cMyc-OE</code>)
+from filename patterns, and produces a sample sheet for you to review.</p>
+
+<form method="post" action="/api/detect">
+  <label>
+    FASTQ directory (absolute path on the server)
+    <input name="fastq_dir" id="fastq_dir_input"
+           placeholder="/BIO1/MRAG/MRAG_data" required
+           value="{{ fastq_dir | default('') }}">
+  </label>
+  <button type="button" class="secondary outline"
+          onclick="
+            document.getElementById('browse-modal').showModal();
+            htmx.ajax('GET', '/api/browse?path=/BIO1/MRAG/MRAG_data', '#browse-pane');
+          ">📁 Browse server directories</button>
+
+  <dialog id="browse-modal">
+    <article style="max-width:720px">
+      <header><strong>Browse server directories</strong>
+        <a href="#" aria-label="Close" class="close"
+           onclick="document.getElementById('browse-modal').close(); return false;"></a>
+      </header>
+      <div id="browse-pane"><em>Loading...</em></div>
+    </article>
+  </dialog>
+  <fieldset>
+    <label>
+      <input type="checkbox" name="llm_assist" value="on" {% if llm_used %}checked{% endif %}>
+      Use LLM-assist for ambiguous samples (Qwen3.6-27B). Slower but
+      handles perturbations outside the built-in keyword dictionary.
+    </label>
+  </fieldset>
+  <button type="submit">Detect</button>
+</form>
+
+{% if sheet %}
+<hr>
+<h3>Detection result</h3>
+<p>{{ sheet.summary_human }}</p>
+{% if sheet.needs_user_action %}
+  <article class="step-fail"><strong>Action needed.</strong> Some samples have low-confidence
+  arm assignment. Edit the sheet on the next page or rerun with <code>LLM-assist</code> enabled.</article>
+{% endif %}
+
+<table class="steps">
+  <thead><tr><th>Sample</th><th>Modality</th><th>Arm</th><th>Replicate</th>
+              <th>Read length</th><th>Confidence</th></tr></thead>
+  <tbody>
+    {% for s in sheet.samples %}
+    <tr>
+      <td class="mono">{{ s.name }}</td>
+      <td>{{ s.modality }}</td>
+      <td>{{ s.arm or "—" }}</td>
+      <td>{{ s.replicate }}</td>
+      <td>{{ s.read_length or "—" }}</td>
+      <td><span class="pill">{{ s.confidence.arm }}</span></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if sheet.warnings %}
+<h4>Warnings</h4>
+<ul>
+  {% for w in sheet.warnings %}
+  <li><span class="pill {{ w.severity }}">{{ w.severity }}</span> {{ w.msg }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<p>
+  <a href="/confirm/{{ sheet._sheet_id }}" role="button">Continue → Configure and run</a>
+</p>
+{% endif %}
+{% endblock %}

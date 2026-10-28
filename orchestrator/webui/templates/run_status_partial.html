@@ -1,0 +1,89 @@
+{% set m = manifest or {} %}
+{% set status = m.get("status", "queued") %}
+{% set steps = m.get("steps", []) %}
+{% set summary = m.get("summary", {}) %}
+
+<p>
+  <strong>Status:</strong>
+  <span class="pill {{ status }}">{{ status }}</span>
+  {% if pid_alive %}<small>(process alive)</small>
+  {% elif status == "running" %}<small style="color:#d62728">(process not running — likely crashed)</small>
+  {% endif %}
+  <span class="mono" style="float:right;color:#888">{{ now }}</span>
+</p>
+
+{% if steps %}
+<table class="steps">
+  <thead><tr><th>Step</th><th>Status</th><th>Duration</th></tr></thead>
+  <tbody>
+    {% for s in steps %}
+    <tr class="step-{{ s.status }}">
+      <td class="mono">{{ s.name }}</td>
+      <td class="status"><span class="pill {{ s.status }}">{{ s.status }}</span></td>
+      <td>
+        {% if s.started_at and s.ended_at %}
+          {{ s.started_at[-8:] }} → {{ s.ended_at[-8:] }}
+        {% elif s.started_at %}
+          started {{ s.started_at[-8:] }}
+        {% endif %}
+      </td>
+    </tr>
+    {% if s.diagnosis %}
+    <tr><td colspan="3">
+      <details class="diag">
+        <summary><strong>{{ s.diagnosis.rule }}</strong>: {{ s.diagnosis.likely_cause }}</summary>
+        <ul>
+          {% for a in s.diagnosis.suggested_actions %}<li class="mono">{{ a }}</li>{% endfor %}
+        </ul>
+      </details>
+    </td></tr>
+    {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p><em>Pipeline starting — manifest not yet written.</em></p>
+{% endif %}
+
+{% set failed = steps | selectattr("status","equalto","fail") | list %}
+{% if failed %}
+<article class="step-fail" style="border-left: 5px solid #d62728; padding-left:1em;background:#fff5f5">
+  <h4 style="margin-top:0">⚠ {{ failed | length }} step(s) failed</h4>
+  {% for s in failed %}
+    <details {% if loop.first %}open{% endif %}>
+      <summary><strong class="mono">{{ s.name }}</strong>
+        {% if s.diagnosis %}<span class="pill fail">{{ s.diagnosis.rule }}</span>{% endif %}
+      </summary>
+      {% if s.error %}<p><em>Error:</em> {{ s.error }}</p>{% endif %}
+      {% if s.diagnosis %}
+        <p><strong>Likely cause:</strong> {{ s.diagnosis.likely_cause }}</p>
+        <p><strong>Suggested actions:</strong></p>
+        <ul>
+          {% for a in s.diagnosis.suggested_actions %}
+          <li class="mono">{{ a }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </details>
+  {% endfor %}
+</article>
+{% endif %}
+
+{% if summary %}
+<h3>Summary</h3>
+<ul>
+  {% if summary.get("robust_core_tfs") %}
+    <li><strong>Robust core TFs:</strong> {{ summary.robust_core_tfs | join(", ") }}</li>
+  {% endif %}
+  {% if summary.get("stability_score") is not none %}
+    <li><strong>Stability (Jaccard):</strong> {{ "%.2f" | format(summary.stability_score) }}</li>
+  {% endif %}
+  {% if summary.get("final_html") %}
+    <li>
+      <a href="/report/{{ run_id }}" target="_blank" role="button">📄 Open HTML report ↗</a>
+      &nbsp;
+      <a href="/api/download/{{ run_id }}" role="button" class="secondary">⬇ Download (zip)</a>
+    </li>
+  {% endif %}
+</ul>
+{% endif %}

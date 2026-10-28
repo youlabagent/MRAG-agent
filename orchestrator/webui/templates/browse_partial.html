@@ -1,0 +1,38 @@
+{# File browser partial — swapped into the modal via HTMX #}
+{% set parts = path.strip("/").split("/") %}
+<div class="browse-path">
+  <strong>Path:</strong>
+  <span class="mono">{{ path }}</span>
+  {% if n_fastq %}
+  <span class="pill ok" style="float:right">{{ n_fastq }} FASTQ files here</span>
+  {% endif %}
+</div>
+
+<div class="browse-actions" style="margin:0.5em 0">
+  {% if parts %}
+  <button class="secondary outline"
+          hx-get="/api/browse?path={{ parent }}"
+          hx-target="#browse-pane"
+          hx-swap="innerHTML">⤴ Parent</button>
+  {% endif %}
+  <button class="contrast"
+          onclick="document.querySelector('input[name=fastq_dir]').value = '{{ path }}'; document.getElementById('browse-modal').close(); return false;">
+    Use this directory
+  </button>
+</div>
+
+<ul style="list-style:none;padding-left:0;max-height:50vh;overflow-y:auto">
+  {% for e in entries %}
+    {% if e.is_dir() %}
+      <li>
+        <a href="#"
+           hx-get="/api/browse?path={{ e }}"
+           hx-target="#browse-pane"
+           hx-swap="innerHTML"
+           class="mono">📁 {{ e.name }}/</a>
+      </li>
+    {% elif e.name.lower().endswith(('.fastq.gz','.fq.gz','.fastq','.fq')) %}
+      <li class="mono" style="color:#0066cc">🧬 {{ e.name }}</li>
+    {% endif %}
+  {% endfor %}
+</ul>

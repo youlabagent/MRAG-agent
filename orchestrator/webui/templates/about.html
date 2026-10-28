@@ -1,0 +1,106 @@
+{% extends "_base.html" %}
+{% block content %}
+<h1>About MRAG</h1>
+
+<p><strong>MRAG</strong> &mdash; <em>Master Regulator analysis of Accessible Genome</em>.
+Give it the ATAC-seq and RNA-seq of a two-condition experiment and it ranks the
+transcription factors that drive the difference, builds their super-enhancer &rarr; factor
+&rarr; target network, finds literature evidence for the targets and writes an interactive
+report.</p>
+
+<h3>What is automated, and what the language models do</h3>
+<p>The analysis is a fixed pipeline: which steps run follows from the inputs you supply and
+from <code>run.toml</code>, never from a language model. Local LLMs score and audit the
+literature evidence for candidate target genes, judge which enrichment terms fit the lineage,
+and write the report text. The chat assistant chooses among a few chat actions: detect samples,
+start a run, show status, open a report, add a locus track, and SRA lookup.</p>
+
+<ul style="line-height:1.7">
+  <li><strong>Reads your sample layout.</strong> Infers modalities, pairs
+      replicates, proposes the comparison.</li>
+  <li><strong>Picks the right reference</strong> and propagates the sign
+      convention end-to-end.</li>
+  <li><strong>Filters pathway noise</strong> using dataset context (cell line,
+      tissue, perturbation).</li>
+  <li><strong>Writes the narrative</strong> grounded in your numbers and
+      cited literature, not templates.</li>
+  <li><strong>Recovers from failure.</strong> Checkpointed, diagnosable,
+      resumable.</li>
+</ul>
+
+<h3>What it can call on</h3>
+<p>Standard genomics methods, run in a fixed order. Which of them run depends on the stage
+your data enter at (FASTQ, peaks or matrices):</p>
+<ul style="line-height:1.7;font-size:0.92em">
+  <li><strong>Chromatin</strong> &mdash; bowtie2 + MACS2 peaks, DAStk
+      differential motif activity, DiffBind for binding-level statistics.</li>
+  <li><strong>Expression</strong> &mdash; STAR + RSEM + DESeq2 (R engine),
+      ENSG&rarr;symbol resolution against GENCODE v34.</li>
+  <li><strong>Integration</strong> &mdash; Stouffer Z combination of ATAC and
+      RNA p-values, producing a deterministic <code>INTEGRATED_ranked.csv</code>
+      with explicit per-TF rank.</li>
+  <li><strong>Regulatory wiring</strong> &mdash; HOMER motif annotation
+      (JASPAR-extended), Cytoscape bipartite TRN graph, per-TF average ATAC
+      profile, pyGenomeTracks locus snapshots.</li>
+  <li><strong>In silico validation</strong> &mdash; the network's super-enhancer
+      &rarr; factor edges tested in sequence space with AlphaGenome and Corgi: motif
+      scrambles against size-matched control edits, scored against lineage-foreign
+      factors. Factor &rarr; target edges are measured too and stay motif-based
+      candidates.</li>
+  <li><strong>Interpretation</strong> &mdash; Functional enrichment (Hallmark
+      + GO BP + Reactome) with LLM relevance filtering; PubMed-grounded
+      narrative authored by Qwen3.6-27B.</li>
+</ul>
+
+<h3>What you get back</h3>
+<ul style="line-height:1.7">
+  <li>A ranked roster of master-regulator TFs with direction (gain vs loss
+      of activity), statistical support, and motif evidence.</li>
+  <li>An interactive TRN graph showing how those TFs converge on shared
+      target programs.</li>
+  <li>Locus-level snapshots that anchor TF&rarr;target pairs in real chromatin
+      tracks across all replicates.</li>
+  <li>Functional enrichment of the convergent target program, filtered for
+      biological plausibility in your specific context.</li>
+  <li>An <em>in silico</em> test of the network's super-enhancer &rarr; factor
+      edges with AlphaGenome and Corgi, reported at the pair level with its own
+      statistics.</li>
+  <li>A single HTML report with its figures embedded (the interactive parts load
+      their JavaScript libraries from public CDNs) and a provenance manifest that records
+      each step's input hash, parameters and outputs.</li>
+</ul>
+
+<h3 id="section13">Section 13: what a run declares</h3>
+<p style="font-size:0.92em">The <em>in silico</em> axis section always prints all three model sets
+(AlphaGenome, Corgi, both) at the pair level. Which one it <strong>leads</strong> with &mdash; the
+figure's first tab and the emphasised row &mdash; is declared by the run, never picked by the
+smallest <em>p</em>:</p>
+<ul style="line-height:1.7;font-size:0.92em">
+  <li><code>axis_headline</code> (top-level key of <code>run.toml</code>; the confirm form's
+      &ldquo;Leading model set&rdquo;): <code>auto</code> (key absent) applies the default rule
+      &mdash; the consensus leads when both arms ran and both single-model headline tests survive
+      Holm; <code>both</code>, <code>alphagenome</code> or <code>corgi</code> declare it.</li>
+  <li><code>axis_ar_gate</code> (true/false; the form's &ldquo;AR cross-condition row&rdquo;):
+      adds the AR-gated enhancer row, which then becomes that model's headline row. A declared
+      PRAD-only extra requirement, off by default.</li>
+  <li>A bulk prostate-adenocarcinoma (PRAD) tumour cohort declares
+      <code>axis_headline = "alphagenome"</code> and <code>axis_ar_gate = true</code>; the form
+      pre-selects them when the run names prostate adenocarcinoma, and you decide. OC2 and
+      cell-line runs keep <code>auto</code>.</li>
+</ul>
+
+<h3>When MRAG is the right agent for the job</h3>
+<ul style="line-height:1.7">
+  <li>You have <strong>paired ATAC-seq + RNA-seq</strong> for a 2-arm
+      comparison (perturbation vs control, tumor vs normal, etc.).</li>
+  <li>You want to know <strong>which TFs are driving</strong> the differential
+      program &mdash; not just a DEG list.</li>
+  <li>You want a publication-ready interactive report from raw FASTQ
+      <em>without scripting the pipeline yourself</em>.</li>
+</ul>
+
+<p style="font-size:0.9em;color:var(--muted);margin-top:2rem">
+  Talk to the agent on the <a href="/chat">Chat</a> page.
+  Past runs (with full provenance manifests) live under <a href="/runs">Runs</a>.
+</p>
+{% endblock %}

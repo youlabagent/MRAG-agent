@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ report_title }}</title>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script src="https://unpkg.com/cytoscape@3.28.1/dist/cytoscape.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<style>
+:root {
+  --primary: #1f5fa6;
+  --accent: #d6604d;
+  --muted: #6b7280;
+  --bg: #fafbfc;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --code-bg: #f3f4f6;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text); background: var(--bg);
+  font-size: 14px; line-height: 1.55;
+}
+header.report-head {
+  background: linear-gradient(135deg, #1f5fa6 0%, #2d7fcf 100%);
+  color: white; padding: 30px 60px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+header.report-head h1 { margin: 0; font-size: 22px; font-weight: 600; }
+header.report-head .meta { margin-top: 6px; font-size: 12px; opacity: 0.9; }
+
+.layout { display: grid; grid-template-columns: 220px 1fr; max-width: 1500px; margin: 0 auto; }
+nav.toc {
+  background: white; border-right: 1px solid var(--border);
+  padding: 24px 18px; min-height: 100vh;
+  position: sticky; top: 0; max-height: 100vh; overflow-y: auto;
+}
+nav.toc h3 { margin: 0 0 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+nav.toc a {
+  display: block; padding: 6px 10px; margin-bottom: 2px;
+  color: var(--text); text-decoration: none; font-size: 13px;
+  border-radius: 4px;
+}
+nav.toc a:hover { background: #eef4fb; color: var(--primary); }
+nav.toc a.active { background: var(--primary); color: white; }
+
+main { padding: 32px 50px; max-width: 1280px; }
+section { margin-bottom: 50px; scroll-margin-top: 20px; }
+section h2 {
+  font-size: 18px; margin: 0 0 16px; padding-bottom: 8px;
+  border-bottom: 2px solid var(--primary); color: var(--primary);
+}
+section h3 { font-size: 15px; margin: 22px 0 10px; color: var(--text); }
+p { margin: 8px 0; }
+
+.card {
+  background: white; border: 1px solid var(--border); border-radius: 8px;
+  padding: 18px 22px; margin: 14px 0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.card h4 { margin: 0 0 8px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
+.figure {
+  background: white; border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px 20px; margin: 14px 0;
+  break-inside: avoid;
+}
+.figure img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.figure figcaption {
+  text-align: center; margin-top: 10px; font-size: 12px;
+  color: var(--muted); font-style: italic;
+}
+.fig-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.fig-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+@media (max-width: 1024px) {
+  .fig-grid-2, .fig-grid-3 { grid-template-columns: 1fr; }
+  nav.toc { display: none; }
+  .layout { grid-template-columns: 1fr; }
+  main { padding: 20px; }
+}
+
+.executive-summary {
+  background: linear-gradient(135deg, #f4f9ff 0%, #ffffff 100%);
+  border-left: 4px solid var(--primary);
+  padding: 22px 28px; border-radius: 6px;
+}
+.executive-summary h3 { color: var(--primary); margin-top: 0; }
+.callout {
+  background: #fef3c7; border-left: 4px solid #f59e0b;
+  padding: 12px 16px; margin: 14px 0; border-radius: 4px;
+  font-size: 13px;
+}
+
+table.dt-table { width: 100% !important; font-size: 12px; }
+table.dt-table th { background: #f3f4f6; font-size: 11.5px; }
+table.dt-table td { padding: 6px 8px; }
+
+.plotly-container { width: 100%; min-height: 380px; }
+#cy-trn { width: 100%; height: 600px; background: white; border: 1px solid var(--border); border-radius: 6px; }
+#cy-detail { font-size: 12px; padding: 10px 14px; background: #f9fafb; border-radius: 4px; margin-top: 8px; min-height: 50px; }
+
+.kv { display: grid; grid-template-columns: 140px 1fr; gap: 6px 14px; font-size: 13px; }
+.kv .k { color: var(--muted); }
+.tag {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  background: var(--code-bg); font-size: 11px; color: var(--text);
+  margin-right: 4px;
+}
+.tag-up { background: #fde0d8; color: #ad2c1c; }
+.tag-down { background: #d6e8f5; color: #1f4f86; }
+
+footer { text-align: center; color: var(--muted); font-size: 11px; padding: 20px; border-top: 1px solid var(--border); margin-top: 40px; }
+
+
+.lyt-btn {
+  font-size: 11px; padding: 4px 9px; border: 1px solid var(--border);
+  background: white; color: var(--text); border-radius: 3px;
+  cursor: pointer; font-family: inherit;
+}
+.lyt-btn:hover { background: #f4f6f9; }
+.se-btn {
+  font-size: 11px; padding: 4px 9px; border: 1px solid var(--border);
+  background: white; color: var(--text); border-radius: 3px;
+  cursor: pointer; font-family: inherit;
+}
+.se-btn:hover { background: #f4f6f9; }
+.se-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+.lyt-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+/* Narrative markdown styling */
+.narrative { font-size: 14px; line-height: 1.65; }
+.narrative p { margin: 12px 0; }
+.narrative code { background: var(--code-bg); padding: 1px 4px; border-radius: 3px; font-size: 12px; }
+.narrative h2, .narrative h3 { color: var(--primary); }
+.narrative em { color: var(--muted); }
+.nf-cards { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+.nf-card { border: 1px solid #e2e8f0; border-left: 4px solid var(--primary); border-radius: 6px; padding: 12px 16px; background: #fbfcfe; }
+.nf-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.nf-num { background: var(--primary); color: #fff; font-weight: 600; font-size: 12px; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 50%; flex: 0 0 auto; }
+.nf-gene { font-size: 16px; font-weight: 700; color: #1a2b3c; }
+.nf-dir { font-size: 15px; color: #555; }
+.nf-tag { font-size: 11px; color: #456; background: #eef3f8; padding: 2px 8px; border-radius: 10px; }
+.nf-fields { list-style: none; padding: 0; margin: 0; font-size: 13px; line-height: 1.55; }
+.nf-fields li { margin: 3px 0; }
+.nf-fields b { color: var(--primary); margin-right: 6px; }
+.nf-fields li.nf-novel, .nf-fields li.nf-novel b { color: #c0392b; }
+.nf-fields ol.nf-nov { list-style: decimal; margin: 1px 0 2px; padding-left: 22px; }
+.nf-fields ol.nf-nov li { margin: 2px 0; }
+.nf-fields li.nf-nov-unreported { color: #c0392b; }
+.nf-fields li.nf-nov-no_evidence, .nf-fields li.nf-nov-error,
+.nf-fields li.nf-nov-corpus_absent { color: #7a8794; }
+.nf-rifs { display: block; margin-top: 2px; }
+.nf-rif { display: block; color: #444; margin: 1px 0 1px 12px; text-indent: -12px; }
+.nf-pmids a { color: var(--primary); text-decoration: none; margin: 0 2px; }
+
+/* ---- per-figure high-quality download buttons ---- */
+.figure { position: relative; }
+.dl-btns { position: absolute; top: 8px; right: 8px; display: flex; gap: 4px;
+  z-index: 6; opacity: .38; transition: opacity .15s; }
+.dl-btns:hover { opacity: 1; }
+.dl-btns button { font: 500 11px/1.4 system-ui, -apple-system, sans-serif;
+  padding: 3px 9px; background: rgba(255,255,255,.95); border: 1px solid #cbd5e1;
+  border-radius: 5px; cursor: pointer; color: #334155;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.dl-btns button:hover { background: #eef2f7; border-color: #94a3b8; }
+@media print { .dl-btns { display: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="report-head">
+  <h1>{{ report_title }}</h1>
+  <div class="meta">
+    {{ study_label }} · Generated {{ generated_at }} · MRAG agent pipeline v{{ pipeline_version }}
+  </div>
+</header>
+
+<div class="layout">
+
+<nav class="toc">
+  <h3>Contents</h3>
+  <a href="#executive">1. Executive Summary</a>
+  <a href="#pipeline">2. Pipeline</a>
+  <a href="#tf-selection">3. TF Ranking (Top 10)</a>
+  <a href="#differential">4. Differential Analysis</a>
+  <a href="#tf-rank">5. Rank &amp; Volcano</a>
+  <a href="#signal">6. Peak Heatmap (Specific / Shared)</a>
+  <a href="#heatmap">7. Heatmap</a>
+  <a href="#homer-known">8. HOMER Known Motifs</a>
+  <a href="#giggle">9. GIGGLE TF Overlap</a>
+  <a href="#trn">10. TRN Graph</a>
+  <a href="#enrichment">11. Functional Enrichment</a>
+  <a href="#tracks">12. Locus Snapshots</a>
+  <a href="#ag-validation">13. In silico Validation</a>
+  <a href="#narrative">14. Result Interpretation</a>
+  <a href="#manifest">15. Manifest</a>
+</nav>
+
+<main>{% if curated_error %}
+<div class="callout curated-failed" style="border-left:5px solid #a3261c;background:#fdecea;color:#5f1510;padding:10px 14px;margin:0 0 14px 0;">
+  <strong>Target-gene selection failed in this run.</strong> {{ curated_error }}
+</div>{% endif %}
+
+{# 1. Executive Summary #}
+<section id="executive">
+  <h2>1. Executive Summary</h2>
+  <div class="executive-summary">
+    <h3>Paper-grounded interpretation</h3>
+    <div class="narrative">{{ executive_summary | safe }}</div>
+  </div>
+  <div class="callout">
+    <strong>Note:</strong> All findings below are evidence-based combinations of
+    ATAC differential binding (DiffBind), RNA differential expression (DESeq2),
+    and TF binding motif annotation (HOMER + JASPAR v12).
+    Section 13 tests the network's super-enhancer &rarr; factor &rarr; target edges in silico
+    with AlphaGenome and Corgi; that test does not choose any gene above.
+  </div>
+</section>
+
+{# 2. Pipeline #}
+<section id="pipeline">
+  <h2>2. Pipeline overview</h2>
+  <div class="card">
+    <div class="kv">
+      <div class="k">Samples</div><div>{{ pipeline.samples }}</div>
+      <div class="k">Conditions</div><div>{{ pipeline.conditions }}</div>
+      {% if pipeline.organism or pipeline.genome_build %}
+      <div class="k">Organism</div><div>{{ pipeline.organism }}{% if pipeline.organism_common %} ({{ pipeline.organism_common }}){% endif %}</div>
+      <div class="k">Genome build</div><div>{{ pipeline.genome_build }}</div>
+      <div class="k">Organism detection</div><div>{{ pipeline.organism_detection or '(not recorded)' }}</div>
+      {% if ortholog_overview %}
+      <div class="k">Literature namespace</div>
+      <div>human symbols &mdash; {{ ortholog_overview }}</div>
+      {% endif %}
+      <div class="k">Steps skipped for this organism</div>
+      <div>{% if organism_skipped %}<span style="color:#b26a00;font-weight:600">{{ organism_skipped | length }} skipped</span> &mdash;
+        {% for sk in organism_skipped %}<b>{{ sk.name }}</b>: {{ sk.reason }}{% if not loop.last %}<br>{% endif %}{% endfor %}
+        {% else %}None &mdash; every step ran for {{ pipeline.organism or 'this organism' }}.{% endif %}</div>
+      {% endif %}
+      <div class="k">Motif database</div><div>{{ pipeline.motif_db }}</div>
+      <div class="k">TF selection</div><div>{{ pipeline.tf_selection }}</div>
+      <div class="k">DiffBind threshold</div><div>{{ pipeline.diffbind_threshold }}</div>
+      <div class="k">DESeq2 threshold</div><div>{{ pipeline.deseq_threshold }}</div>
+      <div class="k">LLM domain</div><div>{{ pipeline.llm_domain }}</div>
+    </div>
+  </div>
+</section>
+
+{# 3. TF Ranking #}
+<section id="tf-selection">
+  <h2>3. TF Ranking (Top 10 by Combined Score (Avg.Z))</h2>
+  <div class="card">
+    <table id="tf-table" class="dt-table"></table>
+  </div>
+</section>
+
+{# 4. Differential #}
+<section id="differential">
+  <h2>4. Differential Analysis</h2>
+  <div class="fig-grid-2">
+    <div class="figure">
+      <div id="volcano-atac" class="plotly-container"></div>
+      <figcaption>Fig 1a. ATAC differential binding (DiffBind). Red = increased binding in treatment.</figcaption>
+    </div>
+    <div class="figure">
+      <div id="volcano-rna" class="plotly-container"></div>
+      <figcaption>Fig 1b. RNA differential expression (DESeq2). Hover to see gene, log2FC, p-value.</figcaption>
+    </div>
+  </div>
+</section>
+
+{# 5. Rank + Volcano (side-by-side) #}
+<section id="tf-rank">
+  <h2>5. Rank &amp; Combined Score volcano</h2>
+  <div class="fig-grid-2" style="grid-template-columns: 1fr 1fr;">
+    <div class="figure">
+      {% if rank_plotly %}
+      <div id="rank-plotly" style="width:100%;height:520px;"></div>
+      <figcaption>Fig 2a. Rank vs Combined Score (Avg.Z). Hover for gene · drag to zoom.</figcaption>
+      {% elif rank_png %}
+      <img src="{{ rank_png }}" alt="Rank plot"
+           style="width:100%;height:auto;display:block;">
+      <figcaption>Fig 2a. Rank vs Combined Score (Avg.Z).</figcaption>
+      {% else %}
+      <div class="callout">Rank plot not generated.</div>
+      {% endif %}
+    </div>
+    <div class="figure">
+      {% if volcano_plotly %}
+      <div id="volcano-plotly" style="width:100%;height:520px;"></div>
+      <figcaption>Fig 2b. log<sub>2</sub>FC (RNA-seq) vs Combined Score (Avg.Z). Hover for gene · drag to zoom.</figcaption>
+      {% elif volcano_png %}
+      <img src="{{ volcano_png }}" alt="Volcano plot"
+           style="width:100%;height:auto;display:block;">
+      <figcaption>Fig 2b. log<sub>2</sub>FC (RNA-seq) vs Combined Score (Avg.Z).</figcaption>
+      {% else %}
+      <div class="callout">Volcano plot not generated.</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{# 6. Peak Heatmap (condition-specific / shared peaks) #}
+<section id="signal">
+  <h2>6. Peak Heatmap (Condition-Specific / Shared Peaks)</h2>
+  {% if peakheatmap %}
+  <div class="figure">
+    <img src="{{ peakheatmap }}" alt="Peak heatmap" style="max-width:560px;width:100%;height:auto;display:block;margin:0 auto;">
+    <figcaption>Fig 3. Peak heatmap over condition-specific / shared peak regions (group-averaged CPM). Columns = condition; rows = peaks.</figcaption>
+  </div>
+  {% else %}
+  <div class="callout">Peak heatmap not generated (requires per-replicate narrowPeak files + dedup BAMs).</div>
+  {% endif %}
+</section>
+
+{# 7. Top-rank gene expression heatmap #}
+<section id="heatmap">
+  <h2>7. Top-Rank Gene Expression Heatmap</h2>
+  {% if heatmap_median_plotly or heatmap_plotly %}
+  <div class="fig-grid-2">
+    {% if heatmap_median_plotly %}
+    <div class="figure">
+      <div id="heatmap-median-plotly" style="width:100%;height:480px"></div>
+      <figcaption>Fig 3a. Median-centered (log<sub>2</sub> ratio vs gene median). Hover for exact value.</figcaption>
+    </div>
+    {% endif %}
+    {% if heatmap_plotly %}
+    <div class="figure">
+      <div id="heatmap-plotly" style="width:100%;height:480px"></div>
+      <figcaption>Fig 3b. Row Z-score scaling. Hover for exact Z.</figcaption>
+    </div>
+    {% endif %}
+  </div>
+  {% elif heatmap_png %}
+  <div class="figure">
+    <img src="{{ heatmap_png }}" alt="Heatmap"
+         style="max-width:560px;width:100%;height:auto;display:block;margin:0 auto;">
+    <figcaption>Fig 3'. Top-10 up + top-10 down gene RSEM counts (row Z-score, clustered).</figcaption>
+  </div>
+  {% else %}
+  <div class="callout">Heatmap not generated (requires INTEGRATED_ranked.csv,
+  DESeq2.gene.csv, and txi.rsem.counts.txt).</div>
+  {% endif %}
+</section>
+
+{# 8. HOMER Known Motif Enrichment #}
+<section id="homer-known">
+  <h2>8. HOMER Known Motif Enrichment</h2>
+  <div class="card">
+    <style>
+      .homer-known-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+      .homer-known-tbl th,.homer-known-tbl td{padding:3px 7px;border-bottom:1px solid #eee;text-align:left;vertical-align:middle;}
+      .homer-known-tbl th{font-weight:600;color:#666;font-size:11px;white-space:nowrap;}
+      .homer-known-tbl tbody tr:hover{background:#f7f9fc;}
+      .homer-logo svg{height:22px;width:auto;display:block;}
+      .homer-num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+    </style>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 12px;">
+      Top 10 known motifs enriched in accessible peaks per condition
+      (HOMER <code>findMotifsGenome</code> on min–max-scaled consensus peaks).
+      <strong>P</strong> = enrichment p-value vs background; <strong>%Tgt / %Bg</strong>
+      = fraction of target / background peaks containing the motif.
+    </p>
+    {% if homer_known %}
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+      {% for grp in homer_known %}
+      <div style="flex:1;min-width:330px;">
+        <h3 style="color:{{ grp.color }};margin:0 0 6px;font-size:15px;">{{ grp.label }}</h3>
+        <table class="homer-known-tbl">
+          <thead><tr>
+            <th>#</th><th>Motif</th><th>Logo</th>
+            <th class="homer-num">P</th>
+            <th class="homer-num">%Tgt</th>
+            <th class="homer-num">%Bg</th>
+          </tr></thead>
+          <tbody>
+          {% for m in grp.motifs %}
+            <tr>
+              <td class="homer-num">{{ m.rank }}</td>
+              <td><strong title="{{ m.full_name }}">{{ m.tf_label if m.tf_label is defined else m.tf }}</strong></td>
+              <td class="homer-logo">{{ m.logo_svg|safe }}</td>
+              <td class="homer-num">{{ m.pvalue }}</td>
+              <td class="homer-num">{{ m.pct_target }}</td>
+              <td class="homer-num" style="color:var(--muted);">{{ m.pct_bg }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="callout">HOMER known-motif results not available for this run.</div>
+    {% endif %}
+  </div>
+</section>
+
+{# 9. GIGGLE Cistrome TF overlap #}
+<section id="giggle">
+  <h2>9. GIGGLE — TF ChIP-seq Overlap (Cistrome DB)</h2>
+  <p class="muted">
+    Differential ATAC peaks (DiffBind FDR&lt;0.05) are searched against the
+    {% if pipeline.genome_build == 'mm10' %}Cistrome mm10 (mouse) TF ChIP-seq collection (7,624 datasets){% else %}Cistrome hg38 TF ChIP-seq collection (~10,000 datasets){% endif %} with
+    <strong>GIGGLE</strong>. Each point is a transcription factor ranked by mean
+    GIGGLE enrichment score over its datasets (top 10). Left = peaks gained in
+    treatment (orange); right = peaks lost (navy).
+  </p>
+  {% if giggle_up or giggle_down %}
+  <div class="fig-grid-2">
+    {% if giggle_up %}
+    <div class="figure">
+      <img src="{{ giggle_up }}" alt="GIGGLE up" style="width:100%;height:auto;display:block;">
+      <figcaption>Fig 5a. {{ giggle_up_label }} — TF ChIP-seq enrichment (GIGGLE).</figcaption>
+    </div>
+    {% endif %}
+    {% if giggle_down %}
+    <div class="figure">
+      <img src="{{ giggle_down }}" alt="GIGGLE down" style="width:100%;height:auto;display:block;">
+      <figcaption>Fig 5b. {{ giggle_down_label }} — TF ChIP-seq enrichment (GIGGLE).</figcaption>
+    </div>
+    {% endif %}
+  </div>
+  {% elif organism_skipped_by_name.get('giggle') %}
+  <div class="callout" style="border-left-color:#b26a00">
+    <strong>Not available for {{ pipeline.organism or 'this organism' }}.</strong>
+    This section was skipped, not attempted and found empty:
+    {{ organism_skipped_by_name.get('giggle') }}
+  </div>
+  {% else %}
+  <div class="callout">GIGGLE plots not generated (requires DiffBind_out.csv + Cistrome index).</div>
+  {% endif %}
+</section>
+
+{# 10. TRN Graph #}
+<section id="trn">
+  <h2>10. TRN Graph {% if se_trn %}(Super Enhancer → TF → target gene){% else %}(bipartite TF → target gene){% endif %}</h2>{% if curated_error %}
+  <div class="callout curated-failed" style="border-left:5px solid #a3261c;background:#fdecea;color:#5f1510;">
+    <strong>No evidence-scored target genes.</strong> {{ curated_error }}
+  </div>{% endif %}
+  {% if ortholog_note %}
+  <div class="callout" style="border-left-color:#b26a00">
+    <strong>Human-ortholog evidence.</strong> {{ ortholog_note }}
+  </div>
+  {% endif %}
+  {% if not se_trn %}
+  <div class="card">
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px;flex-wrap:wrap;">
+      <p style="font-size:12px;color:var(--muted);margin:0;flex:1;">
+        Drag, scroll, click. <strong>Fill</strong> = ATAC Fold (white→red gradient, blue=missing). <strong>Border</strong> = RNA log<sub>2</sub>FC (pink→red gradient, gray=missing). Diamond = TF, ellipse = Target gene.
+      </p>
+      <div class="layout-switcher" style="display:flex;gap:4px;">
+        <span style="font-size:11px;color:var(--muted);align-self:center;margin-right:6px;">Layout:</span>
+        <button class="lyt-btn" data-lyt="bipartite">Bipartite</button>
+        <button class="lyt-btn" data-lyt="concentric">Concentric</button>
+        <button class="lyt-btn active" data-lyt="cose">Spring</button>
+        <button class="lyt-btn" data-lyt="circle">Circle</button>
+        <button class="lyt-btn" data-lyt="breadthfirst">Tree</button>
+        <button class="lyt-btn" data-lyt="grid">Grid</button>
+      </div>
+    </div>
+    <div id="cy-trn"></div>
+    <div id="cy-detail">Click a node or edge for details.</div>
+  </div>
+  {% endif %}
+  {% if se_trn %}
+  {# Section 10b: Super Enhancer -> TF -> target graph (replaces the TF -> target graph when the SE layer ran) #}
+  <div class="card" id="se-trn">
+    <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;flex-wrap:wrap;">
+      <button class="se-btn" onclick="cySE.fit(undefined,30)">Fit</button>
+      <button class="se-btn" onclick="cySE.zoom(cySE.zoom()*1.25)">+</button>
+      <button class="se-btn" onclick="cySE.zoom(cySE.zoom()/1.25)">−</button>
+      <button class="se-btn" onclick="seClearFocus()">Reset focus</button>
+      <span style="font-size:11px;color:var(--muted);">Drag, scroll, click.</span>
+      <span style="flex:1;"></span>
+      <span style="font-size:11px;color:var(--muted);margin-right:2px;">Layout:</span>
+      <button class="se-btn se-lyt active" data-lyt="columns" onclick="seLayout('columns', this)">Columns</button>
+      <button class="se-btn se-lyt" data-lyt="concentric" onclick="seLayout('concentric', this)">Concentric</button>
+      <button class="se-btn se-lyt" data-lyt="cose" onclick="seLayout('cose', this)">Spring</button>
+      <button class="se-btn se-lyt" data-lyt="circle" onclick="seLayout('circle', this)">Circle</button>
+      <button class="se-btn se-lyt" data-lyt="breadthfirst" onclick="seLayout('breadthfirst', this)">Tree</button>
+      <button class="se-btn se-lyt" data-lyt="grid" onclick="seLayout('grid', this)">Grid</button>
+    </div>
+    <div style="position:relative;">
+      <div id="cy-se" style="width:100%;height:1300px;background:white;border:1px solid var(--border);border-radius:6px;"></div>
+    </div>
+    <div id="cy-se-detail" style="font-size:12px;color:var(--muted);margin-top:6px;">Click a node or edge for details.</div>
+  </div>
+  <script>
+  var cySE = null;
+  (function(){
+    var SE = {{ se_trn | tojson }};
+    var el = document.getElementById('cy-se');
+    if (!el || typeof cytoscape === 'undefined') return;
+    cySE = cytoscape({container: el, elements: SE.elements, style: SE.style, layout: {name: 'preset'}});
+    cySE.fit(undefined, 30);
+    var seHdr = cySE.nodes('[type = "header"]');
+    var det = document.getElementById('cy-se-detail');
+    var f = function(v){ return (v === null || v === undefined) ? 'n/a' : Number(v).toFixed(3); };
+    window.seClearFocus = function(){ cySE.elements().removeClass('faded').removeClass('focus'); };
+    cySE.on('tap', function(e){ if (e.target === cySE) window.seClearFocus(); });
+    cySE.on('tap', 'node', function(e){
+      var node = e.target, n = node.data();
+      var nb = node.closedNeighborhood();
+      nb = nb.union(nb.children());   // keep each SE coordinate label with its node
+      cySE.elements().difference(seHdr).addClass('faded').removeClass('focus'); nb.removeClass('faded'); node.addClass('focus');
+      var s = '<b>' + n.type + ':</b> ' + n.name;
+      if (n.type === 'SE') s += ' · nearest ' + n.closest + ' · ROSE signal ' + Number(n.rose_signal).toFixed(0) + ' · ATAC Fold (mean of ' + n.n_peaks + ' DiffBind peaks) = ' + f(n.atac_fold);
+      else if (n.type === 'SE_gene') s += ' · nearest gene of ' + n.se + ' · ATAC Fold = ' + f(n.atac_fold) + ' (' + n.atac_source + ') · RNA log<sub>2</sub>FC = ' + f(n.rna_log2fc) + ' (DESeq2)';
+      else s += ' · ATAC Fold = ' + f(n.atac_fold) + ' · RNA log<sub>2</sub>FC = ' + f(n.rna_log2fc) + (n.atac_source ? ' <span style="color:#888">(ATAC: ' + n.atac_source + ')</span>' : '') + (n.rna_source ? ' <span style="color:#888">(RNA: ' + n.rna_source + ')</span>' : '');
+      det.innerHTML = s;
+    });
+    {# ---- layout options: Columns = the original preset view #}
+    var sePreset = {};
+    cySE.nodes().forEach(function(n){ if (!n.isParent()) sePreset[n.id()] = {x: n.position('x'), y: n.position('y')}; });
+    var seOrder = {SE: 0, TF: 1, Target: 2, SE_gene: 3};
+    var SE_LAYOUTS = {
+      concentric:   {name: 'concentric', concentric: function(n){ var t = n.data('type'); return t === 'SE' ? 3 : (t === 'TF' ? 2 : 1); },
+                     levelWidth: function(){ return 1; }, minNodeSpacing: 30, avoidOverlap: true},
+      cose:         {name: 'cose', animate: false, randomize: true, numIter: 1500, gravity: 0.3,
+                     nodeRepulsion: function(){ return 900000; }, idealEdgeLength: function(){ return 180; }},
+      circle:       {name: 'circle', avoidOverlap: true, spacingFactor: 1.05,
+                     sort: function(a, b){ return (seOrder[a.data('type')] || 9) - (seOrder[b.data('type')] || 9); }},
+      breadthfirst: {name: 'breadthfirst', directed: true, roots: '[type = "SE"]', spacingFactor: 1.1, avoidOverlap: true},
+      grid:         {name: 'grid', avoidOverlap: true, avoidOverlapPadding: 20,
+                     sort: function(a, b){ return (seOrder[a.data('type')] || 9) - (seOrder[b.data('type')] || 9); }}
+    };
+    window.seLayout = function(name, btn){
+      document.querySelectorAll('.se-lyt').forEach(function(b){ b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      if (name === 'columns') {
+        seHdr.style('display', 'element');
+        cySE.nodes().not(seHdr).forEach(function(n){ var p = sePreset[n.id()]; if (p) n.position({x: p.x, y: p.y}); });
+        cySE.fit(undefined, 30);
+        return;
+      }
+      seHdr.style('display', 'none');             // column captions only make sense in Columns
+      // A compound parent is pinned by its child, so layouts cannot move the SE
+      // boxes: detach each coordinate label, lay out, then re-attach it on the box.
+      var parentOf = {};
+      cySE.nodes('[type = "SE_coord"]').forEach(function(k){ if (k.parent().nonempty()) parentOf[k.id()] = k.parent().id(); });
+      cySE.nodes('[type = "SE_coord"]').move({parent: null});
+      var eles = cySE.elements().not(seHdr).not('[type = "SE_coord"]');
+      var lay = eles.layout(Object.assign({fit: true, padding: 30}, SE_LAYOUTS[name]));
+      lay.one('layoutstop', function(){
+        cySE.nodes('[type = "SE_coord"]').forEach(function(k){
+          var pid = parentOf[k.id()]; if (!pid) return;
+          var box = cySE.getElementById(pid);
+          k.position({x: box.position('x'), y: box.position('y')});
+        });
+        Object.keys(parentOf).forEach(function(kid){ cySE.getElementById(kid).move({parent: parentOf[kid]}); });
+        cySE.fit(undefined, 30);
+      });
+      lay.run();
+    };
+    var seKind = {SE_TF: 'Super Enhancer → TF', TF_Target: 'TF → target gene', SE_gene: 'Super Enhancer → nearest gene', TF_SEgene: 'TF → nearest gene'};
+    cySE.on('tap', 'edge', function(e){
+      var d = e.target.data();
+      det.innerHTML = '<b>' + (seKind[d.kind] || d.kind) + ':</b> ' + d.source + ' → ' + d.target + (d.n_hits !== undefined ? ' · motif instances = ' + d.n_hits : '') + (d.hits_per_kb !== undefined ? ' · ' + Number(d.hits_per_kb).toFixed(2) + ' per kb' : '');
+    });
+  })();
+  </script>
+  {% endif %}
+  {% if curated_target_rows %}
+  <div class="card" style="margin-top:14px;">
+    <p style="font-size:12px;color:var(--muted);margin:0 0 8px;">
+      <strong>Table. MRAG-identified target genes</strong>, ranked by curated evidence.{% if curated_target_rows|selectattr('audit_flag')|list or curated_target_rows|selectattr('evidence_flag')|list %}
+      A label after a gene flags a check on its evidence or score. Hover it for the reason.{% endif %}
+    </p>{% if generif_fetch_notice %}<p style="font-size:12px;color:#4a5568;background:#eef0f3;border-radius:6px;padding:6px 10px;margin:0 0 8px;"><strong>GeneRIF fetch failed</strong> for {{ generif_fetch_notice.failed|length }} of {{ generif_fetch_notice.n }} scored candidate gene{{ 's' if generif_fetch_notice.failed|length > 1 else '' }} ({{ generif_fetch_notice.failed|join(', ') }}): NCBI did not return {{ 'their' if generif_fetch_notice.failed|length > 1 else 'its' }} GeneRIF record, also in a second pass, so {{ 'they were' if generif_fetch_notice.failed|length > 1 else 'it was' }} scored without {{ 'their' if generif_fetch_notice.failed|length > 1 else 'its' }} GeneRIF lines{% if generif_fetch_notice.in_targets %}; {{ generif_fetch_notice.in_targets|join(', ') }} {{ 'are' if generif_fetch_notice.in_targets|length > 1 else 'is' }} in this table{% endif %}{% if generif_fetch_notice.missing %}; {{ generif_fetch_notice.missing|join(', ') }} may be missing from this table{% endif %}{% if generif_fetch_notice.cannot %}; {{ generif_fetch_notice.cannot|join(', ') }} cannot be {{ 'targets' if generif_fetch_notice.cannot|length > 1 else 'a target' }} here (a panel TF or no driver TF){% endif %}.</p>{% endif %}{% if pubmed_rescue_notice %}<p style="font-size:12px;color:#4a5568;background:#eef0f3;border-radius:6px;padding:6px 10px;margin:0 0 8px;"><strong>Live PubMed check failed</strong> for {{ pubmed_rescue_notice.failed|length }}{% if pubmed_rescue_notice.n %} of {{ pubmed_rescue_notice.n }}{% endif %} capped candidate gene{{ 's' if pubmed_rescue_notice.failed|length > 1 else '' }} ({{ pubmed_rescue_notice.failed|join(', ') }}): the evidence gate found no counted evidence for {{ 'them' if pubmed_rescue_notice.failed|length > 1 else 'it' }} in this run's literature domain, and the live PubMed check that could have re-admitted {{ 'them' if pubmed_rescue_notice.failed|length > 1 else 'it' }} (a PubMed record naming the gene in the domain) failed, also on a second try, so {{ 'they keep' if pubmed_rescue_notice.failed|length > 1 else 'it keeps' }} the capped score without a decision{% if pubmed_rescue_notice.in_targets %}; {{ pubmed_rescue_notice.in_targets|join(', ') }} {{ 'are' if pubmed_rescue_notice.in_targets|length > 1 else 'is' }} in this table{% endif %}{% if pubmed_rescue_notice.missing %}; {{ pubmed_rescue_notice.missing|join(', ') }} may be missing from this table{% endif %}{% if pubmed_rescue_notice.cannot %}; {{ pubmed_rescue_notice.cannot|join(', ') }} cannot be {{ 'targets' if pubmed_rescue_notice.cannot|length > 1 else 'a target' }} here (a panel TF or no driver TF){% endif %}.</p>{% endif %}
+    <div style="overflow-x:auto;">
+      <table class="dt-table" style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead>
+          <tr style="background:#f0f4f8;">
+            <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Rank</th>
+            <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Gene</th>
+            <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Regulated by TFs</th>
+            <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">{% if curated_target_rows and curated_target_rows|selectattr('evidence_scope','equalto','domain')|list %}Domain evidence{% else %}Evidence source{% endif %}</th>
+            <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">GeneRIF</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in curated_target_rows %}
+          <tr>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ r.rank }}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;font-weight:600;">{{ r.gene }}{% if r.audit_flag %} <span class="ev-audit" style="font-size:10px;font-weight:500;padding:1px 6px;border-radius:8px;white-space:nowrap;{% if r.audit_flag == 'weak' %}background:#fff3e0;color:#8a5200{% elif r.audit_flag in ('unaudited', 'unverifiable') %}background:#eef0f3;color:#4a5568{% else %}background:#fdecea;color:#a3261c{% endif %}" title="Evidence audit: {% if r.audit_flag == 'unverifiable' %}unverifiable (the model answered invalid but did not find the gene named in the evidence it was shown){% else %}{{ r.audit_verdict }}{% endif %}{% if r.audit_pmid %} (PMID {{ r.audit_pmid }}){% endif %} &mdash; {{ r.audit_reason }}{% if r.audit_note %} ({{ r.audit_note }}){% endif %}">{% if r.audit_flag == 'invalid' %}audit: invalid, kept{% elif r.audit_flag == 'unverifiable' %}audit: unverifiable{% elif r.audit_flag == 'unaudited' %}not audited{% else %}{{ r.audit_flag }}{% endif %}</span>{% endif %}{% if r.evidence_flag %} <span class="ev-flag" style="font-size:10px;font-weight:500;padding:1px 6px;border-radius:8px;white-space:nowrap;background:#eef0f3;color:#4a5568" title="{{ r.evidence_flag_note }}">{{ r.evidence_flag }}</span>{% endif %}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;">{{ r.regulated_by }}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;font-size:12px;">{% if r.evidence_label %}{{ r.evidence_label }}{% if r.evidence_by_domain %} {% for d in r.evidence_by_domain %}{{ d.label }} {% for p in d.pmids %}<a href="https://pubmed.ncbi.nlm.nih.gov/{{ p }}/" target="_blank">PMID{{ p }}</a>{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}; {% endif %}{% endfor %}{% elif r.evidence_pmids %} {% for p in r.evidence_pmids %}<a href="https://pubmed.ncbi.nlm.nih.gov/{{ p }}/" target="_blank">PMID{{ p }}</a>{% if not loop.last %}; {% endif %}{% endfor %}{% endif %}{% else %}&mdash;{% endif %}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;font-size:12px;">{% if r.generif_pmids %}{% for p in r.generif_pmids %}<a href="https://pubmed.ncbi.nlm.nih.gov/{{ p }}/" target="_blank">PMID{{ p }}</a>{% if not loop.last %}; {% endif %}{% endfor %}{% else %}&mdash;{% endif %}{% if r.generif_fetch == 'failed' %} <span style="font-size:10px;color:#4a5568;background:#eef0f3;padding:1px 6px;border-radius:8px;white-space:nowrap" title="{{ r.generif_fetch_error|e }}">NCBI fetch failed</span>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+</section>
+
+{# 11. Functional Enrichment #}
+<section id="enrichment">
+  <h2>11. Functional Enrichment of TF Target Programs</h2>
+  <p style="font-size:12px;color:var(--muted)">
+    (a) <strong>Shared-target enrichment</strong>: pathways enriched in genes bound by
+    <strong>&ge;2 TFs</strong> in the TRN (convergent regulation). (b) <strong>Per-TF coverage</strong>:
+    for each pathway, how many of its target genes each{% if per_tf_heatmap_n %} of the
+    network's {{ per_tf_heatmap_n }}{% endif %} transcription factor binds &mdash; coverage, not
+    enrichment strength, so a factor with many targets scores on more rows. A pathway is shown
+    only when at least two target genes carry it. Significance is the nominal <em>p</em>-value,
+    stated on each figure: a TRN's target set is too small for correction across three libraries
+    to retain anything. Where the term-relevance model was reachable, the pathways were also
+    screened against this run's lineage; the screen is recorded in
+    <code>enrichment/pertf_relevance_filter.json</code>.
+    Source libraries: MSigDB Hallmark, GO Biological Process, Reactome.
+  </p>
+  {% if ortholog_note %}
+  <div class="callout" style="border-left-color:#b26a00">
+    <strong>Human-ortholog evidence.</strong> {{ ortholog_note }}
+    The gene-set libraries above are HUMAN libraries and the gene symbols are
+    submitted to them as-is, so coverage on a non-human run is a floor, not a
+    measurement.
+  </div>
+  {% endif %}
+  {% if organism_skipped_by_name.get('enrichment') %}
+  <div class="callout" style="border-left-color:#b26a00">
+    <strong>Not available for {{ pipeline.organism or 'this organism' }}.</strong>
+    This section was skipped, not attempted and found empty:
+    {{ organism_skipped_by_name.get('enrichment') }}
+  </div>
+  {% elif shared_dotplot or per_tf_heatmap %}
+  <div class="fig-grid-2" style="grid-template-columns: 1fr 1.9fr;">
+    <div class="figure" style="min-width:0;">
+      <div id="shared-dotplot" style="width:100%;height:auto;min-height:420px;"></div>
+      <figcaption>Fig 3a. Convergent (≥2 TF) target pathways</figcaption>
+    </div>
+    <div class="figure" style="min-width:0;">
+      <div id="per-tf-heatmap" style="width:100%;height:auto;min-height:420px;"></div>
+      <figcaption>Fig 3b. Per-TF coverage of each pathway&rsquo;s target genes</figcaption>
+    </div>
+  </div>
+  {% else %}
+  <div class="callout">
+    Enrichment plots not generated &mdash; no pathway reached significance for
+    the TRN target set, or the enrichment step produced no output. This is an
+    empty result, not a suppressed one.
+  </div>
+  {% endif %}
+</section>
+
+{# 12. Locus snapshots #}
+<section id="tracks">
+  <h2>12. Locus Snapshots — Key TF → Target Examples</h2>
+  {% if organism_skipped_by_name.get('locus_snapshots') %}
+  <div class="callout" style="border-left-color:#b26a00">
+    <strong>Not available for {{ pipeline.organism or 'this organism' }}.</strong>
+    This section was skipped, not attempted and found empty:
+    {{ organism_skipped_by_name.get('locus_snapshots') }}
+  </div>
+  {% elif locus_tracks %}
+  <div class="fig-grid-2">
+    {% for t in locus_tracks %}
+    <div class="figure">
+      <img src="{{ t.data_url }}" alt="{{ t.gene }}">
+      <figcaption>Fig 4.{{ loop.index }} <strong>{{ t.tf }} → {{ t.gene }}</strong> ({{ t.region }})</figcaption>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="callout">
+    Locus snapshots not generated (requires per-arm bigWigs and a ranked
+    consensus peak table).
+  </div>
+  {% endif %}
+</section>
+
+{# 13. In silico Validation (Enhancer → TF).  The id stays `ag-validation` so the Section-2 TOC
+   anchor and any deep link into an already published report keep working.  The figure colours
+   only the step a group-level test supports, enhancer -> TF; the network's TF -> target edges are
+   drawn as motif-based candidates, and the target-end rows and the SE -> closest-gene detail are
+   folded into the section's details. #}
+<section id="ag-validation">
+  <h2>13. In silico Validation (Enhancer &rarr; TF)</h2>
+
+  {% if axis_note %}
+  <div class="callout" style="border-left-color:#b26a00"><strong>Note.</strong> {{ axis_note }}</div>
+  {% endif %}
+  {% if organism_skipped_by_name.get('axis_validation') %}
+  <div class="callout" style="border-left-color:#b26a00" data-s13="skipped">
+    <strong>Not available for {{ pipeline.organism or 'this organism' }}.</strong>
+    This section was skipped, not attempted and found empty:
+    {{ organism_skipped_by_name.get('axis_validation') }}
+  </div>
+  {% elif not axis %}
+  <div class="callout" data-s13="no-result">
+    No axis validation in this run: the <code>axis_validation</code> step left no result file for
+    it. Either the step did not run here (a run finished before this section existed, or one that
+    stopped before the step wrote its file), or it was not part of this run; a re-render does not
+    compute it. No test was run, so nothing here says whether the enhancer &rarr; TF or the TF &rarr; target step holds.
+  </div>
+  {% elif not axis.models %}
+  <div class="callout" style="border-left-color:#b26a00" data-s13="no-result"{% if axis.step_error %} data-s13-state="step-error"{% endif %}>
+    No axis validation in this run: the <code>axis_validation</code> step {{ axis.state|e }}{% if axis.arm_notes %}; each arm's status and reason:{% elif axis.reason %} &mdash; <span style="white-space:pre-wrap">{{ axis.reason|e }}</span>.{% else %}.{% endif %}
+    {% for a in axis.arm_notes %}<div><strong>{{ a.arm|e }}:</strong> {{ a.status|e }} &mdash; <span style="white-space:pre-wrap">{{ a.reason|e }}</span></div>{% endfor %}
+    No model set was scored, so nothing here says whether the enhancer &rarr; TF or the TF &rarr; target step holds.
+  </div>
+  {% else %}
+
+  {# An arm that did not finish is named here with its reason: the node keeps going on a failed arm,
+     so a reader must be able to tell a negative result from a missing one. #}
+  {% if axis.arm_notes %}
+  <div class="callout" style="border-left-color:#b26a00">
+    {% for a in axis.arm_notes %}<div><strong>{{ a.arm|e }}:</strong> {{ a.status|e }} &mdash; <span style="white-space:pre-wrap">{{ a.reason|e }}</span></div>{% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="card" style="margin-bottom:14px;">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">
+      <strong>Network</strong> &mdash; {% if se_trn %}Section 10b's graph. Solid super-enhancer &rarr; TF edges
+      passed the tab's headline test; the rest are faded. TF &rarr; target edges are motif-based, not validated,
+      and stay faint until you click a super-enhancer, a TF or a gene. {% endif %}One tab per model set.
+    </div>
+    <div style="margin-bottom:8px;">
+      {% for m in axis.models %}
+      <button class="ax-tab" data-k="{{ m.key }}" style="appearance:none;border:1px solid var(--border);background:{% if m.key == axis.default_model %}#eef4ff{% else %}#fff{% endif %};border-radius:6px;padding:6px 14px;margin-right:6px;font-size:13px;font-weight:600;cursor:pointer;">{{ m.name }}<span style="font-weight:400;color:var(--muted);"> &middot; {% if m.links is none %}not drawn{% else %}{{ m.links }} SE&rarr;TF edge{{ '' if m.links == 1 else 's' }} passed{% endif %}</span></button>
+      {% endfor %}
+    </div>
+    <div id="ax-caption" style="font-size:12px;color:var(--muted);margin-bottom:6px;"></div>
+    {% if se_trn %}
+    <div id="cy-ax" style="width:100%;height:1300px;background:white;border:1px solid var(--border);border-radius:6px;"></div>
+    <div class="ax-legend" style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--muted);margin-top:8px;">
+      <span><span style="display:inline-block;width:28px;border-top:4px solid #D62828;vertical-align:middle;margin-right:6px;"></span>SE &rarr; TF passed (Holm)</span>
+      <span><span style="display:inline-block;width:28px;border-top:3px dashed #D08C2E;opacity:0.15;vertical-align:middle;margin-right:6px;"></span>SE &rarr; TF not passed / not tested</span>
+      <span><span style="display:inline-block;width:28px;border-top:2px solid #404040;opacity:0.2;vertical-align:middle;margin-right:6px;"></span>TF &rarr; target, motif-based (not validated)</span>
+    </div>
+    <div id="cy-ax-detail" style="font-size:12px;color:var(--muted);margin-top:6px;">Click a super-enhancer, a TF or a gene to isolate its links; click the background to reset.</div>
+    {% else %}
+    {# No SE-TRN in this run, so Section 10b drew no graph and there is nothing to draw the edges
+       ON.  The figure box is left out entirely rather than rendered empty: an empty 1300px frame
+       is indistinguishable from a figure that failed to load. #}
+    <div class="callout">
+      No SE &rarr; TF &rarr; target graph in this run (Section 10b is empty), so the super-enhancer
+      &rarr; TF result is reported in the details below rather than drawn on the network.
+    </div>
+    {% endif %}
+  </div>
+
+  {# The details: the
+     Enhancer -> TF enrichment table, the target-end rows with their note, and the SE -> closest-gene
+     block.  Folded, not removed -- every number the section measured is still in the report. #}
+  <details class="card ax-details" style="margin-bottom:14px;">
+    <summary style="cursor:pointer;font-size:13px;font-weight:600;">Details &mdash; Enhancer &rarr; TF enrichment{% if axis.target_rows or axis.target_end_note %}, the target-end test{% endif %}{% if axis.se_gene %}, super-enhancer &rarr; closest gene{% endif %}</summary>
+    <div style="margin-top:12px;">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">
+        <strong>Enhancer &rarr; TF enrichment</strong> &mdash; network vs {% if axis.n_foreign_tfs %}{{ axis.n_foreign_tfs }} {% endif %}lineage-foreign
+        factors; one-sided Fisher, Holm across the models' headline rows. Leading row: {{ axis.default_model_name|e }}{% if axis.headline_reason %} ({{ axis.headline_reason|e }}){% endif %}.
+        {% if axis.has_ar %}AR gate: the pair must also pass in AR-positive 22Rv1 and VCaP (AlphaGenome H3K27ac){% if axis.ar_also %}, which the {{ axis.ar_also }} AR row{{ 's also need' if ' and ' in axis.ar_also else ' also needs' }}{% endif %}.{% endif %}
+        {% if axis.n_dropped_pairs %}{{ axis.n_dropped_pairs }} pair{{ 's' if axis.n_dropped_pairs > 1 else '' }} dropped by the control-edit rule.{% endif %}
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="dt-table" style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead><tr style="background:#f0f4f8;">
+            <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Model</th>
+            <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">End</th>
+            <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Network</th>
+            <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Lineage-foreign</th>
+            <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Odds ratio</th>
+            <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Fisher <em>p</em></th>
+            <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Holm <em>p</em></th>
+          </tr></thead>
+          <tbody>
+          {% for r in axis.enhancer_rows %}
+            <tr{% if r.headline %} style="background:#f7faff"{% endif %}>
+              <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;{% if r.headline %}font-weight:600;{% endif %}">{{ r.model }}</td>
+              <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;">{{ r.end }}</td>
+              <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ r.passed }}/{{ r.n }}<span style="color:var(--muted)"> &middot; {{ r.rate }}</span></td>
+              <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ r.fp }}/{{ r.n_frn }}<span style="color:var(--muted)"> &middot; {{ r.fp_rate }}</span></td>
+              <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ r.odds_ratio | safe }}</td>
+              <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ r.p | safe }}</td>
+              <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ r.holm | safe }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% if axis.target_rows %}
+    <div style="margin-top:12px;">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">
+        <strong>Target (promoter) end</strong> &mdash; gene&ndash;factor pairs, same rule.
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="dt-table" style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead><tr style="background:#f0f4f8;">
+          <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Model</th>
+          <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">End</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Network</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Lineage-foreign</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Odds ratio</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Fisher <em>p</em></th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Holm <em>p</em></th>
+          </tr></thead>
+          <tbody>
+        {% for r in axis.target_rows %}
+          <tr{% if r.headline %} style="background:#f7faff"{% endif %}>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;{% if r.headline %}font-weight:600;{% endif %}">{{ r.model }}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;">{{ r.end }}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ r.passed }}/{{ r.n }}<span style="color:var(--muted)"> &middot; {{ r.rate }}</span></td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ r.fp }}/{{ r.n_frn }}<span style="color:var(--muted)"> &middot; {{ r.fp_rate }}</span></td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ r.odds_ratio | safe }}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ r.p | safe }}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ r.holm | safe }}</td>
+          </tr>
+        {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+    {% if axis.target_end_note %}
+    <div style="font-size:12px;color:var(--muted);margin-top:8px;">{{ axis.target_end_note | safe }}</div>
+    {% endif %}
+
+  {# The SE -> closest-gene end.  An SE -> SE_gene edge of the TRN names no factor, so
+     it is measured without one: the super-enhancer is scrambled and that gene is read.  Its own
+     block in the section's details, never a row of the enhancer table: it is descriptive. #}
+  {% if axis.se_gene %}
+  <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">
+      <strong>Super-enhancer &rarr; closest gene</strong> (descriptive, no Fisher <em>p</em>) &mdash; the whole
+      super-enhancer is scrambled (the gene's promoter and exons spared) and the gene read out; it passes a
+      control family when below every control. <strong>free</strong>{% if axis.se_gene.n_free %} ({{ axis.se_gene.n_free }}){% endif %}: controls anywhere in the
+      window; <strong>near</strong>{% if axis.se_gene.n_near %} ({{ axis.se_gene.n_near }}){% endif %}: as close to the gene as possible, the one to read.
+      {% if axis.se_gene.reason %}<br><strong>Note:</strong> {{ axis.se_gene.reason|e }}{% endif %}
+    </div>
+    {% if axis.se_gene.summary %}
+    <div style="overflow-x:auto;margin-bottom:10px;">
+      <table class="dt-table" style="width:auto;border-collapse:collapse;font-size:13px;">
+        <thead><tr style="background:#f0f4f8;">
+          <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Model</th>
+          <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Read-out</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Passed, free controls</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Passed, near controls</th>
+        </tr></thead>
+        <tbody>
+        {% for s in axis.se_gene.summary %}
+          <tr>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;">{{ s.model }}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;">{{ s.read_out }}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ s.free }}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;font-weight:600;">{{ s.near }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+    <div style="overflow-x:auto;">
+      <table class="dt-table" style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead><tr style="background:#f0f4f8;">
+          <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Super-enhancer</th>
+          <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Closest gene</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">Scrambled</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:2px solid #cbd5e1;">To the TSS: knockout / controls</th>
+          {% for rd in axis.se_gene.read_outs %}
+          <th style="text-align:left;padding:6px 10px;border-bottom:2px solid #cbd5e1;">{{ rd }}</th>
+          {% endfor %}
+        </tr></thead>
+        <tbody>
+        {% for r in axis.se_gene.rows %}
+          <tr>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;">{{ r.se }}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;font-weight:600;">{{ r.gene }}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{{ r.scrambled_kb }} kb{% if r.n_blocks %}<span style="color:var(--muted)"> &middot; {{ r.n_blocks }} block{{ 's' if r.n_blocks > 1 else '' }}</span>{% endif %}</td>
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;text-align:right;">{% if r.ko_kb %}{{ r.ko_kb }} kb{% else %}&mdash;{% endif %} / {% if r.ctl_kb %}<span style="color:var(--muted)">{{ r.ctl_kb | safe }} kb</span>{% else %}<span style="color:var(--muted)">no near control</span>{% endif %}</td>
+            {% for rd in r.cells %}
+            <td style="padding:5px 10px;border-bottom:1px solid #e5e9f0;">
+              {% for c in r.cells[rd] %}<div{% if c.both_families %} style="font-weight:600"{% endif %}>{{ c.model }}:
+                {% if c.both_families %}free + near{% elif c.free %}free only{% elif c.near %}near only{% else %}&mdash;{% endif %}
+                {% if c.drop and (c.free or c.near) %}<span style="color:var(--muted)"> &middot; {{ c.drop }} log<sub>2</sub></span>{% endif %}</div>{% endfor %}
+            </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px;">
+      {% if axis.se_gene.strict %}Under <strong>both</strong> models and <strong>both</strong> control
+      families: {% for s in axis.se_gene.strict %}{{ s.se }} &rarr; <strong>{{ s.gene }}</strong> ({{ s.read_outs }}){% if not loop.last %}; {% endif %}{% endfor %}.
+      {% else %}No super-enhancer passed under both models and both control families.{% endif %}
+      Most knockouts sit closer to the gene than any control can; see the distance columns.
+    </div>
+  </div>
+  {% endif %}
+
+  </details>
+  {% endif %}
+</section>
+
+{# Section-13 graph.  It sits after Section 10b's own script block and after the
+     Section-13 markup it drives, and it REUSES that graph's elements and style
+     (`window.cySE.json()`), so the two figures cannot drift apart: same node ids, same edge ids
+     (`{SE}__to__{TF}`, `{TF}__to__{gene}`), same positions.
+
+     `cySE` is declared with `var` at the top level of Section 10b's script, so window.cySE is
+     global -- but that whole script is inside Section 10b's own se_trn guard, so on a run with no SE-TRN the
+     name does not exist at all.  Every reference below therefore goes through `window.cySE`, and
+     a run without the graph gets a stated notice instead of an empty 1300px box. #}
+{% if axis and axis.models %}
+<script>
+(function(){
+  var AX  = {{ axis.payload | tojson }};          // per model: SE->TF edges, nodes, bySE, caption, prox
+  var cur = {{ axis.default_model | tojson }};
+  var cyAx = null;
+  var CUR_E = {};                                 // the open tab's passed SE -> TF edge ids
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+    return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+  function det(){ return document.getElementById('cy-ax-detail'); }
+  function setDet(html){ var d = det(); if (d) d.innerHTML = html; }
+  function hint(){ setDet('Click a super-enhancer, a TF or a gene to isolate its links; click the background '
+                          + 'to reset.'); }
+
+  // A figure that cannot be drawn says why IN the figure's own place, never as an empty frame.
+  function note(html){
+    var el = document.getElementById('cy-ax');
+    if (el){
+      el.style.height = 'auto';
+      el.innerHTML = '<div style="padding:14px;font-size:12px;color:var(--muted)">' + html + '</div>';
+    }
+    setDet('');
+  }
+
+  function build(){
+    var el = document.getElementById('cy-ax');
+    if (!el) return false;                 // the template already said why (Section 10b is empty)
+    if (typeof cytoscape === 'undefined'){
+      note('The network figure needs the Cytoscape library, which this report could not load. '
+           + 'The tables above are unaffected.');
+      return false;
+    }
+    if (!window.cySE){
+      note('The Section-10b network could not be built in this report, so the super-enhancer '
+           + '&rarr; TF result is reported in the table above rather than drawn on it.');
+      return false;
+    }
+    {# Section 13 draws the Section-10b network AS IT IS -- its colours, borders and edges -- and
+       changes one thing: a super-enhancer -> TF edge that did not pass the tab's headline test, or was
+       not tested, is faded, and one that passed is drawn as a thick solid red line (Section 10b draws
+       every SE -> TF edge orange and dashed at 0.45, which left the two hard to tell apart).  The
+       TF -> target edges and every node keep Section 10b's look.  Clicking a super-enhancer or a TF
+       keeps its links and fades the rest (.pkfade, last so it wins); clicking the background brings
+       the network back.  At rest the TF -> target edges are faint (.tgfade): they are motif-based and
+       untested, and drawn in full they read as predictions; a click shows the clicked element's
+       TF -> target edges again (.pkon). #}
+    var extra = [
+      {selector: 'edge.sepass',     style: {'opacity': 1, 'width': 4, 'line-color': '#D62828',
+                                            'target-arrow-color': '#D62828', 'line-style': 'solid',
+                                            'z-index': 30}},
+      {selector: 'edge.sefade',     style: {'opacity': 0.1}},
+      {selector: 'edge.tgfade',     style: {'opacity': 0.1}},
+      {selector: 'edge.pkon',       style: {'opacity': 0.9}},
+      {selector: 'edge.sepass.pick', style: {'width': 5.5, 'z-index': 40}},
+      {selector: 'node.pick',       style: {'border-width': 4, 'z-index': 35}},
+      {selector: '.pkfade',         style: {'opacity': 0.06}}
+    ];
+    cyAx = cytoscape({container: el, elements: window.cySE.json().elements,
+                      style: window.cySE.json().style.concat(extra), layout: {name: 'preset'}});
+    cyAx.fit(undefined, 30);
+    cyAx.on('tap', 'node', function(ev){
+      var n = ev.target.data();
+      // A super-enhancer selects its own edges; its coordinate label belongs to it; any other node
+      // just reports itself.
+      var se = (n.type === 'SE') ? n.id : (n.type === 'SE_coord' ? n.se : null);
+      if (se){ pick(se); return; }
+      if (n.type === 'TF'){ pickTF(n.id); return; }
+      if (n.type === 'Target' || n.type === 'SE_gene'){ pickGene(n.id); return; }
+      clearPick();
+      setDet('<b>' + esc(n.type) + ':</b> ' + esc(n.name));
+    });
+    cyAx.on('tap', function(ev){ if (ev.target === cyAx){ clearPick(); hint(); } });
+    return true;
+  }
+
+  function clearPick(){ if (cyAx) cyAx.elements().removeClass('pick').removeClass('pkfade').removeClass('pkon'); }
+
+  // A TF -> target edge of the Section-10b graph: from a TF node to a gene node.
+  function isTfTg(ed){ var g = ed.target().data('type');
+                       return ed.source().data('type') === 'TF' && (g === 'Target' || g === 'SE_gene'); }
+
+  // A super-enhancer -> TF edge of the Section-10b graph: from an SE node to a TF node.
+  function isSeTf(ed){ return ed.source().data('type') === 'SE' && ed.target().data('type') === 'TF'; }
+
+  // One super-enhancer's links: its SE -> TF edges that passed, the TF -> target edges of those factors
+  // (Section 10b's motif-based links, not tested here) and its closest gene stay; everything else fades.
+  // bySE rows are [TF node id, TF name]; prox bySE is [edge id, gene node id, gene name, read-outs passed].
+  function pick(se){
+    var rows = ((AX[cur] || {}).bySE || {})[se] || [];
+    var px = (((AX[cur] || {}).prox || {}).bySE || {})[se] || null;
+    clearPick();
+    var K = {}, TF = {}, genes = {};
+    K[se] = 1;
+    cyAx.nodes().forEach(function(n){
+      if (n.data('se') === se || n.data('type') === 'header') K[n.id()] = 1;   // its label, the column titles
+    });
+    rows.forEach(function(r){
+      var id = se + '__to__' + r[0], a = cyAx.getElementById(id);
+      if (!a.length) return;
+      K[id] = 1; K[r[0]] = 1; TF[r[0]] = 1;
+      a.addClass('pick');
+    });
+    cyAx.edges().forEach(function(ed){
+      var g = ed.target();
+      if (TF[ed.data('source')] && isTfTg(ed)){
+        K[ed.id()] = 1; K[g.id()] = 1;
+        ed.addClass('pkon');
+        genes[g.data('name') || g.id()] = 1;
+      }
+    });
+    if (px){ K[px[0]] = 1; K[px[1]] = 1; }
+    cyAx.elements().forEach(function(x){ if (!K[x.id()]) x.addClass('pkfade'); });
+    cyAx.getElementById(se).addClass('pick');
+    var gl = Object.keys(genes).sort();
+    var txt = rows.length
+      ? ('<b>' + esc(se) + '</b> &mdash; ' + rows.length + ' SE &rarr; TF edge'
+         + (rows.length > 1 ? 's passed in silico: ' : ' passed in silico: ')
+         + rows.map(function(r){ return esc(r[1]); }).join(', ')
+         + (gl.length ? ('<br>targets of these factors in the network (motif-based links, not validated in '
+                         + 'silico): ' + gl.map(esc).join(', ')) : ''))
+      : ('<b>' + esc(se) + '</b> &mdash; no SE &rarr; TF edge passed under this model set.');
+    if (px){
+      txt += '<br>closest gene: <b>' + esc(px[2]) + '</b>'
+             + (px[3] ? ' &mdash; passed ' + esc(px[3]) + ' (descriptive)' : '');
+    }
+    setDet(txt);
+  }
+
+  {# One TF's SE -> TF -> target chains: the super-enhancers whose SE -> TF edge to it passed in this
+     tab (red) and, only when there is one, its TF -> target edges and genes.  Everything else fades --
+     the SE -> TF edges that did not pass and a TF -> target link with no passed SE included. #}
+  function pickTF(tf){
+    clearPick();
+    var K = {}, passed = [], genes = {};
+    K[tf] = 1;
+    cyAx.edges().forEach(function(ed){
+      if (isSeTf(ed) && ed.target().id() === tf && CUR_E[ed.id()]){
+        K[ed.id()] = 1; K[ed.source().id()] = 1; passed.push(ed.source().id()); ed.addClass('pick');
+      }
+    });
+    if (passed.length){
+      cyAx.edges().forEach(function(ed){
+        if (ed.source().id() === tf && isTfTg(ed)){
+          var g = ed.target();
+          K[ed.id()] = 1; K[g.id()] = 1; ed.addClass('pkon');
+          genes[g.data('name') || g.id()] = 1;
+        }
+      });
+    }
+    cyAx.nodes().forEach(function(n){
+      if (n.data('type') === 'header' || (n.data('type') === 'SE_coord' && K[n.data('se')])) K[n.id()] = 1;
+    });
+    cyAx.elements().forEach(function(x){ if (!K[x.id()]) x.addClass('pkfade'); });
+    cyAx.getElementById(tf).addClass('pick');
+    var gl = Object.keys(genes).sort();
+    setDet(passed.length
+      ? ('<b>' + esc(tf) + '</b> &mdash; SE &rarr; TF passed in silico from: ' + passed.map(esc).join(', ')
+         + (gl.length ? ('<br>its targets in the network (motif-based links, not validated in silico): '
+                         + gl.map(esc).join(', ')) : ''))
+      : ('<b>' + esc(tf) + '</b> &mdash; no SE &rarr; TF edge passed under this model set, so no '
+         + 'SE &rarr; TF &rarr; target chain.'));
+  }
+
+  {# One gene's SE -> TF -> gene chains: the TFs reaching it that have a passed SE -> TF edge in this
+     tab, those edges (red) and super-enhancers, and the super-enhancer it is the closest gene of.
+     Everything else fades -- a TF with no passed SE -> TF edge included. #}
+  function pickGene(gid){
+    clearPick();
+    var K = {}, inE = {}, order = [], via = {}, near = [];
+    K[gid] = 1;
+    cyAx.edges().forEach(function(ed){
+      if (ed.target().id() === gid && isTfTg(ed)){ inE[ed.source().id()] = ed; order.push(ed.source().id()); }
+    });
+    cyAx.edges().forEach(function(ed){
+      if (isSeTf(ed) && inE[ed.target().id()] && CUR_E[ed.id()]){
+        var tf = ed.target().id();
+        K[ed.id()] = 1; K[ed.source().id()] = 1; K[tf] = 1; ed.addClass('pick');
+        (via[tf] = via[tf] || []).push(ed.source().id());
+      }
+      if (ed.target().id() === gid && ed.source().data('type') === 'SE'){   // its super-enhancer(s)
+        K[ed.id()] = 1; K[ed.source().id()] = 1; near.push(ed.source().id());
+      }
+    });
+    var tfs = order.filter(function(tf){ return via[tf]; });
+    tfs.forEach(function(tf){ var e = inE[tf]; K[e.id()] = 1; e.addClass('pkon'); });
+    cyAx.nodes().forEach(function(n){
+      if (n.data('type') === 'header' || (n.data('type') === 'SE_coord' && K[n.data('se')])) K[n.id()] = 1;
+    });
+    cyAx.elements().forEach(function(x){ if (!K[x.id()]) x.addClass('pkfade'); });
+    cyAx.getElementById(gid).addClass('pick');
+    var name = esc(cyAx.getElementById(gid).data('name') || gid);
+    setDet('<b>' + name + '</b> &mdash; ' + (tfs.length
+        ? ('SE &rarr; TF &rarr; ' + name + ' chains (SE &rarr; TF passed in silico; TF &rarr; ' + name
+           + ' motif-based, not validated): '
+           + tfs.map(function(tf){ return esc(tf) + ' &larr; ' + via[tf].map(esc).join(', '); }).join('; '))
+        : ('no SE &rarr; TF &rarr; ' + name + ' chain under this model set'))
+      + (near.length ? '<br>closest gene of: ' + near.map(esc).join(', ') : ''));
+  }
+
+  function show(k){
+    cur = k;
+    var d = AX[k] || {edges: [], caption: ''};
+    Array.prototype.forEach.call(document.querySelectorAll('.ax-tab'), function(b){
+      b.style.background = (b.getAttribute('data-k') === k) ? '#eef4ff' : '#fff';
+    });
+    var cap = document.getElementById('ax-caption');
+    if (cap) cap.innerHTML = d.caption || '';
+    if (!cyAx) return;                       // the caption and the tabs work without the figure
+    clearPick();
+    var E = {};
+    (d.edges || []).forEach(function(x){ E[x] = 1; });
+    CUR_E = E;
+    cyAx.batch(function(){
+      cyAx.edges().removeClass('sepass').removeClass('sefade').removeClass('tgfade');
+      cyAx.edges().forEach(function(ed){
+        if (isSeTf(ed)) ed.addClass(E[ed.id()] ? 'sepass' : 'sefade');
+        else if (isTfTg(ed)) ed.addClass('tgfade');
+      });
+    });
+    {# Each tab opens on the whole network: zooming in on one model set and switching must not
+       leave the next one panned off-screen.  Clicking the open tab again resets the view the same way. #}
+    cyAx.stop();
+    cyAx.fit(undefined, 30);
+    hint();
+  }
+
+  function start(){
+    build();
+    Array.prototype.forEach.call(document.querySelectorAll('.ax-tab'), function(b){
+      b.addEventListener('click', function(){ show(b.getAttribute('data-k')); });
+    });
+    show(cur);     // sets the caption and the tab highlight whether or not the figure was drawn
+  }
+
+  // Section 10b builds cySE inline on this same parse, so start after the document is parsed
+  // rather than racing it.
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+</script>
+{% endif %}
+
+
+{# 14. Result Interpretation (narrative) #}
+<section id="narrative">
+  <h2>14. Result Interpretation
+    {% if citation_audit %}
+    <span style="font-size:13px;font-weight:400;color:#555;background:#f0f4f8;padding:3px 10px;border-radius:12px;margin-left:10px;vertical-align:middle">
+      Citation harness: {{ citation_audit.n_total }} cited ·
+      <span style="color:#2ca02c">{{ citation_audit.n_kept }} verified</span>,
+      <span style="color:#e08b00">{{ citation_audit.n_unverified_quote }} unverified</span>,
+      <span style="color:#d62728">{{ citation_audit.n_removed_whitelist }} removed</span>
+    </span>
+    {% endif %}
+    </h2>
+  <div class="card">
+    {% if ortholog_banner %}
+    <div class="callout" style="border-left-color:#b26a00;margin-bottom:14px">
+      <strong>Human-ortholog evidence.</strong> {{ ortholog_banner }}
+    </div>
+    {% endif %}
+    <div class="narrative">{{ narrative_html | safe }}</div>
+    {% if notable_cards_notice %}
+    <h3 style="margin-top:22px">Target Gene Evidence</h3>
+    <div class="callout cards-withheld" style="border-left:5px solid #a3261c;background:#fdecea;color:#5f1510;padding:10px 14px;margin:0 0 14px 0;">
+      <strong>Target-gene cards withheld.</strong> The cards could not be rebuilt with the evidence rules of this run's curated targets{% if notable_cards_notice.reason %} ({{ notable_cards_notice.reason|e }}){% endif %}. Cards built without those rules can cite papers the evidence gate excluded (a screened-negative list, a NET-type tumour, another gene's symbol), so none are shown; the other sections are unaffected. The run log and the manifest step notable_findings_rebuild say how to rebuild them.
+    </div>
+    {% endif %}{% if notable_cards %}
+    <h3 style="margin-top:22px">Target Gene Evidence</h3>
+    <p style="color:#555;font-size:13px;margin:2px 0 14px">
+      Target genes in the curated ranking order (evidence score desc, then
+      RNA log<sub>2</sub>FC) &mdash; the same ordering that selects the Section-10
+      network targets. Each card is grounded in NCBI GeneRIFs (GeneGPT) and
+      indexed literature (paperQA).</p>
+    <div class="nf-cards">
+      {% for c in notable_cards %}
+      <div class="nf-card">
+        <div class="nf-head">
+          <span class="nf-num">{{ loop.index }}</span>
+          <span class="nf-gene">{{ c.gene }}</span>
+          <span class="nf-tag">RNA log2FC {{ c.rna_log2fc }}</span>
+          {% if c.lit_symbol %}<span class="nf-tag" style="background:#fff3e0;color:#8a5200;border-color:#e0b77a">lit: {{ c.lit_symbol }}</span>
+          {% elif c.lit_searched is defined and not c.lit_searched %}<span class="nf-tag" style="background:#fdecea;color:#a3261c;border-color:#e8a29b">no human ortholog</span>{% endif %}{% if c.audit_flag %} <span class="nf-tag" style="{% if c.audit_flag == 'weak' %}background:#fff3e0;color:#8a5200{% elif c.audit_flag in ('unaudited', 'unverifiable') %}background:#eef0f3;color:#4a5568{% else %}background:#fdecea;color:#a3261c{% endif %}" title="{% if c.audit_pmid %}PMID {{ c.audit_pmid }} &mdash; {% endif %}{{ c.audit_reason }}">evidence audit: {% if c.audit_flag == 'invalid' %}invalid, kept{% elif c.audit_flag == 'unaudited' %}not audited{% else %}{{ c.audit_flag }}{% endif %}</span>{% endif %}{% if c.evidence_flag %} <span class="nf-tag" style="background:#eef0f3;color:#4a5568" title="{{ c.evidence_flag_note }}">{{ c.evidence_flag }}</span>{% endif %}
+        </div>
+        <ul class="nf-fields">
+          <li><b>Regulated by</b> {{ c.regulated_by | join(', ') }}</li>
+          {% if c.ortholog_disclosure %}<li class="nf-ortho" style="color:#8a5200"><b>Evidence species</b> {{ c.ortholog_disclosure }}</li>{% endif %}
+          {% if c.cross_domain_html %}<li><b>Cross-domain</b> {{ c.cross_domain_html | safe }}</li>{% endif %}
+          {# Novelty: one numbered entry per literature domain, user's order; one domain = the old one-line look; old notable_cards.json (novelty_html only) = legacy branch #}{% if c.novelty_by_domain %}{% if c.novelty_by_domain | length == 1 %}{% set d = c.novelty_by_domain[0] %}<li class="nf-nov-{{ d.status }}{% if d.status == 'unreported' %} nf-novel{% endif %}"><b>Novelty</b> {{ d.html | safe }}</li>{% else %}<li class="nf-novblock"><b>Novelty</b><ol class="nf-nov">{% for d in c.novelty_by_domain %}<li class="nf-nov-{{ d.status }}">{{ d.html | safe }}</li>{% endfor %}</ol></li>{% endif %}{% elif c.novelty_html %}<li{% if 'to our knowledge' in c.novelty_html %} class="nf-novel"{% endif %}><b>Novelty</b> {{ c.novelty_html | safe }}</li>{% endif %}
+          {% if c.generif_items %}<li class="nf-generif"><b>GeneRIF</b><span class="nf-rifs">{% for g in c.generif_items %}<span class="nf-rif">{{ g.text }} <a href="https://pubmed.ncbi.nlm.nih.gov/{{ g.pmid }}/" target="_blank">[PMID:{{ g.pmid }}]</a></span>{% endfor %}</span></li>{% elif c.generif_pmids %}<li class="nf-pmids"><b>GeneRIF</b>{% for p in c.generif_pmids %}<a href="https://pubmed.ncbi.nlm.nih.gov/{{ p }}/" target="_blank">{{ p }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</li>{% endif %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if references_html %}
+    <div class="references">{{ references_html | safe }}</div>
+    {% endif %}
+  </div>
+</section>
+
+{# 15. Manifest #}
+<section id="manifest">
+  <h2>15. Manifest</h2>
+  <div class="card">
+    <pre style="font-size:11px;background:var(--code-bg);padding:12px;border-radius:4px;overflow-x:auto;margin:0;">{{ manifest_json }}</pre>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>MRAG Agent · interactive HTML report · build {{ generated_at }}</footer>
+
+<script>
+// ---- TOC active state on scroll ----
+(function(){
+  const links = document.querySelectorAll('nav.toc a');
+  const ids = Array.from(links).map(a => a.getAttribute('href').slice(1));
+  window.addEventListener('scroll', () => {
+    let cur = ids[0];
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top < 100) cur = id;
+    }
+    links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+  });
+})();
+
+// ---- Plotly volcano + heatmap (each call wrapped to keep downstream viz alive
+//      even if one plot div is missing or its data is malformed) ----
+function safePlot(divId, data, layout) {
+  var el = document.getElementById(divId);
+  if (!el) { console.warn('safePlot: missing div #' + divId); return; }
+  try { Plotly.newPlot(divId, data, layout, {responsive:true, displaylogo:false}); }
+  catch (err) { console.error('safePlot: ' + divId + ' failed:', err); }
+}
+{% if volcano_atac %}safePlot('volcano-atac', {{ volcano_atac.data | tojson }}, {{ volcano_atac.layout | tojson }});{% endif %}
+{% if volcano_rna %}safePlot('volcano-rna', {{ volcano_rna.data | tojson }}, {{ volcano_rna.layout | tojson }});{% endif %}
+{% if per_tf_profile %}safePlot('per-tf-profile', {{ per_tf_profile.data | tojson }}, {{ per_tf_profile.layout | tojson }});{% endif %}
+{% if shared_dotplot %}safePlot('shared-dotplot', {{ shared_dotplot.data | tojson }}, {{ shared_dotplot.layout | tojson }});{% endif %}
+{% if per_tf_heatmap %}safePlot('per-tf-heatmap', {{ per_tf_heatmap.data | tojson }}, {{ per_tf_heatmap.layout | tojson }});{% endif %}
+
+// ---- DataTables ----
+$(function(){
+  {% if tf_table %}
+  $('#tf-table').DataTable({
+    data: {{ tf_table.data | tojson }},
+    columns: {{ tf_table.columns | tojson }},
+    pageLength: 10, lengthChange: false, ordering: true, searching: false, info: false,
+    order: [[ {{ tf_table.rank_col | default(0) }}, 'asc' ]]
+  });
+  {% endif %}
+});
+
+// ---- Cytoscape.js TRN (legacy TF -> target graph; replaced by the SE-TRN when present) ----
+{% if trn and not se_trn %}
+const LAYOUTS = {
+  bipartite: function() {
+    // Manual bipartite: TFs in top row, genes in bottom row
+    const tfs   = cy.nodes('[is_tf]');
+    const genes = cy.nodes('[!is_tf]');
+    const w = cy.width() || 800;
+    const yTF = 80, yG = 480;
+    const stepTF = w / Math.max(1, tfs.length + 1);
+    const stepG  = w / Math.max(1, genes.length + 1);
+    tfs.forEach((n,i)   => n.position({x: stepTF * (i+1), y: yTF}));
+    genes.forEach((n,i) => n.position({x: stepG  * (i+1), y: yG}));
+    cy.fit(undefined, 30);
+    return {run: function(){}, stop: function(){}};
+  },
+  concentric: {
+    name: 'concentric',
+    concentric: function(node){ return node.data('is_tf') ? 10 : 1; },
+    levelWidth: function(){ return 1; },
+    spacingFactor: 1.5,
+    minNodeSpacing: 14,
+    animate: false,
+  },
+  cose: {
+    name: 'cose',
+    idealEdgeLength: 90,
+    nodeOverlap: 24,
+    refresh: 20,
+    fit: true,
+    padding: 30,
+    randomize: false,
+    nodeRepulsion: function(){ return 12000; },
+    edgeElasticity: function(){ return 80; },
+    animate: false,
+  },
+  circle: { name: 'circle', radius: 240, animate: false },
+  breadthfirst: {
+    name: 'breadthfirst',
+    directed: true,
+    roots: cy => cy.nodes('[is_tf]').map(n => n.id()),
+    spacingFactor: 1.3,
+    animate: false,
+  },
+  grid: { name: 'grid', rows: 4, animate: false },
+};
+
+// Prefer curated-style cyjs (test.cys mappings) when available; fall back to
+// legacy programmatic TRN (Stouffer Z edge weights) otherwise.
+const _trnCyjs = {% if trn_cyjs %}{{ trn_cyjs | tojson }}{% else %}null{% endif %};
+const _legacyTrn = {
+  elements: {{ trn.elements | tojson }},
+  style:    {{ trn.style | tojson }},
+};
+const _cyjs = (_trnCyjs && _trnCyjs.elements) ? _trnCyjs : _legacyTrn;
+const cy = cytoscape({
+  container: document.getElementById('cy-trn'),
+  elements: _cyjs.elements,
+  style:    _cyjs.style,
+  layout:   { name: 'preset' },
+});
+
+function applyLayout(name) {
+  const cfg = LAYOUTS[name];
+  if (typeof cfg === 'function') {
+    cfg();
+  } else if (typeof cfg.roots === 'function') {
+    const c = Object.assign({}, cfg, {roots: cfg.roots(cy)});
+    cy.layout(c).run();
+  } else {
+    cy.layout(cfg).run();
+  }
+}
+applyLayout('cose');
+
+document.querySelectorAll('.lyt-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.lyt-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyLayout(btn.dataset.lyt);
+  });
+});
+const detail = document.getElementById('cy-detail');
+cy.on('tap', 'node', function(evt){
+  const n = evt.target.data();
+  // curated-style node (test.cys mappings)
+  if (n.type) {
+    const atac = (n.atac_fold === null || n.atac_fold === undefined) ? 'n/a' : Number(n.atac_fold).toFixed(3);
+    const rna  = (n.rna_log2fc === null || n.rna_log2fc === undefined) ? 'n/a' : Number(n.rna_log2fc).toFixed(2);
+    detail.innerHTML = `<strong>${n.type}:</strong> ${n.name} · ATAC Fold = ${atac} · RNA log<sub>2</sub>FC = ${rna}`;
+    return;
+  }
+  // Legacy TRN node fallback
+  if (n.is_tf) {
+    detail.innerHTML = `<strong>TF:</strong> ${n.label} · ${n.target_count} targets`;
+  } else {
+    detail.innerHTML = `<strong>Gene:</strong> ${n.label} · ${n.tf_count} regulating TFs · RNA log2FC = ${(n.rna_fc||0).toFixed(2)}`;
+  }
+});
+cy.on('tap', 'edge', function(evt){
+  const e = evt.target.data();
+  // curated-style edge: just source → target + Interaction group letter
+  if (typeof e.z === 'undefined') {
+    detail.innerHTML = `<strong>${e.source} → ${e.target}</strong>` + (e.interaction ? ` · group ${e.interaction}` : '');
+    return;
+  }
+  detail.innerHTML = `<strong>${e.source.replace('tf:','')} → ${e.target.replace('g:','')}</strong>
+   · Z=${e.z.toFixed(2)} · ATAC Fold=${e.atac_fc.toFixed(2)} · RNA log2FC=${e.rna_fc.toFixed(2)} · ${e.same_dir ? '✓ same-direction' : '✗ mixed-direction'}`;
+});
+cy.on('tap', function(evt){ if (evt.target === cy) detail.innerHTML = 'Click a node or edge for details.'; });
+{% endif %}
+
+// Section 5: rank + volcano Plotly (interactive)
+{% if rank_plotly %}
+Plotly.newPlot("rank-plotly",
+    {{ rank_plotly.data | tojson }},
+    {{ rank_plotly.layout | tojson }},
+    {responsive: true, displaylogo: false});
+{% endif %}
+{% if volcano_plotly %}
+Plotly.newPlot("volcano-plotly",
+    {{ volcano_plotly.data | tojson }},
+    {{ volcano_plotly.layout | tojson }},
+    {responsive: true, displaylogo: false});
+{% endif %}
+// Section 7: heatmaps Plotly (median-centered + z-score)
+{% if heatmap_median_plotly %}
+Plotly.newPlot("heatmap-median-plotly",
+    {{ heatmap_median_plotly.data | tojson }},
+    {{ heatmap_median_plotly.layout | tojson }},
+    {responsive: true, displaylogo: false});
+{% endif %}
+{% if heatmap_plotly %}
+Plotly.newPlot("heatmap-plotly",
+    {{ heatmap_plotly.data | tojson }},
+    {{ heatmap_plotly.layout | tojson }},
+    {responsive: true, displaylogo: false});
+{% endif %}
+</script>
+
+<script>
+/* Per-figure high-quality download buttons (added client-side; print-hidden). */
+(function(){
+  function slug(s){return String(s||'figure').trim()
+    .replace(/[^A-Za-z0-9._-]+/g,'_').slice(0,60)||'figure';}
+  function bar(wrap){
+    var b=wrap.querySelector(':scope > .dl-btns');
+    if(!b){b=document.createElement('div');b.className='dl-btns';wrap.appendChild(b);}
+    return b;
+  }
+  function addBtn(wrap,label,fn){
+    var btn=document.createElement('button');btn.type='button';btn.textContent=label;
+    btn.onclick=function(e){e.preventDefault();e.stopPropagation();fn();};
+    bar(wrap).appendChild(btn);
+  }
+  function dlUrl(url,name){var a=document.createElement('a');a.href=url;a.download=name;
+    document.body.appendChild(a);a.click();a.remove();}
+  function figWrap(el){return el.closest('.figure')||el.parentElement;}
+
+  // 1) static images -> native-resolution PNG
+  document.querySelectorAll('.figure img').forEach(function(img){
+    var src=img.getAttribute('src');
+    if(!src||img.offsetParent===null)return;
+    var wrap=figWrap(img);
+    if(wrap.dataset.dlImg)return;wrap.dataset.dlImg='1';
+    addBtn(wrap,'\u2b07 PNG',function(){dlUrl(img.src,slug(img.getAttribute('alt'))+'.png');});
+  });
+
+  // 2) Plotly figures -> high-res PNG (4x) + vector SVG
+  function attachPlotly(){
+    if(typeof Plotly==='undefined')return;
+    document.querySelectorAll('.js-plotly-plot').forEach(function(gd){
+      if(gd.dataset.dlPlotly)return;gd.dataset.dlPlotly='1';
+      var wrap=figWrap(gd);
+      addBtn(wrap,'\u2b07 SVG',function(){
+        Plotly.downloadImage(gd,{format:'svg',filename:slug(gd.id)});});
+      addBtn(wrap,'\u2b07 PNG (hi-res)',function(){
+        Plotly.downloadImage(gd,{format:'png',scale:4,filename:slug(gd.id)});});
+    });
+  }
+
+  // 3) Cytoscape networks -> high-res PNG
+  function attachCy(){
+    var pairs=[];
+    try{if(typeof cy!=='undefined'&&cy)pairs.push(['cy-trn',cy]);}catch(e){}
+    try{if(typeof cySE!=='undefined'&&cySE)pairs.push(['cy-se',cySE]);}catch(e){}
+    pairs.forEach(function(p){
+      var el=document.getElementById(p[0]);if(!el||el.dataset.dlCy)return;el.dataset.dlCy='1';
+      var wrap=el.parentElement;wrap.style.position=wrap.style.position||'relative';
+      addBtn(wrap,'\u2b07 PNG (hi-res)',function(){
+        dlUrl(p[1].png({scale:3,full:true,bg:'white'}),p[0]+'.png');});
+    });
+  }
+
+  window.addEventListener('load',function(){
+    setTimeout(function(){attachPlotly();attachCy();},900);
+  });
+})();
+</script>
+
+</body>
+</html>

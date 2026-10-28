@@ -1,0 +1,19 @@
+[project]
+name = "atac-mcp"
+version = "0.1.0"
+description = "ATAC-seq pipeline MCP server with AI-powered automation"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = [
+    "mcp[cli]>=1.0.0",
+]
+
+[project.scripts]
+atac-mcp = "atac_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/atac_mcp"]

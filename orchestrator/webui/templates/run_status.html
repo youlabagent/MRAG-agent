@@ -1,0 +1,29 @@
+{% extends "_base.html" %}
+{% block content %}
+<h1>Run: <span class="mono">{{ run_id }}</span></h1>
+<p><small>Live status — refreshes every 1 second while running.</small></p>
+
+<div id="status-panel"
+     hx-get="/api/status/{{ run_id }}"
+     hx-trigger="load, every 1s"
+     hx-swap="innerHTML">
+  Loading status...
+</div>
+
+<hr>
+<details>
+  <summary>Auto-debug (any failed steps)</summary>
+  <pre id="debug-panel">Loading...</pre>
+  <script>
+    (async () => {
+      try {
+        const r = await fetch("/api/debug/{{ run_id }}");
+        const j = await r.json();
+        document.getElementById("debug-panel").textContent = JSON.stringify(j, null, 2);
+      } catch (e) {
+        document.getElementById("debug-panel").textContent = "(no manifest yet)";
+      }
+    })();
+  </script>
+</details>
+{% endblock %}

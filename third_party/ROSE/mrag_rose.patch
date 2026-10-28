@@ -1,0 +1,302 @@
+diff --git a/LICENSE b/LICENSE
+old mode 100644
+new mode 100755
+diff --git a/README.md b/README.md
+old mode 100644
+new mode 100755
+diff --git a/ROSE_bamToGFF.py b/ROSE_bamToGFF.py
+old mode 100644
+new mode 100755
+index 7ce9101..1958298
+--- a/ROSE_bamToGFF.py
++++ b/ROSE_bamToGFF.py
+@@ -46,11 +46,11 @@ def mapBamToGFF(bamFile,gff,sense = 'both',extension = 200,floor = 0,rpm = False
+     senseTrans = maketrans('-+.','+-+')
+ 
+     if ROSE_utils.checkChrStatus(bamFile) == 1:
+-      print "has chr"
++      #print "has chr"
+       hasChrFlag = 1
+       #sys.exit();
+     else:
+-      print "does not have chr"
++      #print "does not have chr"
+       hasChrFlag = 0
+       #sys.exit()
+       
+@@ -67,10 +67,10 @@ def mapBamToGFF(bamFile,gff,sense = 'both',extension = 200,floor = 0,rpm = False
+     for line in gff:
+         line = line[0:9]
+         if ticker%100 == 0:
+-            print ticker
++            print(ticker)
+         ticker+=1
+         if not hasChrFlag:
+-	  line[0] = re.sub(r"chr",r"",line[0])
++            line[0] = re.sub(r"chr",r"",line[0])
+         gffLocus = ROSE_utils.Locus(line[0],int(line[3]),int(line[4]),line[6],line[1])
+         #print line[0]
+         #sys.exit()
+@@ -191,18 +191,28 @@ def main():
+     if options.bam:
+         bamFile = options.bam
+         fullPath = os.path.abspath(bamFile)
+-        bamName = fullPath.split('/')[-1].split('.')[0]
+-        pathFolder = join(fullPath.split('/')[0:-1],'/')
+-        fileList = os.listdir(pathFolder)
++        # FIX: check for THIS bam's index explicitly.
++        # The old code did fullPath.split('.')[0] and then scanned the whole
++        # folder for any filename containing that stem plus '.bai'.  With a
++        # name like 'x_merge.filterd.-chrM.bam' the stem collapses to
++        # 'x_merge', so an unrelated 'x_merge.dedup.bai' sitting in the same
++        # folder satisfied the test and the run proceeded without an index.
++        # samtools then failed on every region query and every region got a
++        # read density of 0, which propagated to a super-enhancer cutoff of 0
++        # and an empty SuperEnhancers table.
++        baiCandidates = [fullPath + '.bai', os.path.splitext(fullPath)[0] + '.bai',
++                         fullPath + '.csi', os.path.splitext(fullPath)[0] + '.csi']
+         hasBai = False
+-        for fileName in fileList:
+-            if fileName.count(bamName) == 1 and fileName.count('.bai') == 1:
++        for baiPath in baiCandidates:
++            if os.path.isfile(baiPath):
+                 hasBai = True
+ 
+         if not hasBai:
+-            print('ERROR: no associated .bai file found with bam. Must use a sorted bam with accompanying index file')
++            print('ERROR: no index found for %s' % (fullPath))
++            print('       looked for: %s' % (', '.join(baiCandidates)))
++            print('       Must use a sorted bam with accompanying index file (samtools index).')
+             parser.print_help()
+-            exit()
++            exit(1)
+    
+     if options.sense:
+         if ['+','-','.','both'].count(options.sense) == 0:
+diff --git a/ROSE_bamToGFF_turbo.py b/ROSE_bamToGFF_turbo.py
+old mode 100644
+new mode 100755
+diff --git a/ROSE_callSuper.R b/ROSE_callSuper.R
+old mode 100644
+new mode 100755
+diff --git a/ROSE_geneMapper.py b/ROSE_geneMapper.py
+old mode 100644
+new mode 100755
+index cebe6fb..87706d0
+--- a/ROSE_geneMapper.py
++++ b/ROSE_geneMapper.py
+@@ -79,7 +79,13 @@ def mapEnhancerToGene(annotFile,enhancerFile,transcribedFile='',uniqueGenes=True
+     else:
+         #set up the output tables
+         #first by enhancer
+-        enhancerToGeneTable = [enhancerTable[0][0:9]+['OVERLAP_GENES','PROXIMAL_GENES','CLOSEST_GENE'] + enhancerTable[5][-2:]]
++        # FIX 3: the header was taken from enhancerTable[0], which is ROSE's
++        # first COMMENT line ('#<name> Enhancers'), not the column header.
++        # ROSE writes 5 '#' comment lines before the real header, so row 5 is
++        # the header -- the very same line already used it for the trailing two
++        # columns.  Result was a 6-field header sitting on top of 14-field data.
++        headerRow = enhancerTable[5]
++        enhancerToGeneTable = [headerRow[0:9]+['OVERLAP_GENES','PROXIMAL_GENES','CLOSEST_GENE'] + headerRow[-2:]]
+ 
+         #next by gene
+         geneToEnhancerTable = [['GENE_NAME','REFSEQ_ID','PROXIMAL_ENHANCERS']]
+@@ -278,16 +284,31 @@ def main():
+         noFormatTable = False
+ 
+     #GETTING THE CORRECT ANNOT FILE
+-    cwd = os.getcwd()
++    # FIX 1: this file was never touched by patch.sh, so it still used
++    # os.getcwd() -- the annotation was only found when you happened to run
++    # from inside the ROSE directory.  Anchor to the script's own location,
++    # the way ROSE_main.py already does.
++    cwd = os.path.dirname(os.path.abspath(__file__))
+     genomeDict = {
+         'HG18':'%s/annotation/hg18_refseq.ucsc' % (cwd),
+         'MM9': '%s/annotation/mm9_refseq.ucsc' % (cwd),
+         'HG19':'%s/annotation/hg19_refseq.ucsc' % (cwd),
++        'HG38':'%s/annotation/hg38_refseq.ucsc' % (cwd),
+         'MM8': '%s/annotation/mm8_refseq.ucsc' % (cwd),
+         'MM10':'%s/annotation/mm10_refseq.ucsc' % (cwd),
+         }
+ 
+-    annotFile = genomeDict[upper(genome)]
++    # FIX 2: HG38 was missing from the dict above, so '-g HG38' died with
++    # KeyError.  Also accept a direct path to an annotation file, matching the
++    # patched ROSE_main.py which takes '-g <path>' rather than a build name.
++    if os.path.isfile(genome):
++        annotFile = genome
++    elif upper(genome) in genomeDict:
++        annotFile = genomeDict[upper(genome)]
++    else:
++        print('ERROR: unknown genome %s. Use one of %s, or give a path to a '
++              'refseq annotation file.' % (genome, ', '.join(sorted(genomeDict))))
++        sys.exit(1)
+ 
+     #GETTING THE TRANSCRIBED LIST
+     if options.geneList:
+diff --git a/ROSE_main.py b/ROSE_main.py
+old mode 100644
+new mode 100755
+index fa66b98..e317c60
+--- a/ROSE_main.py
++++ b/ROSE_main.py
+@@ -16,6 +16,7 @@ import ROSE_utils
+ import time
+ 
+ import os
++import subprocess
+ 
+ from string import upper,join
+ 
+@@ -230,6 +231,67 @@ def mapCollection(stitchedCollection,referenceCollection,bamFileList,mappedFolde
+ #=========================MAIN METHOD==============================
+ #==================================================================
+ 
++
++def mapGFFParallel(roseFolder, gffFile, bamFile, mappedOut, nBin, readFloor, readExtension, nThreads):
++    '''
++    Split gffFile into nThreads chunks, run ROSE_bamToGFF.py on each
++    concurrently, then concatenate keeping a single header row.
++    Falls back to the original single background process when nThreads <= 1.
++    '''
++    base = "python %s/ROSE_bamToGFF.py -f %s -e %s -r -m %s -b %s" % (
++        roseFolder, readFloor, readExtension, nBin, bamFile)
++
++    if nThreads <= 1:
++        cmd = "%s -i %s -o %s &" % (base, gffFile, mappedOut)
++        print(cmd)
++        os.system(cmd)
++        return
++
++    lines = open(gffFile).readlines()
++    lines = [l for l in lines if l.strip()]
++    total = len(lines)
++    n = min(nThreads, total) or 1
++    size = (total + n - 1) // n
++
++    chunkDir = mappedOut + '.chunks'
++    if not os.path.isdir(chunkDir):
++        os.makedirs(chunkDir)
++
++    parts = []
++    for i in range(n):
++        piece = lines[i*size:(i+1)*size]
++        if not piece:
++            continue
++        cf = '%s/part_%03d.gff' % (chunkDir, i)
++        fh = open(cf, 'w'); fh.writelines(piece); fh.close()
++        parts.append(cf)
++
++    print('PARALLEL MAPPING: %s regions -> %s chunks' % (total, len(parts)))
++    procs = []
++    for cf in parts:
++        cmd = "%s -i %s -o %s.mapped" % (base, cf, cf)
++        procs.append(subprocess.Popen(cmd, shell=True))
++    for pr in procs:
++        pr.wait()
++
++    out = open(mappedOut, 'w')
++    wroteHeader = False
++    for cf in parts:
++        mf = cf + '.mapped'
++        if not os.path.isfile(mf):
++            print('WARNING: chunk produced no output: %s' % mf)
++            continue
++        fh = open(mf)
++        header = fh.readline()
++        if not wroteHeader:
++            out.write(header); wroteHeader = True
++        for line in fh:
++            out.write(line)
++        fh.close()
++    out.close()
++    print('PARALLEL MAPPING DONE -> %s' % mappedOut)
++
++
+ def main():
+     '''
+     main run call
+@@ -260,6 +322,22 @@ def main():
+     parser.add_option("-t","--tss", dest="tss",nargs = 1, default=0,
+                       help = "Enter a distance from TSS to exclude. 0 = no TSS exclusion")
+ 
++    # FIX: read extension and floor were hardcoded into the bamToGFF command
++    # line below (-f 1 -e 200), so they could not be changed without editing
++    # this file.  200bp extension is a ChIP-seq default; ATAC-seq fragments are
++    # short and usually want 0.
++    parser.add_option("-e","--extension", dest="extension",nargs = 1, default=200,
++                      help = "Extend reads by n bp for density. ChIP default 200; use 0 for ATAC")
++    parser.add_option("-f","--floor", dest="floor",nargs = 1, default=1,
++                      help = "Read floor threshold to count toward density")
++
++    # FIX: ROSE launched exactly two bamToGFF processes (stitched + unstitched)
++    # regardless of machine size.  Region density is independent per region, so
++    # the GFF can be split into chunks and mapped concurrently, then
++    # concatenated.  Verified byte-identical to serial output.
++    parser.add_option("-n","--threads", dest="threads",nargs = 1, default=1,
++                      help = "Split each GFF into n chunks mapped concurrently (default 1 = original behaviour)")
++
+ 
+ 
+ 
+@@ -385,6 +463,10 @@ def main():
+ 
+     # bin for bam mapping
+     nBin =1
++    readExtension = int(options.extension)
++    readFloor = int(options.floor)
++    nThreads = int(options.threads)
++    print('USING READ EXTENSION %s AND FLOOR %s' % (readExtension, readFloor))
+ 
+     #IMPORTANT
+     #CHANGE cmd1 and cmd2 TO PARALLELIZE OUTPUT FOR BATCH SUBMISSION
+@@ -397,16 +479,12 @@ def main():
+         #MAPPING TO THE STITCHED GFF
+         mappedOut1 ='%s%s_%s_MAPPED.gff' % (mappedFolder,stitchedGFFName,bamFileName)
+         #WILL TRY TO RUN AS A BACKGROUND PROCESS. BATCH SUBMIT THIS LINE TO IMPROVE SPEED
+-        cmd1 = "python %s/ROSE_bamToGFF.py -f 1 -e 200 -r -m %s -b %s -i %s -o %s &" % (os.path.dirname(__file__),nBin,bamFile,stitchedGFFFile,mappedOut1)
+-        print(cmd1)
+-        os.system(cmd1)
++        mapGFFParallel(os.path.dirname(__file__),stitchedGFFFile,bamFile,mappedOut1,nBin,readFloor,readExtension,nThreads)
+ 
+         #MAPPING TO THE ORIGINAL GFF
+         mappedOut2 ='%s%s_%s_MAPPED.gff' % (mappedFolder,inputName,bamFileName)
+         #WILL TRY TO RUN AS A BACKGROUND PROCESS. BATCH SUBMIT THIS LINE TO IMPROVE SPEED
+-        cmd2 = "python %s/ROSE_bamToGFF.py -f 1 -e 200 -r -m %s -b %s -i %s -o %s &" % (os.path.dirname(__file__),nBin,bamFile,inputGFFFile,mappedOut2)
+-        print(cmd2)
+-        os.system(cmd2)
++        mapGFFParallel(os.path.dirname(__file__),inputGFFFile,bamFile,mappedOut2,nBin,readFloor,readExtension,nThreads)
+         
+ 
+     
+diff --git a/ROSE_main_turbo.py b/ROSE_main_turbo.py
+old mode 100644
+new mode 100755
+diff --git a/ROSE_utils.py b/ROSE_utils.py
+old mode 100644
+new mode 100755
+index b157055..3cb88b1
+--- a/ROSE_utils.py
++++ b/ROSE_utils.py
+@@ -658,6 +658,21 @@ class Bam:
+             print(command)
+         getReads = subprocess.Popen(command,stdin = subprocess.PIPE,stderr = subprocess.PIPE,stdout = subprocess.PIPE,shell = True)
+         reads = getReads.communicate()
++        # FIX: do not swallow samtools' stderr.  A missing index makes every
++        # region query fail on stderr while stdout stays empty, so the run
++        # looked healthy and silently produced zero reads everywhere.  Fail
++        # loudly on the errors that mean 'no usable data' instead.
++        stderrText = reads[1]
++        if stderrText:
++            fatal = ('idx_find_and_load' in stderrText
++                     or 'Random alignment retrieval' in stderrText
++                     or 'fail to load' in stderrText
++                     or 'no BAM index' in stderrText)
++            if fatal:
++                sys.stderr.write('FATAL: samtools failed for region %s\n' % (locusLine))
++                sys.stderr.write('       command: %s\n' % (command))
++                sys.stderr.write('       %s\n' % (stderrText.strip()))
++                sys.exit(1)
+         reads = reads[0].split('\n')[:-1]
+         reads = [read.split('\t') for read in reads]
+         if includeJxnReads == False:

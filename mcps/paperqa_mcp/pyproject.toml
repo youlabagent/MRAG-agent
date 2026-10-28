@@ -1,0 +1,24 @@
+[project]
+name = "paperqa-mcp"
+version = "0.1.0"
+description = "MRAG paper-qa MCP server: dense retrieval + incremental indexing"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+# Heavy deps (qdrant-client, sentence-transformers, torch) already live in
+# /BIO1/MRAG/venvs/paper_qa. mrag_paperqa is imported via sys.path injection
+# in server.py (it is NOT installed as a package).
+dependencies = [
+    "mcp[cli]>=1.0.0",
+    "qdrant-client>=1.7",
+    "sentence-transformers>=2.5",
+]
+
+[project.scripts]
+paperqa-mcp = "paperqa_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/paperqa_mcp"]

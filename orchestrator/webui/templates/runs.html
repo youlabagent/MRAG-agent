@@ -1,0 +1,50 @@
+{% extends "_base.html" %}
+{% block content %}
+<h1>All runs</h1>
+
+<p>
+  <button class="secondary"
+          hx-post="/api/cleanup_drafts" hx-confirm="Delete all draft sheets (detect-only, no run started)?"
+          hx-swap="none"
+          hx-on::after-request="location.reload();">
+    Clean up all drafts
+  </button>
+  <a href="/runs?drafts=1" class="secondary" role="button" style="margin-left:0.5em">
+    {% if include_drafts %}Hide drafts{% else %}Show drafts{% endif %}
+  </a>
+</p>
+
+{% if not runs %}
+  <p><em>No runs yet. <a href="/detect">Start a new one</a>.</em></p>
+{% else %}
+<table class="steps">
+  <thead><tr><th>Run ID</th><th>Created</th><th>Status</th><th>Steps</th><th></th><th></th></tr></thead>
+  <tbody>
+  {% for r in runs %}
+    <tr {% if r.is_draft %}style="opacity:0.6"{% endif %}>
+      <td class="mono">{{ r.run_id }}{% if r.is_draft %} <small>(draft)</small>{% endif %}</td>
+      <td>{{ r.created }}</td>
+      <td><span class="pill {{ r.status }}">{{ r.status }}</span></td>
+      <td>{{ r.n_steps | default(0) }}</td>
+      <td>
+        {% if r.is_draft %}
+          <a href="/confirm/{{ r.run_id.replace('sheet_','') }}">resume</a>
+        {% else %}
+          <a href="/run/{{ r.run_id }}">view</a>
+          {% if r.final_html %}&middot; <a href="/report/{{ r.run_id }}" target="_blank">report</a>{% endif %}
+          {% if r.final_html %}&middot; <a href="/api/download/{{ r.run_id }}">zip</a>{% endif %}
+        {% endif %}
+      </td>
+      <td>
+        <button class="secondary outline" style="padding:2px 8px;font-size:0.8em"
+                hx-delete="/api/runs/{{ r.run_id }}"
+                hx-confirm="Delete {{ r.run_id }}?"
+                hx-swap="none"
+                hx-on::after-request="location.reload();">delete</button>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}
