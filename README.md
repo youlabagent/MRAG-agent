@@ -645,6 +645,9 @@ The analyses in the paper use two datasets, which also serve as configuration ex
   `sample<TAB>group` TSV. It was run with `literature_domains = ["prostate"]` and declares
   `axis_headline = "alphagenome"` and `axis_ar_gate = true`.
 
+The complete reports of one run of each dataset (OC2 with the `prostate` literature domain, and PRAD)
+are in [`examples/`](examples/).
+
 ## License
 
 MRAG's own code is released under the MIT License, Copyright (c) 2026 Cedars-Sinai Medical Center;
