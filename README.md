@@ -646,7 +646,9 @@ The analyses in the paper use two datasets, which also serve as configuration ex
   `axis_headline = "alphagenome"` and `axis_ar_gate = true`.
 
 The complete reports of one run of each dataset (OC2 with the `prostate` literature domain, and PRAD)
-are in [`examples/`](examples/).
+are in [`examples/`](examples/). Open them online:
+[OC2](https://youlabagent.github.io/MRAG-agent/examples/OC2/mrag_report.html),
+[PRAD](https://youlabagent.github.io/MRAG-agent/examples/PRAD/mrag_report.html).
 
 ## License
 
