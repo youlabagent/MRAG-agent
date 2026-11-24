@@ -14,9 +14,16 @@ AR-gated enhancer row.
 
 ## Viewing
 
-GitHub shows `.html` files as source. Download the file and open it in a browser. The page loads
-Plotly 2.27.0, DataTables 1.13.7, jQuery 3.7.1 and Cytoscape 3.28.1 from public CDNs, so an internet
-connection is needed to draw the plots and tables.
+Open the reports online (served by GitHub Pages):
+
+- OC2: <https://youlabagent.github.io/MRAG-agent/examples/OC2/mrag_report.html>
+- PRAD: <https://youlabagent.github.io/MRAG-agent/examples/PRAD/mrag_report.html>
+
+The pages load Plotly 2.27.0, DataTables 1.13.7, jQuery 3.7.1 and Cytoscape 3.28.1 from public CDNs, so an
+internet connection is needed to draw the plots and tables.
+
+GitHub's own file viewer shows `.html` files as source only. To view a report offline, download the file
+and open it in a browser (the libraries above are still fetched from the CDNs).
 
 ## What each report contains
 
