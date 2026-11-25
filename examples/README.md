@@ -3,10 +3,15 @@
 Two complete MRAG reports for the datasets used in the paper. Each report is one standalone HTML file
 (`mrag_report.html`) written by the `viz_report` step at the end of a run.
 
-| Example | Dataset | Comparison | Report |
-|---|---|---|---|
-| **OC2** | LNCaP prostate cancer cells, ATAC-seq + RNA-seq, 2 replicates per arm (processed from FASTQ) | `ONECUT2-OE` vs `MYC-DDK` | [`OC2/mrag_report.html`](OC2/mrag_report.html) |
-| **PRAD** | TCGA prostate adenocarcinoma, processed matrices (ATAC-seq peak counts, 24 vs 28 samples; RNA-seq log2, 12 vs 14 samples) | `AR_high` vs `Basal_like` | [`PRAD/mrag_report.html`](PRAD/mrag_report.html) |
+| Example | Dataset | Comparison | Open online | Download |
+|---|---|---|---|---|
+| **OC2** | LNCaP prostate cancer cells, ATAC-seq + RNA-seq, 2 replicates per arm (processed from FASTQ) | `ONECUT2-OE` vs `MYC-DDK` | [OC2 report](https://youlabagent.github.io/MRAG-agent/examples/OC2/mrag_report.html) | [mrag_report.html](https://github.com/youlabagent/MRAG-agent/raw/main/examples/OC2/mrag_report.html) |
+| **PRAD** | TCGA prostate adenocarcinoma, processed matrices (ATAC-seq peak counts, 24 vs 28 samples; RNA-seq log2, 12 vs 14 samples) | `AR_high` vs `Basal_like` | [PRAD report](https://youlabagent.github.io/MRAG-agent/examples/PRAD/mrag_report.html) | [mrag_report.html](https://github.com/youlabagent/MRAG-agent/raw/main/examples/PRAD/mrag_report.html) |
+
+The files are about 3.6 MB each, which is too large for GitHub's file viewer. Opening
+[`OC2/mrag_report.html`](OC2/mrag_report.html) in the repository only shows *"Sorry about that, but we can't show
+files that are this big right now."* Use **Open online**, or **Download** the file: on the file page click the
+download button (top right), or right-click the *Download* link above and choose *Save Link As...*.
 
 Both runs used `literature_domains = ["prostate"]`. The PRAD run declares `axis_headline = "alphagenome"`
 and `axis_ar_gate = true` (see *Paper datasets* in the top-level README), so its Section 13 also reports the
@@ -22,8 +27,8 @@ Open the reports online (served by GitHub Pages):
 The pages load Plotly 2.27.0, DataTables 1.13.7, jQuery 3.7.1 and Cytoscape 3.28.1 from public CDNs, so an
 internet connection is needed to draw the plots and tables.
 
-GitHub's own file viewer shows `.html` files as source only. To view a report offline, download the file
-and open it in a browser (the libraries above are still fetched from the CDNs).
+GitHub's own file viewer cannot show these files (see above). To keep a copy, download the file and open it
+in a browser (the libraries above are still fetched from the CDNs).
 
 ## What each report contains
 
