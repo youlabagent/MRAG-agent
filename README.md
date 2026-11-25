@@ -32,12 +32,15 @@ in silico validation is human-only.
 
 ## Example reports
 
-| Dataset | Comparison | Report |
-|---|---|---|
-| **OC2**: LNCaP prostate cancer cells with ONECUT2 overexpression | `ONECUT2-OE` vs `MYC-DDK` | [Open online](https://youlabagent.github.io/MRAG-agent/examples/OC2/mrag_report.html) |
-| **PRAD**: TCGA prostate adenocarcinoma | `AR_high` vs `Basal_like` | [Open online](https://youlabagent.github.io/MRAG-agent/examples/PRAD/mrag_report.html) |
+| Dataset | Comparison | Literature domain | Report |
+|---|---|---|---|
+| **OC2**: LNCaP prostate cancer cells with ONECUT2 overexpression | `ONECUT2-OE` vs `MYC-DDK` | Prostate cancer | [Open online](https://youlabagent.github.io/MRAG-agent/examples/PCa_cellline_reports/prostate/mrag_report.html) |
+| | | Neuroendocrine carcinoma | [Open online](https://youlabagent.github.io/MRAG-agent/examples/PCa_cellline_reports/neuroendocrine/mrag_report.html) |
+| | | Small cell lung cancer | [Open online](https://youlabagent.github.io/MRAG-agent/examples/PCa_cellline_reports/small_cell_lung_cancer/mrag_report.html) |
+| **PRAD**: TCGA prostate adenocarcinoma | `AR_high` vs `Basal_like` | Prostate cancer | [Open online](https://youlabagent.github.io/MRAG-agent/examples/PRAD/mrag_report.html) |
 
-The files, how they were produced and how to download them are in [`examples/`](examples/).
+The three OC2 reports come from the same data and settings; only the literature domain changes. The files,
+how they were produced and how to download them are in [`examples/`](examples/).
 
 ## How MRAG works
 
@@ -73,7 +76,7 @@ super-enhancer -> TF edges. The details of every step are in
 orchestrator/   mrag CLI and the deterministic runner (a fixed DAG of steps); optional web UI
 mcps/           10 analysis packages, each a FastMCP server: 114 tools in total
 libs/           NCBI client, literature retriever, AlphaGenome client, locus-track plots
-examples/       the two example reports
+examples/       example reports: OC2 in three literature domains, and PRAD
 ```
 
 The orchestrator calls the MCP tools in process; each package can also be served over stdio to any
@@ -121,8 +124,8 @@ The analyses in the paper use two datasets, which also serve as configuration ex
   `sample<TAB>group` TSV. It was run with `literature_domains = ["prostate"]` and declares
   `axis_headline = "alphagenome"` and `axis_ar_gate = true`.
 
-The complete reports of one run of each dataset (OC2 with the `prostate` literature domain, and PRAD)
-are in [`examples/`](examples/).
+The complete reports of the three OC2 runs (one per literature domain) and of the PRAD run are in
+[`examples/`](examples/).
 
 ## License
 
